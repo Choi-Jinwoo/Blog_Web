@@ -2,15 +2,21 @@ import Vue from 'vue'
 import Router from 'vue-router'
 
 // Components / Vue
-import loginContainer from '../components/login/loginContainer';
+import login from '@/views/login';
+import register from '@/views/register';
 
 Vue.use(Router)
 
 export default new Router({
+  mode: 'history',
   routes: [
     {
       path: '/login',
-      component: loginContainer
+      component: login
+    },
+    {
+      path: '/register',
+      component: register
     }
   ]
 })

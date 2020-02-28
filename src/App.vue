@@ -13,7 +13,11 @@ export default {
 
 <style>
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap");
-
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
 #app {
   font-family: "Noto Sans KR";
   -webkit-font-smoothing: antialiased;
