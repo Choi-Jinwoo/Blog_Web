@@ -22,6 +22,7 @@ export default {
 
 <style lang="scss" scoped>
 .post-card {
+  box-shadow: 0 5px 20px rgba($color: #000000, $alpha: 0.3);
   display: inline-block;
   background-color: #ffffff;
   width: 25%;

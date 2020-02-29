@@ -53,7 +53,7 @@ import { sha512 } from "js-sha512";
 import SERVER_ENV from "../../env/server";
 
 export default {
-  data: function() {
+  data() {
     return {
       id: "",
       name: "",
@@ -82,7 +82,7 @@ export default {
         })
         .then(resp => {
           this.$swal("회원가입 성공", "블로그 가입에 감사드립니다.", "success");
-          // Success Login
+          this.$router.push("/login");
         })
         .catch(err => {
           let message = "";
@@ -100,7 +100,7 @@ export default {
           this.$swal("로그인 실패", message, "error");
         });
     },
-    goLogin: function() {
+    goLogin() {
       this.$router.push("/login");
     }
   }

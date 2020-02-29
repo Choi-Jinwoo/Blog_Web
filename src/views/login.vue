@@ -17,7 +17,8 @@
           <button class="login-btn" @click="login">로그인</button>
         </div>
         <div class="register-text-form">
-          아직 계정이 없으신가요?
+          <span class="main-text" @click="goMain">로그인 없이 둘러보기</span>
+          <br />
           <span class="register-text" @click="goRegister">회원가입</span>
         </div>
       </div>
@@ -31,7 +32,7 @@ import { sha512 } from "js-sha512";
 import SERVER_ENV from "../../env/server";
 
 export default {
-  data: function() {
+  data() {
     return {
       id: "",
       name: "",
@@ -40,7 +41,7 @@ export default {
     };
   },
   methods: {
-    login: function() {
+    login() {
       axios
         .post(`${SERVER_ENV.API_ADDR}/auth/login`, {
           id: this.id,
@@ -51,7 +52,7 @@ export default {
           const token = data["x-access-token"];
           localStorage.setItem("x-access-token", token);
           this.$swal("로그인 성공", "블로그 방문에 감사드립니다.", "success");
-          // Success Login
+          this.$router.push("/");
         })
         .catch(err => {
           let message = "";
@@ -65,12 +66,16 @@ export default {
             default:
               message = "다시 시도해주세요!";
           }
-
+          this.id = "";
+          this.pw = "";
           this.$swal("로그인 실패", message, "error");
         });
     },
-    goRegister: function() {
+    goRegister() {
       this.$router.push("/register");
+    },
+    goMain() {
+      this.$router.push("/");
     }
   }
 };
@@ -130,8 +135,13 @@ export default {
       }
       .register-text-form {
         width: 50%;
-        margin: 3% auto;
+        margin: 2% auto;
         font-size: 13px;
+        .main-text {
+          &:hover {
+            cursor: pointer;
+          }
+        }
         .register-text {
           color: #597cff;
           font-weight: bold;
