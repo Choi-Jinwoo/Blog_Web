@@ -1,9 +1,6 @@
 <template>
   <div class="main">
-    <div class="title-bar">
-      <button>로그인</button>
-      <h1>Jinwoo Tech Blog</h1>
-    </div>
+    <title-bar></title-bar>
     <ul class="category-list">
       <li class="category-item">전체</li>
       <li
@@ -15,14 +12,17 @@
     <div class="post-container">
       <post-card v-for="(post, index) in posts" :key="index" :post="post" />
     </div>
+    <footer class="end-bar">풋바</footer>
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import moment from "moment";
-import postCard from "@/components/main/postCard";
 import SERVER_ENV from "../../env/server";
+
+import postCard from "@/components/main/postCard";
+import titleBar from "@/components/main/titleBar";
 
 export default {
   data() {
@@ -38,36 +38,48 @@ export default {
       .then(resp => {
         const { data } = resp.data;
         this.categories = data.categories;
-
-        axios
-          .get(`${SERVER_ENV.API_ADDR}/post`, {
-            headers: {
-              "x-access-token": localStorage.getItem("x-access-token")
-            }
-          })
-          .then(resp => {
-            const { data } = resp.data;
-            const { posts } = data;
-            this.posts = data.posts.map(data => {
-              const post = {
-                idx: data.idx,
-                title: data.title,
-                thumbnail: data.thumbnail,
-                createdAt: moment(data.created_at).format("YYYY-MM-DD"),
-                category: this.getCategoryByIdx(data.fk_category_idx)
-              };
-              return post;
-            });
-          })
-          .catch(err => {
-            console.log(err);
-          });
+        this.getPosts();
       })
       .catch(err => {
         this.$swal("오류", "다시 시도주세요", "error");
       });
   },
   methods: {
+    getPosts(category, order) {
+      let url = `${SERVER_ENV.API_ADDR}/post`;
+      if (category) {
+        url = `${url}?category=${category}`;
+        if (order) {
+          url = `${url}&order=${order}`;
+        }
+      } else if (order) {
+        url = `${url}?order=${order}`;
+      }
+      console.log(url);
+      axios
+        .get(url, {
+          headers: {
+            "x-access-token": localStorage.getItem("x-access-token")
+          }
+        })
+        .then(resp => {
+          const { data } = resp.data;
+          const { posts } = data;
+          this.posts = data.posts.map(data => {
+            const post = {
+              idx: data.idx,
+              title: data.title,
+              thumbnail: data.thumbnail,
+              createdAt: moment(data.created_at).format("YYYY-MM-DD"),
+              category: this.getCategoryByIdx(data.fk_category_idx)
+            };
+            return post;
+          });
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
     getCategoryByIdx(category_idx) {
       const categoriesIdx = this.categories.map(category => {
         return category.idx;
@@ -81,7 +93,8 @@ export default {
     }
   },
   components: {
-    "post-card": postCard
+    "post-card": postCard,
+    "title-bar": titleBar
   }
 };
 </script>
@@ -92,12 +105,7 @@ export default {
   padding: 0;
   background-color: #f5f6fa;
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  .title-bar {
-    background-color: #0097e6;
-    color: #ffffff;
-  }
+  position: relative;
   .category-list {
     display: flex;
     list-style: none;
@@ -118,11 +126,14 @@ export default {
     flex-wrap: wrap;
     .post-card {
       margin: 0 4.16%;
-      margin-bottom: 3%;
-      &:hover {
-        cursor: pointer;
-      }
+      margin-bottom: 8%;
     }
+  }
+  .end-bar {
+    position: absolute;
+    background-color: black;
+    bottom: 0;
+    width: 100%;
   }
 }
 </style>

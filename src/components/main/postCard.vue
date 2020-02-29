@@ -29,6 +29,8 @@ export default {
   border-radius: 5px;
   margin: 0;
   padding: 0;
+  min-width: 180px;
+  max-height: 400px;
   img {
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
@@ -76,6 +78,10 @@ export default {
       padding-right: 8%;
       margin-bottom: 8%;
     }
+  }
+  &:hover {
+    cursor: pointer;
+    transform: scale(1.03);
   }
 }
 </style>
