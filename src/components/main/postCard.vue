@@ -22,18 +22,23 @@ export default {
 
 <style lang="scss" scoped>
 .post-card {
-  box-shadow: 0 5px 20px rgba($color: #000000, $alpha: 0.3);
+  @media only screen and (max-width: 768px) {
+    max-width: 100%;
+  }
+  box-shadow: 0 5px 20px rgba($color: #000000, $alpha: 0.15);
   display: inline-block;
   background-color: #ffffff;
-  width: 25%;
-  border-radius: 5px;
+  width: 21%;
+  border-radius: 2px;
   margin: 0;
   padding: 0;
-  min-width: 180px;
+  min-width: 200px;
+  max-width: 46%;
   max-height: 400px;
+  color: #597cff;
   img {
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
     width: 100%;
     height: 28vh;
     object-fit: cover;
@@ -62,7 +67,7 @@ export default {
 
     .title {
       margin-left: 4%;
-      font-size: 25px;
+      font-size: 20px;
       margin-top: 4%;
       text-align: right;
       padding-right: 8%;
@@ -72,7 +77,7 @@ export default {
     }
 
     .created-at {
-      color: #636e72;
+      color: #30336b;
       font-weight: normal;
       text-align: right;
       padding-right: 8%;

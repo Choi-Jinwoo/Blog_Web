@@ -109,6 +109,7 @@ export default {
 
 <style lang="scss" scoped>
 .register {
+  user-select: none;
   background-color: #597cff;
   height: 100vh;
   margin: 0;
@@ -120,6 +121,7 @@ export default {
       margin: 0;
     }
     .register-form {
+      min-width: 300px;
       text-align: left;
       background-color: #ffffff;
       width: 40%;
@@ -163,6 +165,9 @@ export default {
         width: 50%;
         margin: 3% auto;
         font-size: 13px;
+        @media only screen and (max-width: 768px) {
+          font-size: 10px;
+        }
         .login-text {
           color: #597cff;
           font-weight: bold;

@@ -1,9 +1,15 @@
 <template>
   <div class="title-bar">
-    <h1>Title</h1>
-    <button class="subscribe-btn">구독</button>
-    <button class="login-btn" v-if="this.isLogin">로그아웃</button>
-    <button class="logout-btn" v-else>로그인</button>
+    <div class="tool-bar">
+      <button class="subscribe-btn">Subscribe</button>
+      <button class="login-btn" v-if="this.isLogin" @click="logout">Logout</button>
+      <button class="logout-btn" v-else @click="login">Login</button>
+      <button class="about-btn">About</button>
+    </div>
+    <div class="title-box">
+      <h1>Tech Blog</h1>
+      <h4>Hi, I'm jinwoo in dgsw. Enjoy showing my tech blog!</h4>
+    </div>
   </div>
 </template>
 
@@ -18,16 +24,69 @@ export default {
     if (localStorage.getItem("x-access-token")) {
       this.isLogin = true;
     }
+  },
+  methods: {
+    logout() {
+      localStorage.removeItem("x-access-token");
+      window.location.reload();
+    },
+    login() {
+      this.$router.push("/login");
+    }
   }
 };
 </script>
 
 <style lang="scss" scoped>
 .title-bar {
-  background-color: #597cff;
+  user-select: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  background-color: #0097e6;
   color: #ffffff;
-  h1 {
+  h1,
+  h4 {
     margin: 0;
+    padding: 0;
+  }
+  .title-box {
+    margin: 0 auto;
+    margin-top: 1%;
+    margin-bottom: 4%;
+    h1 {
+      font-size: 40px;
+      margin-bottom: 5%;
+    }
+    h4 {
+      font-weight: normal;
+      font-size: 12px;
+    }
+  }
+  .tool-bar {
+    margin: 0.5% 2%;
+    button {
+      font-size: 15px;
+      width: 7%;
+      min-width: 70px;
+      border: none;
+      background-color: transparent;
+      color: white;
+      text-align: center;
+      padding: 0;
+      &:hover {
+        cursor: pointer;
+        font-weight: 600;
+      }
+      @media only screen and (max-width: 768px) {
+        padding: 0;
+        font-size: 12px;
+        min-width: 70px;
+      }
+    }
+    @media only screen and (max-width: 768px) {
+      margin: 0 auto;
+    }
   }
 }
 </style>

@@ -2,11 +2,12 @@
   <div class="main">
     <title-bar></title-bar>
     <ul class="category-list">
-      <li class="category-item">전체</li>
+      <li class="category-item" @click="getPosts()">전체</li>
       <li
-        class="category-itme"
-        v-for="(category, index) in categories"
-        :key="index"
+        class="category-item"
+        v-for="(category) in categories"
+        :key="category.idx"
+        @click="getPostsByCategory(category.idx)"
       >{{ category.name }}</li>
     </ul>
     <div class="post-container">
@@ -45,6 +46,9 @@ export default {
       });
   },
   methods: {
+    getPostsByCategory(categoryIdx) {
+      this.getPosts(categoryIdx);
+    },
     getPosts(category, order) {
       let url = `${SERVER_ENV.API_ADDR}/post`;
       if (category) {
@@ -55,7 +59,6 @@ export default {
       } else if (order) {
         url = `${url}?order=${order}`;
       }
-      console.log(url);
       axios
         .get(url, {
           headers: {
@@ -77,7 +80,18 @@ export default {
           });
         })
         .catch(err => {
-          console.log(err);
+          let message = "";
+          switch (err.response.status) {
+            case 400:
+              message = "오류가 발생하였습니다.";
+              break;
+            case 404:
+              message = "새로고침 후 사용해주세요.";
+              break;
+            default:
+              message = "다시 시도해주세요!";
+          }
+          this.$swal("오류", message, "error");
         });
     },
     getCategoryByIdx(category_idx) {
@@ -107,25 +121,36 @@ export default {
   min-height: 100vh;
   position: relative;
   .category-list {
+    @media only screen and (max-width: 768px) {
+      font-size: 13px;
+      justify-content: center;
+    }
     display: flex;
-    list-style: none;
-    width: 60%;
+    width: 80%;
     margin: 0 auto;
+    padding-left: 2%;
+    padding-right: 2%;
+    margin-top: 1%;
     margin-bottom: 3%;
+    list-style: none;
     .category-item {
-      margin-left: 3%;
-      padding-right: 2%;
+      margin-left: 2%;
+      &:hover {
+        cursor: pointer;
+        color: #597cff;
+      }
     }
   }
   .post-container {
-    width: 60%;
+    width: 80%;
     margin: 0 auto;
     display: flex;
     align-items: center;
     justify-content: left;
     flex-wrap: wrap;
     .post-card {
-      margin: 0 4.16%;
+      flex-grow: 1;
+      margin: 0 2%;
       margin-bottom: 8%;
     }
   }
