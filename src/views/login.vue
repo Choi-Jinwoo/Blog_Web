@@ -30,6 +30,7 @@
 import axios from "axios";
 import { sha512 } from "js-sha512";
 import SERVER_ENV from "../../env/server";
+import { user } from "../singleton/index";
 
 export default {
   data() {
@@ -50,8 +51,15 @@ export default {
         .then(resp => {
           const { data } = resp.data;
           const token = data["x-access-token"];
+          const isAdmin = data.is_admin;
+          const name = data.name;
+
           localStorage.setItem("x-access-token", token);
-          this.$swal("로그인 성공", "블로그 방문에 감사드립니다.", "success");
+          user.setInstance({
+            isAdmin
+          });
+
+          this.$swal("로그인 성공", `안녕하세요, ${data.name} 님`, "success");
           this.$router.push("/");
         })
         .catch(err => {

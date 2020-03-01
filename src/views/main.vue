@@ -13,7 +13,6 @@
     <div class="post-container">
       <post-card v-for="(post, index) in posts" :key="index" :post="post" />
     </div>
-    <footer class="end-bar">풋바</footer>
   </div>
 </template>
 
@@ -130,8 +129,8 @@ export default {
     margin: 0 auto;
     padding-left: 2%;
     padding-right: 2%;
-    margin-top: 1%;
-    margin-bottom: 3%;
+    margin-top: 3%;
+    margin-bottom: 2%;
     list-style: none;
     .category-item {
       margin-left: 2%;
@@ -153,12 +152,6 @@ export default {
       margin: 0 2%;
       margin-bottom: 8%;
     }
-  }
-  .end-bar {
-    position: absolute;
-    background-color: black;
-    bottom: 0;
-    width: 100%;
   }
 }
 </style>
