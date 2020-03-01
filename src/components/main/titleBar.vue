@@ -1,9 +1,9 @@
 <template>
   <div class="title-bar">
     <div class="tool-bar">
-      <button class="adminpage-btn" v-show="this.isAdmin">Admin</button>
+      <button class="adminpage-btn" v-show="this.isAdmin === true">Admin</button>
       <button class="subscribe-btn">Subscribe</button>
-      <button class="login-btn" v-if="this.isLogin" @click="logout">Logout</button>
+      <button class="login-btn" v-if="this.id !== null" @click="logout">Logout</button>
       <button class="logout-btn" v-else @click="login">Login</button>
       <button class="about-btn">About</button>
     </div>
@@ -11,27 +11,40 @@
       <h1>Tech Blog</h1>
       <h4>Hi, I'm jinwoo in dgsw. Enjoy showing my tech blog!</h4>
     </div>
+    <div class="profile" v-show="this.name !== null">
+      <img class="profile-img" :src="this.profileImage" alt="profile" />
+    </div>
   </div>
 </template>
 
 <script>
-import { user, count } from "../../singleton/index";
+import axios from "axios";
+import SERVER_ENV from "../../../env/server";
+
 export default {
   data() {
     return {
-      isAdmin: false,
-      isLogin: false
+      name: null,
+      profileImage: null,
+      id: null,
+      isAdmin: null
     };
   },
   mounted() {
-    if (localStorage.getItem("x-access-token")) {
-      this.isLogin = true;
-    }
-    if (user.getInstance() && user.getInstance().isAdmin === true) {
-      this.isAdmin = true;
-    } else {
-      this.isAdmin = false;
-    }
+    axios
+      .get(`${SERVER_ENV.API_ADDR}/profile`, {
+        headers: {
+          "x-access-token": localStorage.getItem("x-access-token")
+        }
+      })
+      .then(resp => {
+        const { data } = resp.data;
+        const { user } = data;
+        this.name = user.name;
+        this.profileImage = user.profile_image;
+        this.id = user.id;
+        this.isAdmin = user.is_admin;
+      });
   },
   methods: {
     logout() {
@@ -53,6 +66,23 @@ export default {
   align-items: flex-end;
   background-color: #0097e6;
   color: #ffffff;
+  .profile {
+    margin-right: 2%;
+    margin-bottom: 1%;
+    .profile-img {
+      background-color: #ffffff;
+      height: 50px;
+      width: 50px;
+      object-fit: cover;
+      border-radius: 50%;
+      border: solid 3px #ffffff;
+      @media only screen and (max-width: 768px) {
+        height: 30px;
+        width: 30px;
+        border: solid 2px #ffffff;
+      }
+    }
+  }
   h1,
   h4 {
     margin: 0;
@@ -61,7 +91,7 @@ export default {
   .title-box {
     margin: 0 auto;
     margin-top: 1%;
-    margin-bottom: 4%;
+    margin-bottom: 2%;
     h1 {
       font-size: 40px;
       margin-bottom: 5%;
