@@ -2,7 +2,7 @@
   <div class="post">
     <div class="post-container">
       <div class="post-title">{{ post.title }}</div>
-      <div class="post-content">{{ convertedContent }}</div>
+      <div class="post-content" v-html="convertedContent"></div>
     </div>
   </div>
 </template>
