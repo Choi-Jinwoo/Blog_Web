@@ -1,5 +1,5 @@
 <template>
-  <div class="post-card">
+  <div class="post-card" @click="goPostPage">
     <img v-bind:src="post.thumbnail" v-bind:alt="post.title" />
     <div class="info-container">
       <h5 class="category">{{ post.category }}</h5>
@@ -11,11 +11,16 @@
 
 <script>
 export default {
-  data: function() {
+  data() {
     return {};
   },
   props: {
     post: Object
+  },
+  methods: {
+    goPostPage() {
+      this.$router.push(`/post/${this.post.idx}`);
+    }
   }
 };
 </script>

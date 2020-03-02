@@ -32,7 +32,7 @@ export default {
   },
   mounted() {
     axios
-      .get(`${SERVER_ENV.API_ADDR}/profile`, {
+      .get(`${SERVER_ENV.API_ADDR}/profile/my`, {
         headers: {
           "x-access-token": localStorage.getItem("x-access-token")
         }
@@ -44,6 +44,11 @@ export default {
         this.profileImage = user.profile_image;
         this.id = user.id;
         this.isAdmin = user.is_admin;
+      })
+      .catch(err => {
+        if (err.response.status === 410) {
+          this.$swal("만료", "로그인 후 사용해주세요", "error");
+        }
       });
   },
   methods: {

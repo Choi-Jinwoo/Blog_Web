@@ -87,6 +87,9 @@ export default {
             case 404:
               message = "새로고침 후 사용해주세요.";
               break;
+            case 410:
+              message = "로그인 후 사용해주세요";
+              break;
             default:
               message = "다시 시도해주세요!";
           }

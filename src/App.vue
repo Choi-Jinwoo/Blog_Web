@@ -15,14 +15,46 @@ export default {
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Nanum+Gothic+Coding&display=swap");
 img {
+  display: block;
   max-width: 100%;
+  padding: 0;
+  margin: 0 auto;
+}
+blockquote {
+  border-left: 5px solid #597cff;
+  margin: 0;
+  padding-left: 2%;
+  background-color: #e2e2e2;
+}
+table {
+  text-align: center;
+  width: 100%;
+  border: solid 1px #000000;
+  max-width: 100%;
+  border-collapse: collapse;
+}
+th,
+td {
+  text-align: center;
+  border: solid 1px #000000;
+  padding: 0;
 }
 code {
-  max-width: 95%;
-  padding: 0 1%;
+  font-size: 90%;
+  background-color: #dff9fb;
+  padding: 0.2%;
+  /* color: #ffffff; */
   display: inline-block;
   overflow: auto;
   font-family: "Nanum Gothic Coding";
+}
+pre code {
+  font-size: 100%;
+  border-radius: 5px;
+  background-color: #ffffff;
+  padding: 1%;
+  width: 98%;
+  margin: 0 auto;
 }
 
 html,
