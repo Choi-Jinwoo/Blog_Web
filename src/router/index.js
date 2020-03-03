@@ -7,6 +7,7 @@ import register from '@/views/register.vue';
 import main from '@/views/main.vue';
 import post from '@/views/post.vue';
 import writePost from '@/views/writePost.vue';
+import admin from '@/views/admin.vue';
 
 Vue.use(Router)
 
@@ -16,6 +17,10 @@ export default new Router({
     {
       path: '/',
       component: main
+    },
+    {
+      path: '/admin',
+      component: admin
     },
     {
       path: '/login',

@@ -1,7 +1,19 @@
 <template>
   <div class="write-post">
-    <input type="file" id="upload-form" @change="addFile" style="display: none" />
-    <input type="file" id="upload-thumbnail" @change="uploadThumbnail" style="display: none" />
+    <input
+      type="file"
+      accept=".gif, .jpg, .png"
+      id="upload-form"
+      @change="addFile"
+      style="display: none"
+    />
+    <input
+      type="file"
+      accept=".gif, .jpg, .png"
+      id="upload-thumbnail"
+      @change="uploadThumbnail"
+      style="display: none"
+    />
     <div class="write-container">
       <div class="write-form">
         <img
@@ -110,7 +122,7 @@ export default {
               message = "다시 시도해주세요";
           }
           this.$swal("오류", message, "error");
-          this.$router.push("/");
+          this.$router.push(`/`);
         });
     }
   },
@@ -382,6 +394,7 @@ export default {
       .content-input {
         max-width: 90%;
         padding: 5%;
+        padding-bottom: 30%;
         font-size: 18px;
         resize: none;
         height: 100%;
@@ -394,6 +407,7 @@ export default {
     }
     .result-form {
       padding-top: 3%;
+      padding-bottom: 20%;
       width: 50%;
       background-color: #f5f6fa;
       overflow: auto;
@@ -405,7 +419,6 @@ export default {
       .result-content {
         padding: 0 5%;
         font-size: 18px;
-        max-height: 100vh;
       }
     }
   }

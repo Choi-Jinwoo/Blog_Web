@@ -1,7 +1,11 @@
 <template>
   <div class="title-bar">
     <div class="tool-bar">
-      <button class="adminpage-btn" v-show="this.isAdmin === true">Admin</button>
+      <button
+        @click="$router.push('/admin')"
+        class="adminpage-btn"
+        v-show="this.isAdmin === true"
+      >Admin</button>
       <button class="subscribe-btn">Subscribe</button>
       <button class="login-btn" v-if="this.id !== null" @click="logout">Logout</button>
       <button class="logout-btn" v-else @click="login">Login</button>

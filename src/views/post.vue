@@ -3,10 +3,14 @@
     <img
       src="https://img.icons8.com/material-rounded/24/000000/home.png"
       class="home-btn"
-      @click="goMain"
+      @click="$router.push('/')"
     />
     <div class="post-container">
       <div class="post-title">{{ post.title }}</div>
+      <div class="ctrl-box" v-show="this.post.fk_user_id === this.user.id">
+        <button @click="$router.push(`/write?idx=${post.idx}`)">수정</button>
+        <button @click="deletePost">삭제</button>
+      </div>
       <div class="post-content" v-html="convertedContent"></div>
     </div>
     <div class="comment-box">
@@ -94,8 +98,46 @@ export default {
       });
   },
   methods: {
-    goMain() {
-      this.$router.push("/");
+    deletePost() {
+      this.$swal({
+        title: "정말 삭제하시겠습니까?",
+        text: "삭제 시 댓글과 모든 답글이 삭제됩니다.",
+        icon: "warning",
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false
+      }).then(result => {
+        if (!result.value) return;
+        axios
+          .delete(`${SERVER_ENV.API_ADDR}/post/${this.post.idx}`, {
+            headers: {
+              "x-access-token": localStorage.getItem("x-access-token")
+            }
+          })
+          .then(resp => {
+            this.$router.push("/");
+          })
+          .catch(err => {
+            let message = "";
+            switch (err.response.status) {
+              case 400:
+                message = "오류가 발생하였습니다.";
+                break;
+              case 404:
+                message = "새로고침 후 이용해주세요.";
+                break;
+              case 403:
+                message = "본인 글만 삭제 할 수 있습니다.";
+                break;
+              case (410, 401):
+                message = "로그인 후 사용해주세요.";
+                break;
+              default:
+                message = "오류가 발생하였습니다.";
+                break;
+            }
+          });
+      });
     },
     createComment() {
       const content = this.createContent;
@@ -184,6 +226,29 @@ export default {
   width: 100%;
   min-height: 100vh;
   flex-direction: column;
+  .ctrl-box {
+    display: flex;
+    justify-content: flex-end;
+    button {
+      margin-left: 1%;
+      min-width: 30px;
+      margin-top: 2%;
+      width: 8%;
+      border: none;
+      background-color: #597cff;
+      color: #ffffff;
+      padding: 0.5%;
+      margin-bottom: 2%;
+      border-radius: 5px;
+      &:hover {
+        cursor: pointer;
+        background-color: rgba($color: #597cff, $alpha: 0.8);
+      }
+      &:focus {
+        outline: none;
+      }
+    }
+  }
   .home-btn {
     width: 30px;
     height: 30px;
