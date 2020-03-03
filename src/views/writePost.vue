@@ -59,6 +59,9 @@ export default {
     };
   },
   computed: {
+    updateIdx() {
+      return this.$route.query.idx;
+    },
     convertedContent() {
       return marked(this.content);
     }
@@ -73,6 +76,43 @@ export default {
       .catch(err => {
         this.$swal("오류", "다시 시도주세요", "error");
       });
+
+    if (this.updateIdx) {
+      axios
+        .get(`${SERVER_ENV.API_ADDR}/post/${this.updateIdx}?image=raw`, {
+          headers: {
+            "x-access-token": localStorage.getItem("x-access-token")
+          }
+        })
+        .then(resp => {
+          const { data } = resp.data;
+          const { post } = data;
+          this.title = post.title;
+          this.content = post.content;
+          this.thumbnail = post.thumbnail;
+          this.category = post.category_idx;
+          this.isPrivate = post.is_private;
+        })
+        .catch(err => {
+          let message = "";
+
+          switch (err.response.status) {
+            case 400:
+              message = "오류가 발생하였습니다.";
+              break;
+            case 404:
+              message = "새로고침 후 이용해주세요.";
+              break;
+            case 403:
+              message = "비공개 글입니다.";
+              break;
+            default:
+              message = "다시 시도해주세요";
+          }
+          this.$swal("오류", message, "error");
+          this.$router.push("/");
+        });
+    }
   },
   methods: {
     goMain() {
@@ -97,6 +137,43 @@ export default {
       post.thumbnail = this.thumbnail;
       post.category_idx = this.category;
 
+      if (this.updateIdx) {
+        axios
+          .put(`${SERVER_ENV.API_ADDR}/post/${this.updateIdx}`, post, {
+            headers: {
+              "x-access-token": localStorage.getItem("x-access-token")
+            }
+          })
+          .then(resp => {
+            this.$swal("글 수정 성공", "소중한 글 감사합니다.", "success");
+            this.$router.push("/");
+          })
+          .catch(err => {
+            let message = "";
+
+            switch (err.response.status) {
+              case 400:
+                message = "양식을 확인해주세요";
+                break;
+              case 401:
+                message = "로그인 후 사용해주세요";
+                break;
+              case 403:
+                message = "접근 권한이 없습니다";
+                break;
+              case 404:
+                message = "새로고침 후 사용해주세요";
+                break;
+              case 410:
+                message = "로그인 후 사용해주세요";
+                break;
+              default:
+                message = "다시 시도해주세요";
+            }
+            this.$swal("오류", message, "error");
+          });
+        return;
+      }
       axios
         .post(`${SERVER_ENV.API_ADDR}/post`, post, {
           headers: {

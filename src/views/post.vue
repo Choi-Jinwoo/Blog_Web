@@ -182,6 +182,7 @@ export default {
   text-align: center;
   background-color: #f5f6fa;
   width: 100%;
+  min-height: 100vh;
   flex-direction: column;
   .home-btn {
     width: 30px;
