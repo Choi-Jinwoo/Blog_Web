@@ -231,7 +231,7 @@ export default {
     background-color: #597cff;
     padding: 1% 0;
     padding-right: 5%;
-    box-shadow: 0 3px 3px rgba($color: #000000, $alpha: 0.3);
+    box-shadow: 0 2px 2px rgba($color: #000000, $alpha: 0.3);
     span {
       margin-left: 2%;
       &:hover {

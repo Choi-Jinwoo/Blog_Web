@@ -84,11 +84,11 @@ export default {
       width: 50px;
       object-fit: cover;
       border-radius: 50%;
-      border: solid 3px #ffffff;
+      border: solid 2px #ffffff;
       @media only screen and (max-width: 768px) {
         height: 30px;
         width: 30px;
-        border: solid 2px #ffffff;
+        border: solid 1px #ffffff;
       }
     }
   }
