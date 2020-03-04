@@ -1,10 +1,8 @@
 <template>
   <div class="post">
-    <img
-      src="https://img.icons8.com/material-rounded/24/000000/home.png"
-      class="home-btn"
-      @click="$router.push('/')"
-    />
+    <div class="top-bar">
+      <span @click="$router.push('/')">Home</span>
+    </div>
     <div class="post-container">
       <div class="post-title">{{ post.title }}</div>
       <div class="ctrl-box" v-show="this.post.fk_user_id === this.user.id">
@@ -226,6 +224,22 @@ export default {
   width: 100%;
   min-height: 100vh;
   flex-direction: column;
+  .top-bar {
+    display: flex;
+    justify-content: flex-start;
+    color: #ffffff;
+    background-color: #597cff;
+    padding: 1% 0;
+    padding-right: 5%;
+    box-shadow: 0 3px 3px rgba($color: #000000, $alpha: 0.3);
+    span {
+      margin-left: 2%;
+      &:hover {
+        cursor: pointer;
+        text-decoration: underline;
+      }
+    }
+  }
   .ctrl-box {
     display: flex;
     justify-content: flex-end;
@@ -247,16 +261,6 @@ export default {
       &:focus {
         outline: none;
       }
-    }
-  }
-  .home-btn {
-    width: 30px;
-    height: 30px;
-    margin: 0;
-    margin-left: 2%;
-    margin-top: 2%;
-    &:hover {
-      cursor: pointer;
     }
   }
   .comment-box {
