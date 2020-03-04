@@ -266,6 +266,9 @@ export default {
   .comment-box {
     padding-bottom: 10%;
     .comment-container {
+      @media only screen and (max-width: 768px) {
+        width: 90%;
+      }
       display: flex;
       flex-direction: column;
       font-size: 20px;
@@ -311,6 +314,10 @@ export default {
     }
   }
   .post-container {
+    @media only screen and (max-width: 768px) {
+      width: 90%;
+      font-size: 90%;
+    }
     width: 60%;
     margin: 0 auto;
     padding-top: 3%;
@@ -319,6 +326,7 @@ export default {
       font-weight: bold;
     }
     .post-content {
+      font-size: 110%;
       text-align: left;
     }
   }

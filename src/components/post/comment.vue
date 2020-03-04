@@ -296,6 +296,9 @@ export default {
 
 <style lang="scss" scoped>
 .comment {
+  @media only screen and (max-width: 768px) {
+    width: 90%;
+  }
   border-top: 1px #e2e2e2 solid;
   width: 60%;
   margin: 0 auto;
