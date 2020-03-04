@@ -6,7 +6,7 @@
         class="adminpage-btn"
         v-show="this.isAdmin === true"
       >Admin</button>
-      <button class="subscribe-btn">Subscribe</button>
+      <button class="subscribe-btn" @click="$router.push('/subscribe')">Subscribe</button>
       <button class="login-btn" v-if="this.id !== null" @click="logout">Logout</button>
       <button class="logout-btn" v-else @click="login">Login</button>
       <button class="about-btn">About</button>
