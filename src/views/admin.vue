@@ -228,10 +228,10 @@ export default {
       font-size: 30px;
       font-weight: bold;
       .subscribe-container {
-        color: #ffffff;
+        color: #597cff;
         width: 100%;
-        background-color: #597cff;
-        box-shadow: 0px 4px 4px 4px rgba($color: #000000, $alpha: 0.3);
+        background-color: #ffffff;
+        // box-shadow: 0px 4px 4px 4px rgba($color: #000000, $alpha: 0.3);
         h3 {
           margin: 0;
           padding: 0;
@@ -241,6 +241,7 @@ export default {
           max-height: 75vh;
           overflow: auto;
           .subscribe {
+            border: #597cff 1px solid;
             color: #597cff;
             text-align: left;
             background-color: #ffffff;
