@@ -9,6 +9,7 @@ import post from '@/views/post.vue';
 import writePost from '@/views/writePost.vue';
 import admin from '@/views/admin.vue';
 import subscribe from '@/views/subscribe.vue';
+import profile from '@/views/profile.vue';
 
 Vue.use(Router)
 
@@ -18,6 +19,10 @@ export default new Router({
     {
       path: '/',
       component: main
+    },
+    {
+      path: '/profile',
+      component: profile
     },
     {
       path: '/subscribe',

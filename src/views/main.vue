@@ -153,7 +153,7 @@ export default {
     .post-card {
       flex-grow: 1;
       margin: 0 2%;
-      margin-bottom: 8%;
+      margin-bottom: 3%;
     }
   }
 }

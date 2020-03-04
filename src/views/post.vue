@@ -264,6 +264,7 @@ export default {
     }
   }
   .comment-box {
+    margin-top: 5%;
     padding-bottom: 10%;
     .comment-container {
       @media only screen and (max-width: 768px) {
