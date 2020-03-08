@@ -6,12 +6,10 @@
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
+import { Vue, Component, Prop } from "vue-property-decorator";
 
 import SideIntro from "@/components/login/SideIntro.vue";
 import LoginForm from "../../components/login/LoginForm.vue";
-
 @Component({
   components: {
     "side-intro": SideIntro,

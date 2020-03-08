@@ -10,21 +10,26 @@
         <p>비밀번호</p>
         <input type="password" v-model="pw" />
       </div>
+      <Button text="로그인"></Button>
     </div>
   </div>
 </template>
 
 <script lang="ts">
-import Vue from "vue";
-import Component from "vue-class-component";
+import { Vue, Component } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
 import { sha512, Message } from "js-sha512";
 import { SweetAlertOptions } from "sweetalert2";
 import { API_ADDR } from "../../../config/server";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 import generateSwalOption from "@/lib/util/generateSwalOption";
+import Button from "@/components/common/Button/index.vue";
 
-@Component
+@Component({
+  components: {
+    Button
+  }
+})
 export default class LoginForm extends Vue {
   id: string = "";
   pw: string = "";
