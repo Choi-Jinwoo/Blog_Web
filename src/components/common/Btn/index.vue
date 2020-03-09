@@ -1,5 +1,6 @@
 <template>
   <button
+    class="Btn"
     @click="$emit('click')"
     :style="buttonStyle"
     @mouseover="isMouseOver = true"

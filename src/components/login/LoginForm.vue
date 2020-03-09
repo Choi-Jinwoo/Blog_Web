@@ -11,7 +11,7 @@
         <p>비밀번호</p>
         <input type="password" v-model="pw" @keydown.enter="login" />
       </div>
-      <Button text="로그인" @click="login"></Button>
+      <Btn text="로그인" @click="login"></Btn>
     </div>
 
     <div class="util-container">
@@ -31,11 +31,11 @@ import { sha512, Message } from "js-sha512";
 import { SweetAlertOptions } from "sweetalert2";
 import { API_ADDR } from "../../../config/server";
 import getDataFromResp from "@/lib/util/getDataFromResp";
-import Button from "@/components/common/Button/index.vue";
+import Btn from "@/components/common/Btn/index.vue";
 
 @Component({
   components: {
-    Button
+    Btn
   }
 })
 export default class LoginForm extends Vue {
@@ -77,21 +77,21 @@ export default class LoginForm extends Vue {
 @import "../../style/palette.scss";
 
 .login-form {
-  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background-color: #ffffff;
   .input-container {
     display: flex;
     flex-direction: column;
-    margin-top: 10%;
-    margin-bottom: 5%;
+    margin-top: 3rem;
+    margin-bottom: 1.5rem;
     width: 80%;
     h1 {
-      font-size: 2rem;
       margin: 0;
-      margin-bottom: 8%;
+      margin-bottom: 2rem;
       padding: 0;
+      font-size: 2rem;
       text-align: center;
     }
 
@@ -116,14 +116,14 @@ export default class LoginForm extends Vue {
       }
     }
 
-    button {
+    .Btn {
       margin-top: 2rem;
     }
   }
 
   .util-container {
     width: 80%;
-    margin-bottom: 10%;
+    margin-bottom: 3rem;
 
     .no-login-btn {
       display: inline;

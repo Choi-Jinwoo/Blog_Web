@@ -30,6 +30,7 @@ export default class Login extends Vue {}
   align-items: center;
   justify-content: center;
   height: 100vh;
+  min-width: 300px;
   background-color: $blue3;
   user-select: none;
 
