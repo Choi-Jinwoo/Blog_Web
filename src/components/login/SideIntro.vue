@@ -4,7 +4,10 @@
       <h1>Welcome</h1>
       <p>안녕하세요</p>
     </div>
-    <img src="../../assets/svg/login_joyride.svg" alt="Hello" />
+    <!-- <img src="../../assets/svg/login_joyride.svg" alt="Hello" /> -->
+    <div class="img-form">
+      <img src="../../assets/svg/login_highfive.svg" alt="Hello" />
+    </div>
   </div>
 </template>
 
@@ -26,7 +29,6 @@ export default class SideIntro extends Vue {}
 
   .intro-text-form {
     box-sizing: border-box;
-    margin-bottom: 30%;
     padding: 8%;
     width: 100%;
     h1 {
@@ -43,8 +45,14 @@ export default class SideIntro extends Vue {}
     }
   }
 
-  img {
-    width: 80%;
+  .img-form {
+    flex-grow: 1;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    img {
+      width: 80%;
+    }
   }
 }
 </style>

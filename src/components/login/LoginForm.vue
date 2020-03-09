@@ -31,7 +31,6 @@ import { sha512, Message } from "js-sha512";
 import { SweetAlertOptions } from "sweetalert2";
 import { API_ADDR } from "../../../config/server";
 import getDataFromResp from "@/lib/util/getDataFromResp";
-import generateSwalOption from "@/lib/util/generateSwalOption";
 import Button from "@/components/common/Button/index.vue";
 
 @Component({
@@ -58,26 +57,15 @@ export default class LoginForm extends Vue {
       localStorage.setItem("x-access-token", token);
       this.$router.push("/");
     } catch (err) {
-      const defaultOption: SweetAlertOptions = generateSwalOption();
-
       switch (err.response.status) {
         case 400:
-          defaultOption.title = "로그인 실패";
-          defaultOption.text = "아이디, 비밀번호가 비었습니다";
-          defaultOption.icon = "warning";
-          this.$swal(defaultOption);
+          this.$toasted.error("아이디, 비밀번호가 비었습니다").goAway(800);
           break;
         case 401:
-          defaultOption.title = "로그인 실패";
-          defaultOption.text = "아이디, 비밀번호가 일치하지 않습니다";
-          defaultOption.icon = "error";
-          this.$swal(defaultOption);
+          this.$toasted.error("아이디, 비밀번호가 틀렸습니다").goAway(800);
           break;
         default:
-          defaultOption.title = "로그인 실패";
-          defaultOption.text = "오류가 발생하였습니다";
-          defaultOption.icon = "error";
-          this.$swal(defaultOption);
+          this.$toasted.error("오류가 발생하였습니다").goAway(800);
           break;
       }
     }

@@ -31,6 +31,8 @@ export default class Login extends Vue {}
   justify-content: center;
   height: 100vh;
   background-color: $blue3;
+  user-select: none;
+
   .login-box {
     @media only screen and (max-width: 768px) {
       width: 80%;

@@ -5,7 +5,10 @@ export default (): SweetAlertOptions => {
     title: '',
     icon: 'success',
     text: '',
-    position: 'top-end',
+    position: 'top',
     toast: true,
+    timer: 800,
+    animation: false,
+    showConfirmButton: false,
   }
 }
