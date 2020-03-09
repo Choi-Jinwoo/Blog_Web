@@ -13,6 +13,10 @@ body {
   padding: 0;
 }
 
+input {
+  font-family: "Noto Sans KR";
+}
+
 #app {
   font-family: "Noto Sans KR";
 }

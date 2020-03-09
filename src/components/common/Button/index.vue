@@ -1,5 +1,6 @@
 <template>
   <button
+    @click="$emit('click')"
     :style="buttonStyle"
     @mouseover="isMouseOver = true"
     @mouseleave="isMouseOver = false"
@@ -72,9 +73,5 @@ button {
   border: none;
   border-radius: 3px;
   cursor: pointer;
-}
-
-button:hover {
-  background-color: black;
 }
 </style>

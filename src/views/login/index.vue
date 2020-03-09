@@ -1,7 +1,9 @@
 <template>
   <div class="login">
-    <side-intro />
-    <login-form />
+    <div class="login-box">
+      <side-intro />
+      <login-form />
+    </div>
   </div>
 </template>
 
@@ -20,9 +22,35 @@ export default class Login extends Vue {}
 </script>
 
 <style lang="scss" scoped>
+@import "../../style/palette";
+
 .login {
-  .side-intro {
-    width: 20%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: $blue3;
+  .login-box {
+    @media only screen and (max-width: 768px) {
+      width: 80%;
+    }
+
+    display: flex;
+    width: 50%;
+    .side-intro {
+      @media only screen and (max-width: 768px) {
+        display: none;
+      }
+
+      width: 40%;
+    }
+    .login-form {
+      width: 60%;
+      @media only screen and (max-width: 768px) {
+        width: 100%;
+      }
+    }
   }
 }
 </style>

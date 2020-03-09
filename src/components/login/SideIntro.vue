@@ -1,7 +1,7 @@
 <template>
   <div class="side-intro">
     <div class="intro-text-form">
-      <h1>Hello</h1>
+      <h1>Welcome</h1>
       <p>안녕하세요</p>
     </div>
     <img src="../../assets/svg/login_joyride.svg" alt="Hello" />
@@ -23,24 +23,25 @@ export default class SideIntro extends Vue {}
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background-color: $blue1;
+  background-color: #ffffff;
 
   .intro-text-form {
     h1 {
       padding: 0;
       margin: 0;
-      font-size: 3rem;
+      font-size: 2rem;
     }
 
     p {
       padding: 0;
       margin: 0;
       font-size: 1rem;
+      color: $gray5;
     }
   }
 
   img {
-    width: 100%;
+    width: 80%;
   }
 }
 </style>
