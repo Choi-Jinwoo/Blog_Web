@@ -15,10 +15,10 @@
     </div>
 
     <div class="util-container">
-      <p class="no-login-btn" @click="router.push('/')">로그인 없이 둘러보기</p>
+      <p class="no-login-btn" @click="$router.push('/')">로그인 없이 둘러보기</p>
       <p>
         아직 게정이 없으신가요?
-        <span @click="router.push('/register')">회원가입</span>
+        <span @click="$router.push('/register')">회원가입</span>
       </p>
     </div>
   </div>

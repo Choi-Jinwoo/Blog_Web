@@ -22,21 +22,24 @@ export default class SideIntro extends Vue {}
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background-color: #ffffff;
+  background-color: $gray1;
 
   .intro-text-form {
+    box-sizing: border-box;
+    margin-bottom: 30%;
+    padding: 8%;
+    width: 100%;
     h1 {
       padding: 0;
       margin: 0;
-      font-size: 2rem;
+      font-size: 1.5rem;
     }
 
     p {
       padding: 0;
       margin: 0;
-      font-size: 1rem;
-      color: $gray5;
+      font-size: 0.75rem;
+      color: $gray4;
     }
   }
 
