@@ -4,7 +4,7 @@
       <h1>회원가입</h1>
 
       <div class="input-form-container">
-        <div class="input-form">
+        <div class="input-form" title="숫자 혹은 알파벳 소문자 조합 4~20자로 구성되어야 합니다.">
           <p>아이디</p>
           <input type="text" v-model="id" />
         </div>
@@ -12,13 +12,21 @@
           <p>이름</p>
           <input type="text" v-model="name" />
         </div>
-        <div class="input-form">
+        <div class="input-form" title="8자 이상으로 구성되어야 합니다.">
           <p>비밀번호</p>
-          <input type="password" v-model="pw" />
+          <input
+            type="password"
+            v-model="pw"
+            :style="!this.isPwChecked ? 'border: #ff0000 1px solid' : ''"
+          />
         </div>
         <div class="input-form">
           <p>비밀번호 확인</p>
-          <input type="password" v-model="rePw" />
+          <input
+            type="password"
+            v-model="rePw"
+            :style="!this.isPwChecked ? 'border: #ff0000 1px solid' : ''"
+          />
         </div>
       </div>
 
@@ -26,10 +34,10 @@
     </div>
 
     <div class="util-container">
-      <p class="no-register-btn">회원가입 없이 둘러보기</p>
+      <p class="no-register-btn" @click="$router.push('/')">회원가입 없이 둘러보기</p>
       <p>
         이미 계정이 있으신가요?
-        <span>로그인</span>
+        <span @click="$router.push('/login')">로그인</span>
       </p>
     </div>
   </div>
@@ -37,6 +45,9 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import axios, { AxiosResponse } from "axios";
+import { sha512, Message } from "js-sha512";
+import { API_ADDR } from "../../../config/server";
 import Btn from "@/components/common/Btn/index.vue";
 
 type User = {
@@ -55,6 +66,52 @@ export default class RegisterForm extends Vue {
   name: string = "";
   pw: string = "";
   rePw: string = "";
+
+  get isPwChecked(): boolean {
+    return this.pw === this.rePw;
+  }
+
+  async register() {
+    if (!(this.id && this.pw && this.name)) {
+      this.$toasted.error("양식이 비었습니다.").goAway(800);
+      return;
+    }
+
+    if (!this.isPwChecked) {
+      this.$toasted.error("비밀번호가 다릅니다").goAway(800);
+      return;
+    }
+
+    if (this.pw.length < 8) {
+      this.$toasted.error("비밀번호 길이가 맞지 않습니다").goAway(800);
+      return;
+    }
+
+    const castedPw: Message = String(this.pw);
+
+    const userData: User = {
+      id: this.id,
+      pw: sha512(castedPw),
+      name: this.name
+    };
+
+    try {
+      await axios.post(`${API_ADDR}/auth/register`, userData);
+      this.$router.push("/login");
+    } catch (err) {
+      switch (err.response.status) {
+        case 400:
+          this.$toasted.error("양식을 확인해 주세요").goAway(800);
+          break;
+        case 409:
+          this.$toasted.error("이미 존재하는 아이디입니다").goAway(800);
+          break;
+        default:
+          this.$toasted.error("오류가 발생하였습니다").goAway(800);
+          break;
+      }
+    }
+  }
 }
 </script>
 
@@ -120,7 +177,7 @@ export default class RegisterForm extends Vue {
   }
 
   .util-container {
-    width: 80%;
+    width: 75%;
     margin-bottom: 3rem;
 
     .no-register-btn {

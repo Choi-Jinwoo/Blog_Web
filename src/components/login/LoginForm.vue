@@ -28,7 +28,6 @@
 import { Vue, Component } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
 import { sha512, Message } from "js-sha512";
-import { SweetAlertOptions } from "sweetalert2";
 import { API_ADDR } from "../../../config/server";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 import Btn from "@/components/common/Btn/index.vue";
