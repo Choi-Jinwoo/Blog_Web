@@ -31,7 +31,7 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import moment from "moment";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 import { API_ADDR } from "../../../../config/server";
@@ -67,7 +67,7 @@ export default class PostCard extends Vue {
 
   async getAuthor() {
     try {
-      const resp = await axios.get(
+      const resp: AxiosResponse = await axios.get(
         `${API_ADDR}/profile?user=${this.post.authorId}`
       );
 
@@ -79,7 +79,6 @@ export default class PostCard extends Vue {
       };
       this.author = author;
     } catch (err) {
-      console.log(err);
       switch (err.response.status) {
         case 404:
           this.getBasicProfile();
@@ -91,7 +90,9 @@ export default class PostCard extends Vue {
   }
 
   async getBasicProfile() {
-    const resp = await axios.get(`${API_ADDR}/file/basic-profile`);
+    const resp: AxiosResponse = await axios.get(
+      `${API_ADDR}/file/basic-profile`
+    );
 
     const { profile_image } = getDataFromResp(resp);
     const author: AuthorType = {
@@ -123,6 +124,7 @@ export default class PostCard extends Vue {
     flex-direction: column;
     justify-content: center;
     margin: 0 auto;
+    margin-top: 0.25rem;
     width: 90%;
 
     .category,
@@ -159,7 +161,7 @@ export default class PostCard extends Vue {
     .img-not-exist {
       display: flex;
       flex-direction: column;
-      height: 18rem;
+      height: 16rem;
       align-items: center;
       justify-content: center;
 

@@ -12,6 +12,11 @@ import { API_ADDR } from "../../../../config/server";
 
 import PostCard from "@/components/main/PostView/PostCard.vue";
 
+type Category = {
+  idx: number;
+  name: string;
+};
+
 type PostResponseType = {
   title: string;
   fk_category_idx: number;
@@ -38,10 +43,18 @@ type PostType = {
 export default class PostView extends Vue {
   posts: PostType[] = [];
   currentPage: number = 0;
+  categories!: Category[];
+  categoryIdxMapped!: number[];
 
   async mounted() {
+    const resp: AxiosResponse = await axios.get(`${API_ADDR}/category`);
+    const { categories } = getDataFromResp(resp);
+    this.categories = categories;
+    this.categoryIdxMapped = categories.map((category: Category) => {
+      return category.idx;
+    });
+
     while (window.innerHeight >= document.body.offsetHeight) {
-      console.log(window.innerHeight, document.body.offsetHeight);
       this.currentPage += 1;
       const newPosts = await this.getPosts();
       if (!(newPosts && newPosts.length)) {
@@ -50,11 +63,6 @@ export default class PostView extends Vue {
     }
 
     window.addEventListener("scroll", () => {
-      console.log(
-        window.innerHeight + window.scrollY,
-        document.body.offsetHeight
-      );
-
       if (
         window.innerHeight + window.scrollY >=
         document.body.offsetHeight * 0.9
@@ -74,11 +82,16 @@ export default class PostView extends Vue {
       const { posts } = getDataFromResp(resp);
 
       const newPosts: PostType[] = posts.map((resPost: PostResponseType) => {
+        const categoryIdx = this.categoryIdxMapped.indexOf(
+          resPost.fk_category_idx
+        );
+        const categoryName =
+          categoryIdx !== -1 ? this.categories[categoryIdx].name : "기타";
+
         console.log(resPost);
         const post: PostType = {
           title: resPost.title,
-          // TODO: category
-          category: resPost.fk_category_idx.toString(),
+          category: categoryName,
           thumbnail: resPost.thumbnail,
           authorId: resPost.fk_user_id,
           view: resPost.view,
@@ -90,6 +103,7 @@ export default class PostView extends Vue {
       this.posts = [...this.posts, ...newPosts];
       return newPosts;
     } catch (err) {
+      // TODO: Catch Error
       console.log(err);
     }
   }
