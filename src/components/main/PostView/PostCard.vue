@@ -1,6 +1,38 @@
+<template>
+  <div class="post-card">
+    <img v-show="post.thumbnail" :src="post.thumbnail" :alt="post.title" />
+    <div class="post-info">
+      <!-- if thumbnail exist -->
+      <div class="img-exist" v-if="post.thumbnail">
+        <p class="category">{{ post.category}}</p>
+        <p class="created-at">{{ post.createdAt}}</p>
+        <h3>{{ post.title }}</h3>
+      </div>
+
+      <div class="img-not-exist" v-else>
+        <p class="category">{{ post.category}}</p>
+        <h3>{{ post.title }}</h3>
+        <p class="created-at">{{ post.createdAt}}</p>
+      </div>
+
+      <div class="bottom-info-container">
+        <div class="author-info">
+          <img :src="author.profileImage" />
+          <p>{{ author.id }}</p>
+        </div>
+        <div class="view-info">
+          <img src="../../../assets/svg/post_card_view.svg" />
+          <p>{{ post.view }}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import axios from "axios";
+import moment from "moment";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 import { API_ADDR } from "../../../../config/server";
 
@@ -10,7 +42,7 @@ type PostType = {
   thumbnail: string;
   authorId: string;
   view: number;
-  createdAt: string;
+  createdAt: Date | string;
 };
 
 type AuthorType = {
@@ -29,6 +61,7 @@ export default class PostCard extends Vue {
   };
 
   async mounted() {
+    this.post.createdAt = moment(this.post.createdAt).format("YYYY-MM-DD");
     this.getAuthor();
   }
 
@@ -60,54 +93,35 @@ export default class PostCard extends Vue {
   async getBasicProfile() {
     const resp = await axios.get(`${API_ADDR}/file/basic-profile`);
 
-    const { proifle_image } = getDataFromResp(resp);
-
+    const { profile_image } = getDataFromResp(resp);
     const author: AuthorType = {
       id: "삭제된 사용자",
-      profileImage: proifle_image
+      profileImage: profile_image
     };
     this.author = author;
   }
 }
 </script>
 
-<template>
-  <div class="post-card">
-    <img v-show="post.thumbnail" :src="post.thumbnail" :alt="post.title" />
-    <div class="post-info">
-      <p class="category">{{ post.category}}</p>
-      <p class="created-at">{{ post.createdAt}}</p>
-      <h3>{{ post.title }}</h3>
-
-      <div class="bottom-info-container">
-        <div class="author-info">
-          <img :src="author.profileImage" />
-          <p>{{ author.id }}</p>
-        </div>
-        <div class="view-info">
-          <img src="../../../assets/svg/post_card_view.svg" />
-          <p>{{ post.view }}</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <style lang="scss" scoped>
 @import "../../../style/palette.scss";
+
 .post-card {
-  display: inline-block;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   background-color: #ffffff;
   img {
     width: 100%;
-    height: 15rem;
+    height: 12rem;
     object-fit: cover;
   }
 
   .post-info {
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
+    justify-content: center;
     margin: 0 auto;
     width: 90%;
 
@@ -119,23 +133,67 @@ export default class PostCard extends Vue {
       color: $gray5;
     }
 
-    .category {
-      text-align: left;
-    }
-    .created-at {
-      text-align: right;
+    .img-exist {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      .category {
+        text-align: left;
+      }
+      .created-at {
+        text-align: right;
+      }
+
+      h3 {
+        margin: 0;
+        padding: 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        text-align: right;
+        overflow: hidden;
+        font-size: 1.75rem;
+      }
     }
 
-    h3 {
-      margin: 0;
-      padding: 0;
-      text-align: right;
-      font-size: 1.75rem;
+    .img-not-exist {
+      display: flex;
+      flex-direction: column;
+      height: 18rem;
+      align-items: center;
+      justify-content: center;
+
+      h3 {
+        flex-grow: 3;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
+        font-size: 1.75rem;
+      }
+
+      .category,
+      .created-at {
+        flex-grow: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .created-at {
+        justify-content: flex-end;
+        width: 100%;
+      }
     }
 
     .bottom-info-container {
       display: flex;
       margin-top: 0.25rem;
+      margin-bottom: 0.5rem;
       .author-info,
       .view-info {
         display: flex;

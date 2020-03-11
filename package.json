@@ -12,6 +12,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
     "js-sha512": "^0.8.0",
+    "moment": "^2.24.0",
     "node-sass": "^4.13.1",
     "sass-loader": "^8.0.2",
     "sweetalert2": "^9.9.0",
