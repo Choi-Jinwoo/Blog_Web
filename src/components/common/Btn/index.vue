@@ -44,7 +44,7 @@ export default class Button extends Vue {
   isMouseOver: boolean = false;
 
   @Prop({ type: String })
-  text?: string | null;
+  text!: string | null;
 
   @Prop({ type: String, default: "medium" })
   size!: Size;
