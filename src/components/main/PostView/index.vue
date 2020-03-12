@@ -62,22 +62,17 @@ export default class PostView extends Vue {
       return category.idx;
     });
 
-    await this.viewInit();
+    this.getPosts();
 
     window.addEventListener("scroll", async () => {
-      if (this.category) {
-        return;
-      }
-
       if (this.loadAll) {
         return;
       }
 
       if (
-        window.innerHeight + window.scrollY >=
-        document.body.offsetHeight * 0.9
+        document.body.scrollTop + document.body.clientHeight >=
+        document.body.offsetHeight
       ) {
-        this.currentPage += 1;
         const newPosts = await this.getPosts();
         this.loadAll = newPosts && newPosts.length ? false : true;
       }
@@ -86,33 +81,21 @@ export default class PostView extends Vue {
     eventBus.$on("select-category", async (idx: number) => {
       this.category = idx;
       this.posts = [];
-      if (idx === null) {
-        await this.viewInit();
-        await this.viewInit();
-        return;
-      }
-
+      this.initView();
       this.getPosts();
     });
   }
 
-  async viewInit() {
+  async initView() {
     this.currentPage = 0;
     this.loadAll = false;
-
-    while (window.innerHeight >= document.body.offsetHeight) {
-      this.currentPage += 1;
-      const newPosts = await this.getPosts();
-      if (!(newPosts && newPosts.length)) {
-        break;
-      }
-    }
   }
 
   async getPosts() {
-    let url = `${API_ADDR}/post?page=${this.currentPage}&limit=1`;
+    this.currentPage += 1;
+    let url = `${API_ADDR}/post?page=${this.currentPage}&limit=10`;
     if (this.category) {
-      url = `${API_ADDR}/post?category=${this.category}`;
+      url += `&category=${this.category}`;
     }
     try {
       const resp: AxiosResponse = await axios.get(url);
