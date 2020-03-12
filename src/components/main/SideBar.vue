@@ -10,7 +10,7 @@
 
     <div class="search-bar">
       <img src="../../assets/svg/search_bar_searcher.svg" alt />
-      <input type="text" placeholder="검색어를 입력하세요" />
+      <input type="text" placeholder="검색어를 입력하세요" v-model="findQuery" @keydown.enter="findPost" />
     </div>
 
     <div class="category-container">
@@ -47,6 +47,7 @@ type Category = {
 export default class SideBar extends Vue {
   user: UserType = {} as UserType;
   categories: Category[] = [];
+  findQuery: string = "";
 
   async mounted() {
     this.getProfile();
@@ -91,6 +92,10 @@ export default class SideBar extends Vue {
 
   async selectCategory(idx: number) {
     eventBus.$emit("select-category", idx);
+  }
+
+  async findPost() {
+    eventBus.$emit("find-post", this.findQuery);
   }
 }
 </script>

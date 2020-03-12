@@ -84,6 +84,10 @@ export default class PostView extends Vue {
       this.initView();
       this.getPosts();
     });
+
+    eventBus.$on("find-post", async (query: string) => {
+      this.findPost(query);
+    });
   }
 
   async initView() {
@@ -125,6 +129,19 @@ export default class PostView extends Vue {
     } catch (err) {
       // TODO: Catch Error
       console.log(err);
+    }
+  }
+
+  async findPost(query: string) {
+    try {
+      const resp: AxiosResponse = await axios.get(
+        `${API_ADDR}/post/find?query=${query}`
+      );
+      const { posts } = getDataFromResp(resp);
+
+      this.posts = posts;
+    } catch (err) {
+      //TODO: Catech Error
     }
   }
 }
