@@ -162,6 +162,7 @@ export default class PostView extends Vue {
     min-width: 14rem;
     max-width: calc(50% - 2rem);
     max-height: 20rem;
+    cursor: pointer;
   }
 }
 </style>
