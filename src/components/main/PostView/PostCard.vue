@@ -112,6 +112,8 @@ export default class PostCard extends Vue {
   flex-direction: column;
   width: 100%;
   background-color: #ffffff;
+  box-shadow: 0 0 8px 2px rgba($color: $gray5, $alpha: 0.2);
+
   img {
     width: 100%;
     height: 12rem;
