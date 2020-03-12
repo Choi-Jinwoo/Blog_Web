@@ -4,6 +4,7 @@
       <side-bar></side-bar>
     </div>
     <post-view />
+    <div class="subscribe-btn">SUBSCRIBE</div>
   </div>
 </template>
 
@@ -26,6 +27,8 @@ export default class Main extends Vue {}
 </script>
 
 <style lang="scss" scoped>
+@import "../../style/palette";
+
 .main {
   @media only screen and (max-width: 945px) {
     flex-direction: column;
@@ -38,7 +41,7 @@ export default class Main extends Vue {}
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: 25%;
+    width: 24%;
     .side-bar {
       @media only screen and (max-width: 945px) {
         position: initial;
@@ -51,7 +54,23 @@ export default class Main extends Vue {}
     @media only screen and (max-width: 945px) {
       width: 100%;
     }
-    width: 75%;
+    width: 76%;
+  }
+
+  .subscribe-btn {
+    display: flex;
+    position: fixed;
+    align-items: center;
+    justify-content: center;
+    width: 6rem;
+    height: 2.5rem;
+    bottom: 1.5rem;
+    right: 1.5rem;
+    border-radius: 2rem;
+    font-size: 0.75rem;
+    background-color: $gray4;
+    color: #ffffff;
+    cursor: pointer;
   }
 }
 </style>
