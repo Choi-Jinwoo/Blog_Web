@@ -42,7 +42,7 @@ type PostType = {
   thumbnail: string;
   authorId: string;
   view: number;
-  createdAt: Date | string;
+  createdAt: string;
 };
 
 type AuthorType = {
@@ -60,8 +60,11 @@ export default class PostCard extends Vue {
     profileImage: ""
   };
 
-  async mounted() {
-    this.post.createdAt = moment(this.post.createdAt).format("YYYY-MM-DD");
+  mounted() {
+    this.initCard();
+  }
+
+  initCard() {
     this.getAuthor();
   }
 

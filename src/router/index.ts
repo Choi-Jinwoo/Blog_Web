@@ -19,6 +19,11 @@ const routes = [
     name: 'Register',
     component: () => import('@/views/register/index.vue')
   },
+  {
+    path: '/:idx',
+    name: 'Post',
+    component: () => import('@/views/post/index.vue'),
+  }
 ]
 
 const router = new VueRouter({

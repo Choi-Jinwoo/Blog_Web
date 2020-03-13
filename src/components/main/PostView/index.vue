@@ -12,6 +12,7 @@ import { eventBus } from "@/lib/evnetBus";
 import { API_ADDR } from "../../../../config/server";
 
 import PostCard from "@/components/main/PostView/PostCard.vue";
+import moment from "moment";
 
 type Category = {
   idx: number;
@@ -33,7 +34,7 @@ type PostType = {
   thumbnail: string;
   authorId: string;
   view: number;
-  createdAt: Date;
+  createdAt: string;
 };
 
 type GetPostOptionsType = {
@@ -95,6 +96,27 @@ export default class PostView extends Vue {
     this.loadAll = false;
   }
 
+  formatPost(posts: PostResponseType[]): PostType[] {
+    return posts.map((resPost: PostResponseType) => {
+      const categoryIdx = this.categoryIdxMapped.indexOf(
+        resPost.fk_category_idx
+      );
+      const categoryName =
+        categoryIdx !== -1 ? this.categories[categoryIdx].name : "기타";
+
+      const post: PostType = {
+        title: resPost.title,
+        category: categoryName,
+        thumbnail: resPost.thumbnail,
+        authorId: resPost.fk_user_id,
+        view: resPost.view,
+        createdAt: moment(resPost.created_at).format("YYYY-MM-DD")
+      };
+
+      return post;
+    });
+  }
+
   async getPosts() {
     this.currentPage += 1;
     let url = `${API_ADDR}/post?page=${this.currentPage}&limit=10`;
@@ -106,25 +128,8 @@ export default class PostView extends Vue {
 
       const { posts } = getDataFromResp(resp);
 
-      const newPosts: PostType[] = posts.map((resPost: PostResponseType) => {
-        const categoryIdx = this.categoryIdxMapped.indexOf(
-          resPost.fk_category_idx
-        );
-        const categoryName =
-          categoryIdx !== -1 ? this.categories[categoryIdx].name : "기타";
-
-        const post: PostType = {
-          title: resPost.title,
-          category: categoryName,
-          thumbnail: resPost.thumbnail,
-          authorId: resPost.fk_user_id,
-          view: resPost.view,
-          createdAt: resPost.created_at
-        };
-        return post;
-      });
-
-      this.posts = [...this.posts, ...newPosts];
+      const newPosts: PostType[] = this.formatPost(posts);
+      this.posts.push(...newPosts);
       return newPosts;
     } catch (err) {
       // TODO: Catch Error
@@ -138,8 +143,7 @@ export default class PostView extends Vue {
         `${API_ADDR}/post/find?query=${query}`
       );
       const { posts } = getDataFromResp(resp);
-
-      this.posts = posts;
+      this.posts = this.formatPost(posts);
     } catch (err) {
       //TODO: Catech Error
     }

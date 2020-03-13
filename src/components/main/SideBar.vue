@@ -1,5 +1,10 @@
 <template>
   <div class="side-bar">
+    <div class="notice-bar">
+      <div class="notice-btn">공지</div>
+      <p>{{ noticeTitle }}</p>
+    </div>
+
     <div class="title-bar">
       <h1>꼬꼬마 블로그</h1>
       <div v-show="user.id" class="profile">
@@ -22,6 +27,12 @@
         @click="selectCategory(category.idx)"
       >{{ category.name }}</p>
     </div>
+
+    <div class="bottom-bar">
+      <p v-show="user.isAdmin">관리자</p>
+      <p v-if="!user.id" @click="$router.push('/login')">로그인</p>
+      <p v-else @click="logout">로그아웃</p>
+    </div>
   </div>
 </template>
 
@@ -38,7 +49,7 @@ type UserType = {
   isAdmin: boolean;
 };
 
-type Category = {
+type CategoryType = {
   idx: number;
   name: string;
 };
@@ -46,12 +57,14 @@ type Category = {
 @Component
 export default class SideBar extends Vue {
   user: UserType = {} as UserType;
-  categories: Category[] = [];
+  categories: CategoryType[] = [];
   findQuery: string = "";
+  noticeTitle: string = "";
 
   async mounted() {
     this.getProfile();
     this.getCategories();
+    this.getRecentNotice();
   }
 
   async getProfile() {
@@ -84,18 +97,39 @@ export default class SideBar extends Vue {
     }
   }
 
+  async getRecentNotice() {
+    try {
+      const resp: AxiosResponse = await axios.get(`${API_ADDR}/notice/recent`);
+      const { notice } = getDataFromResp(resp);
+      this.noticeTitle = notice.title;
+    } catch (err) {
+      switch (err.response.status) {
+        case 404:
+          this.noticeTitle = "공지사항 없음";
+          break;
+        default:
+          this.noticeTitle = "공지사항 오류 발생";
+      }
+    }
+  }
+
   async getCategories() {
     const resp: AxiosResponse = await axios.get(`${API_ADDR}/category`);
     const { categories } = getDataFromResp(resp);
     this.categories = categories;
   }
 
-  async selectCategory(idx: number) {
+  selectCategory(idx: number) {
     eventBus.$emit("select-category", idx);
   }
 
-  async findPost() {
+  findPost() {
     eventBus.$emit("find-post", this.findQuery);
+  }
+
+  logout() {
+    localStorage.removeItem("x-access-token");
+    location.href = "./";
   }
 }
 </script>
@@ -108,10 +142,50 @@ export default class SideBar extends Vue {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  user-select: none;
+
   @media only screen and (max-width: 945px) {
+    width: 100%;
     height: auto;
   }
+
+  .notice-bar {
+    @media only screen and (max-width: 945px) {
+      padding-left: 1rem;
+    }
+    box-sizing: border-box;
+    display: flex;
+    align-content: center;
+    justify-content: flex-start;
+    margin-top: 0.5rem;
+    width: 100%;
+    height: 1.75rem;
+    cursor: pointer;
+
+    .notice-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 4rem;
+      border-radius: 1rem;
+      border: $gray5 solid 2px;
+      font-weight: bold;
+    }
+
+    p {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      margin-left: 0.5rem;
+      padding: 0;
+    }
+  }
+
   .title-bar {
+    @media only screen and (max-width: 945px) {
+      width: 100%;
+    }
     flex-grow: 0.8;
     display: flex;
     flex-direction: column;
@@ -125,6 +199,10 @@ export default class SideBar extends Vue {
     }
 
     .profile {
+      @media only screen and (max-width: 945px) {
+        padding-right: 1rem;
+      }
+      box-sizing: border-box;
       display: flex;
       align-items: center;
       justify-content: flex-end;
@@ -174,7 +252,7 @@ export default class SideBar extends Vue {
     @media only screen and (max-width: 945px) {
       display: none;
     }
-    flex-grow: 3;
+    flex-grow: 2.5;
     width: 100%;
 
     h3 {
@@ -196,6 +274,31 @@ export default class SideBar extends Vue {
         color: $gray5;
         text-decoration: underline;
       }
+    }
+  }
+
+  .bottom-bar {
+    @media only screen and (max-width: 945px) {
+      padding-right: 1rem;
+      margin-top: 0.5rem;
+    }
+    box-sizing: border-box;
+    flex-grow: 0.4;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+
+    p {
+      margin: 0;
+      margin-left: 0.5rem;
+      padding: 0;
+      font-size: 0.8rem;
+      color: $gray5;
+      cursor: pointer;
+    }
+    :hover {
+      text-decoration: underline;
     }
   }
 }

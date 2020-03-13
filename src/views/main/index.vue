@@ -70,6 +70,7 @@ export default class Main extends Vue {}
     font-size: 0.75rem;
     background-color: $gray4;
     color: #ffffff;
+    box-shadow: 0px 0px 2px 2px rgba($color: #000000, $alpha: 0.2);
     cursor: pointer;
   }
 }
