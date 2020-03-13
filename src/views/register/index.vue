@@ -26,14 +26,14 @@ export default class Register extends Vue {}
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  min-height: 100vh;
   min-width: 300px;
   background-color: $blue3;
   user-select: none;
 
   .register-box {
     @media only screen and (max-width: 768px) {
-      width: 80%;
+      width: 90%;
     }
     width: 50%;
   }

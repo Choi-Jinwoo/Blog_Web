@@ -5,6 +5,7 @@
     :style="buttonStyle"
     @mouseover="isMouseOver = true"
     @mouseleave="isMouseOver = false"
+    :disabled="disabled"
   >{{ text }}</button>
 </template>
 
@@ -43,6 +44,9 @@ const colorMap: colorMapType = {
 export default class Button extends Vue {
   isMouseOver: boolean = false;
 
+  @Prop({ type: Boolean, default: false })
+  disabled!: boolean;
+
   @Prop({ type: String })
   text!: string | null;
 
@@ -58,7 +62,12 @@ export default class Button extends Vue {
       "background-color": !this.isMouseOver
         ? colorMap[this.color].background
         : colorMap[this.color].hoverBackground,
-      "font-size": this.size === "medium" ? "1rem" : "1.25rem",
+      "font-size":
+        this.size === "medium"
+          ? "1rem"
+          : this.size === "large"
+          ? "1.25rem"
+          : "0.75rem",
       padding: this.size === "medium" ? "0.5rem" : "0.5rem"
     };
   }
