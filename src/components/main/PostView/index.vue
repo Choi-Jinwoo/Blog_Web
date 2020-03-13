@@ -124,7 +124,11 @@ export default class PostView extends Vue {
       url += `&category=${this.category}`;
     }
     try {
-      const resp: AxiosResponse = await axios.get(url);
+      const resp: AxiosResponse = await axios.get(url, {
+        headers: {
+          "x-access-token": localStorage.getItem("x-access-token")
+        }
+      });
 
       const { posts } = getDataFromResp(resp);
 
@@ -140,7 +144,12 @@ export default class PostView extends Vue {
   async findPost(query: string) {
     try {
       const resp: AxiosResponse = await axios.get(
-        `${API_ADDR}/post/find?query=${query}`
+        `${API_ADDR}/post/find?query=${query}`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("x-access-token")
+          }
+        }
       );
       const { posts } = getDataFromResp(resp);
       this.posts = this.formatPost(posts);
