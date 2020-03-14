@@ -89,7 +89,11 @@ export default class PostBox extends Vue {
   async getPost() {
     const idx = this.$route.params.idx;
     try {
-      const resp: AxiosResponse = await axios.get(`${API_ADDR}/post/${idx}`);
+      const resp: AxiosResponse = await axios.get(`${API_ADDR}/post/${idx}`, {
+        headers: {
+          "x-access-token": localStorage.getItem("x-access-token")
+        }
+      });
       const { post } = getDataFromResp(resp);
       post.created_at = moment(post.created_at).format("YYYY-MM-DD");
       this.post = post;

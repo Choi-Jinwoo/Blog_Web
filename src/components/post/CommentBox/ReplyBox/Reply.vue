@@ -116,7 +116,7 @@ export default class Reply extends Vue {
           break;
         case 410:
           this.$toasted
-            .error("로그인 정보가 만료로 재 로그인 후 이용해주세요")
+            .error("로그인 정보 만료로 재 로그인 후 이용해주세요")
             .goAway(800);
           break;
         default:
@@ -151,7 +151,7 @@ export default class Reply extends Vue {
           break;
         case 410:
           this.$toasted
-            .error("로그인 정보가 만료로 재 로그인 후 이용해주세요")
+            .error("로그인 정보 만료로 재 로그인 후 이용해주세요")
             .goAway(800);
           break;
         default:

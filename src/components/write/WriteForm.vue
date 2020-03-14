@@ -1,6 +1,6 @@
 <template>
   <div class="write-form">
-    <div class="input-box">
+    <div class="input-box" v-if="!activeWriteOption">
       <div class="title">
         <input type="text" placeholder="제목을 입력하세요" v-model="post.title" />
       </div>
@@ -14,6 +14,47 @@
         ></textarea>
       </div>
     </div>
+
+    <!-- Upload Post Mode -->
+    <div class="upload-post-box" v-else>
+      <input
+        type="file"
+        id="thumbnail-upload-input"
+        @change="uploadThumbnail"
+        style="display: none"
+      />
+      <h2>{{ post.title }}</h2>
+
+      <div class="thumbnail-box">
+        <div class="upload-thumbnail">
+          <img :src="thumbnailURL" />
+        </div>
+        <Btn text="썸네일 업로드" size="medium" @click="onClickUploadThumbnail" />
+      </div>
+
+      <div class="private-box">
+        <div
+          class="private"
+          @click="post.is_private = !post.is_private"
+        >{{ post.is_private ? '비공개' : '공개' }}</div>
+      </div>
+
+      <div class="category-box">
+        <select class="category-select" v-model="post.category_idx">
+          <option
+            v-for="category in categories"
+            :key="category.idx"
+            :value="category.idx"
+          >{{ category.name }}</option>
+        </select>
+      </div>
+
+      <div class="save-box">
+        <Btn text="업로드" size="medium" @click="createPost" />
+        <Btn text="임시저장" size="medium" @click="tempSave" />
+      </div>
+    </div>
+
     <div class="result-box">
       <h1>{{ post.title }}</h1>
       <div class="result-container" v-html="convertedContent"></div>
@@ -23,17 +64,9 @@
       <img
         class="active-option-btn"
         src="../../assets/svg/write_upload.svg"
-        v-if="!activeWriteOption"
+        v-show="!activeWriteOption"
         @click="activeWriteOption = true"
       />
-      <div class="write-option-bar" v-else>
-        임시저장
-        업로드
-        썸네일 업로드
-        공개
-        카테고리
-        취소
-      </div>
     </div>
   </div>
 </template>
@@ -45,6 +78,8 @@ import axios, { AxiosResponse } from "axios";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 import { API_ADDR } from "../../../config/server";
 
+import Btn from "@/components/common/Btn/index.vue";
+
 type PostType = {
   title: string;
   content: string;
@@ -53,16 +88,145 @@ type PostType = {
   is_private: boolean;
 };
 
-@Component
+type CategoryType = {
+  idx: number;
+  name: string;
+};
+
+@Component({
+  components: {
+    Btn
+  }
+})
 export default class Write extends Vue {
   post: PostType = {
-    content: ""
+    content: "",
+    is_private: false
   } as PostType;
+
+  categories: CategoryType[] = [];
+
+  thumbnailURL: string = "";
 
   activeWriteOption: boolean = false;
 
+  async mounted() {
+    const isAdmin = await this.getProfile();
+    if (!isAdmin) {
+      alert("관리자만 접근 가능합니다");
+      this.$router.push("/");
+    }
+    this.getCategories();
+  }
+
   get convertedContent() {
     return marked(this.post.content);
+  }
+
+  async getProfile() {
+    try {
+      const resp: AxiosResponse = await axios.get(`${API_ADDR}/profile/my`, {
+        headers: {
+          "x-access-token": localStorage.getItem("x-access-token")
+        }
+      });
+
+      const { user: resUser } = getDataFromResp(resp);
+
+      return resUser.is_admin;
+    } catch (err) {
+      switch (err.response.status) {
+        case 400:
+        case 401:
+        case 404:
+          break;
+        default:
+          this.$toasted.error("오류가 발생하였습니다").goAway(800);
+      }
+      this.$router.push("/");
+    }
+  }
+
+  async getCategories() {
+    const resp: AxiosResponse = await axios.get(`${API_ADDR}/category`);
+    const { categories } = getDataFromResp(resp);
+    this.categories = categories;
+  }
+
+  async createPost() {
+    const post: PostType = {
+      title: this.post.title,
+      content: this.post.content,
+      thumbnail: this.post.thumbnail,
+      is_private: this.post.is_private,
+      category_idx: this.post.category_idx
+    };
+
+    try {
+      await axios.post(`${API_ADDR}/post`, post, {
+        headers: {
+          "x-access-token": localStorage.getItem("x-access-token")
+        }
+      });
+      alert("글 업로드가 완료되었습니다");
+      this.$router.push("/");
+    } catch (err) {
+      switch (err.response.status) {
+        case 400:
+          this.$toasted.error("양식을 확인해주세요").goAway(800);
+          break;
+        case 401:
+        case 403:
+          this.$toasted.error("관리자만 이용할 수 있습니다").goAway(800);
+          break;
+        case 404:
+          this.$toasted.error("삭제된 카테고리 입니다").goAway(800);
+          break;
+        case 410:
+          this.$toasted
+            .error("로그인 정보 만료로 재 로그인 후 이용해주세요")
+            .goAway(800);
+          break;
+      }
+    }
+  }
+
+  async tempSave() {
+    const post: PostType = {
+      title: this.post.title,
+      content: this.post.content,
+      thumbnail: this.post.thumbnail,
+      is_private: this.post.is_private,
+      category_idx: this.post.category_idx
+    };
+
+    try {
+      await axios.post(`${API_ADDR}/post/temp`, post, {
+        headers: {
+          "x-access-token": localStorage.getItem("x-access-token")
+        }
+      });
+      alert("임시저장이 완료되었습니다");
+      this.$router.push("/");
+    } catch (err) {
+      switch (err.response.status) {
+        case 400:
+          this.$toasted.error("제목이 필요합니다").goAway(800);
+          break;
+        case 401:
+        case 403:
+          this.$toasted.error("관리자만 이용할 수 있습니다").goAway(800);
+          break;
+        case 404:
+          this.$toasted.error("삭제된 카테고리 입니다").goAway(800);
+          break;
+        case 410:
+          this.$toasted
+            .error("로그인 정보 만료로 재 로그인 후 이용해주세요")
+            .goAway(800);
+          break;
+      }
+    }
   }
 
   async uploadWithDrop(e: any) {
@@ -81,6 +245,30 @@ export default class Write extends Vue {
     const formData = new FormData();
     formData.append("files", reqFiles[0]);
     this.uploadFiles(formData);
+  }
+
+  async onClickUploadThumbnail() {
+    document.getElementById("thumbnail-upload-input")!.click();
+  }
+
+  async uploadThumbnail(e: any) {
+    const formData = new FormData();
+    const [file] = e.target.files;
+    formData.append("files", file);
+
+    const resp: AxiosResponse = await axios.post(
+      `${API_ADDR}/upload`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        }
+      }
+    );
+
+    const { files } = getDataFromResp(resp);
+    this.post.thumbnail = files[0];
+    this.thumbnailURL = await this.createURL(files[0]);
   }
 
   async uploadFiles(formData: FormData) {
@@ -159,6 +347,58 @@ export default class Write extends Vue {
         &:focus {
           outline: none;
         }
+      }
+    }
+  }
+
+  .upload-post-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 50%;
+
+    .thumbnail-box {
+      width: 90%;
+      .upload-thumbnail {
+        margin-bottom: 1rem;
+        height: 15rem;
+        overflow: hidden;
+
+        img {
+          display: block;
+          max-width: 100%;
+          object-fit: cover;
+        }
+      }
+    }
+
+    .private-box {
+      display: flex;
+      width: 90%;
+      margin-top: 2rem;
+      font-size: 1rem;
+      font-weight: bold;
+      color: #ffffff;
+
+      .private {
+        box-sizing: border-box;
+        padding: 0.25rem 2rem;
+        border-radius: 3px;
+        background-color: $blue2;
+        cursor: pointer;
+      }
+    }
+
+    .category-box {
+      width: 90%;
+      width: 90%;
+      margin-top: 2rem;
+      .category-select {
+        padding: 0.25rem;
+        width: 8rem;
+        border: $gray5 1px solid;
+        background-color: #ffffff;
+        text-align: center;
       }
     }
   }
@@ -249,15 +489,6 @@ export default class Write extends Vue {
       width: 3rem;
       height: 3rem;
       cursor: pointer;
-    }
-
-    .write-option-bar {
-      display: flex;
-      align-items: center;
-      padding: 0 1rem;
-      height: 3rem;
-      border-radius: 40px;
-      background-color: #ffffff;
     }
   }
 }
