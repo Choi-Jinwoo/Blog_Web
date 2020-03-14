@@ -20,6 +20,11 @@ const routes = [
     component: () => import('@/views/register/index.vue')
   },
   {
+    path: '/write',
+    name: 'Write',
+    component: () => import('@/views/write/index.vue'),
+  },
+  {
     path: '/:idx',
     name: 'Post',
     component: () => import('@/views/post/index.vue'),
