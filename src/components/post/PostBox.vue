@@ -132,6 +132,7 @@ export default class PostBox extends Vue {
 
 .post-box {
   color: $gray6;
+  padding-bottom: 20rem;
 
   .title {
     display: flex;
@@ -249,6 +250,10 @@ export default class PostBox extends Vue {
         border: solid 1px $gray6;
       }
     }
+  }
+
+  .comment-box {
+    margin-top: 15rem;
   }
 }
 </style>

@@ -1,19 +1,17 @@
 <template>
-  <div class="comment-box">
-    <h3>Comments</h3>
-    <div class="input-form">
-      <textarea placeholder="익명 작성이 가능합니다" v-model="content"></textarea>
-      <Btn text="작성" size="small" @click="createComment" />
-    </div>
-
-    <div class="comment-container">
-      <Comment
-        @comment-change="getComments"
-        v-for="(comment, index) in comments"
+  <div class="reply-box">
+    <div class="reply-container">
+      <Reply
+        @reply-change="getReplies"
+        v-for="(reply, index) in replies"
         :key="index"
-        :comment="comment"
+        :reply="reply"
         :user="user"
       />
+      <div class="input-form">
+        <textarea placeholder="익명 작성이 가능합니다" v-model="content"></textarea>
+        <Btn text="작성" size="small" @click="createReply" />
+      </div>
     </div>
   </div>
 </template>
@@ -21,18 +19,17 @@
 <script lang="ts">
 import { Component, Vue, Prop } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
-import { API_ADDR } from "../../../../config/server";
-import getDataFromResp from "../../../lib/util/getDataFromResp";
+import { API_ADDR } from "../../../../../config/server";
+import getDataFromResp from "../../../../lib/util/getDataFromResp";
 
 import Btn from "@/components/common/Btn/index.vue";
-import Comment from "@/components/post/CommentBox/Comment.vue";
+import Reply from "@/components/post/CommentBox/ReplyBox/Reply.vue";
 
-type CommentType = {
+type ReplyType = {
   idx: number;
   content: string;
   fk_user_id: string | null;
-  fk_post_idx: number;
-  has_replies: boolean;
+  fk_comment_idx: number;
 };
 
 type UserType = {
@@ -44,38 +41,38 @@ type UserType = {
 
 @Component({
   components: {
-    Btn,
-    Comment
+    Reply,
+    Btn
   }
 })
-export default class CommentBox extends Vue {
+export default class ReplyBox extends Vue {
   @Prop({ type: Number })
-  postIdx!: number;
+  commentIdx!: number;
 
   @Prop({ type: Object })
   user!: UserType;
 
   content: string = "";
 
-  comments: CommentType[] = [];
+  replies: ReplyType[] = [];
 
   async mounted() {
     setTimeout(() => {
-      this.getComments();
+      this.getReplies();
     }, 100);
   }
 
-  async createComment() {
+  async createReply() {
     if (!this.content.length) {
-      this.$toasted.error("댓글을 입력하세요").goAway(800);
+      this.$toasted.error("답글을 입력하세요").goAway(800);
       return;
     }
     try {
       await axios.post(
-        `${API_ADDR}/comment`,
+        `${API_ADDR}/reply`,
         {
           content: this.content,
-          post_idx: this.postIdx
+          comment_idx: this.commentIdx
         },
         {
           headers: {
@@ -85,7 +82,7 @@ export default class CommentBox extends Vue {
       );
 
       this.content = "";
-      this.getComments();
+      this.getReplies();
     } catch (err) {
       switch (err.response.status) {
         case 400:
@@ -95,7 +92,7 @@ export default class CommentBox extends Vue {
           this.$toasted.error("비공개로 전환된 글입니다").goAway(800);
           break;
         case 404:
-          this.$toasted.error("삭제된 글입니다").goAway(800);
+          this.$toasted.error("삭제된 댓글입니다").goAway(800);
           break;
         default:
           this.$toasted.error("오류가 발생하였습니다").goAway(800);
@@ -103,10 +100,10 @@ export default class CommentBox extends Vue {
     }
   }
 
-  async getComments() {
+  async getReplies() {
     try {
       const resp: AxiosResponse = await axios.get(
-        `${API_ADDR}/comment?post=${this.postIdx}`,
+        `${API_ADDR}/reply?comment=${this.commentIdx}`,
         {
           headers: {
             "x-access-token": localStorage.getItem("x-access-token")
@@ -114,8 +111,8 @@ export default class CommentBox extends Vue {
         }
       );
 
-      const { comments } = getDataFromResp(resp);
-      this.comments = comments;
+      const { replies } = getDataFromResp(resp);
+      this.replies = replies;
     } catch (err) {
       switch (err.response.status) {
         case 403:
@@ -123,7 +120,7 @@ export default class CommentBox extends Vue {
           this.$router.push("/");
           break;
         case 404:
-          alert("삭제된 글입니다");
+          alert("삭제된 댓글(글)입니다");
           this.$router.push("/");
           break;
         default:
@@ -137,13 +134,13 @@ export default class CommentBox extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.comment-box {
-  width: 100%;
+.reply-box {
   .input-form {
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
     align-items: flex-end;
+    padding: 2rem 0;
     textarea {
       box-sizing: border-box;
       resize: none;
