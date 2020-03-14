@@ -85,7 +85,6 @@ export default class SideBar extends Vue {
 
       this.user = user;
     } catch (err) {
-      console.log(err);
       switch (err.response.status) {
         case 400:
         case 401:

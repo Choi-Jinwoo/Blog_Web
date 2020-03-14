@@ -150,8 +150,14 @@ export default class PostView extends Vue {
       this.posts.push(...newPosts);
       return newPosts;
     } catch (err) {
-      // TODO: Catch Error
-      console.log(err);
+      switch (err.response.status) {
+        case 404:
+          this.$toasted.error("삭제된 카테고리 입니다").goAway(800);
+          break;
+        default:
+          this.$toasted.error("오류가 발생하였습니다").goAway(800);
+          break;
+      }
     }
   }
 
@@ -168,7 +174,7 @@ export default class PostView extends Vue {
       const { posts } = getDataFromResp(resp);
       this.posts = this.formatPost(posts);
     } catch (err) {
-      //TODO: Catech Error
+      this.$toasted.error("오류가 발생하였습니다").goAway(800);
     }
   }
 }

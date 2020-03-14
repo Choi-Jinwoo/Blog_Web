@@ -209,7 +209,6 @@ export default class RegisterForm extends Vue {
           this.$toasted.error("이미 존재하는 아이디입니다").goAway(800);
           break;
         default:
-          console.log(err.response.status);
           this.$toasted.error("오류가 발생하였습니다").goAway(800);
           break;
       }

@@ -18,6 +18,8 @@
       </div>
       <div class="marked-content" v-html="convertedContent" />
     </div>
+
+    <comment-box :user="user" :post-idx="post.idx" />
   </div>
 </template>
 
@@ -29,6 +31,8 @@ import marked from "marked";
 import { API_ADDR } from "../../../config/server";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 import { eventBus } from "../../lib/evnetBus";
+
+import CommentBox from "@/components/post/CommentBox/index.vue";
 
 type PostType = {
   idx: number;
@@ -45,16 +49,41 @@ type CategoryType = {
   name: string;
 };
 
-@Component
+type UserType = {
+  id: string;
+  name: string;
+  isAdmin: boolean;
+  thumbnail: string;
+};
+
+@Component({
+  components: {
+    "comment-box": CommentBox
+  }
+})
 export default class PostBox extends Vue {
   post: PostType = {} as PostType;
   category: CategoryType = {} as CategoryType;
   convertedContent: string = "";
+  user: UserType = {} as UserType;
 
   async mounted() {
     await this.getPost();
     this.getCategory();
     this.convertedContent = marked(this.post.content);
+    this.getProfile();
+  }
+
+  async getProfile() {
+    try {
+      const resp: AxiosResponse = await axios.get(`${API_ADDR}/profile/my`, {
+        headers: {
+          "x-access-token": localStorage.getItem("x-access-token")
+        }
+      });
+      const { user } = getDataFromResp(resp);
+      this.user = user;
+    } catch (err) {}
   }
 
   async getPost() {
@@ -121,7 +150,6 @@ export default class PostBox extends Vue {
 
     p {
       margin: 0;
-      margin-left: 2rem;
       padding: 0;
       font-size: 1rem;
     }
@@ -139,7 +167,6 @@ export default class PostBox extends Vue {
       display: flex;
 
       p {
-        margin: 0;
         font-size: 0.75rem;
       }
       .user-id {

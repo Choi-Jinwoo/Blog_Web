@@ -13,7 +13,8 @@ body {
   padding: 0;
 }
 
-input {
+input,
+textarea {
   font-family: "Noto Sans KR";
 }
 
