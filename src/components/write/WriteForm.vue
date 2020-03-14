@@ -17,6 +17,10 @@
       <h1>{{ post.title }}</h1>
       <div class="result-container" v-html="convertedContent"></div>
     </div>
+
+    <div class="write-option">
+      <img src="../../assets/svg/write_upload.svg" />
+    </div>
   </div>
 </template>
 
@@ -50,6 +54,7 @@ export default class Write extends Vue {
   display: flex;
   min-height: 100vh;
   max-height: 100vh;
+  max-width: 100vw;
 
   .input-box {
     display: flex;
@@ -73,9 +78,14 @@ export default class Write extends Vue {
     }
 
     .util-bar {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: center;
+      padding-right: 5rem;
       img {
-        width: 2rem;
-        height: 2rem;
+        width: 1.75rem;
+        height: 1.75rem;
       }
     }
 
@@ -102,9 +112,12 @@ export default class Write extends Vue {
     box-sizing: border-box;
     padding: 2rem;
     width: 50%;
+    max-width: 50%;
     background-color: $gray1;
 
     h1 {
+      word-break: break-all;
+      display: block;
       margin: 0;
       padding: 0;
     }
@@ -168,6 +181,17 @@ export default class Write extends Vue {
         text-align: center;
         border: solid 1px $gray6;
       }
+    }
+  }
+
+  .write-option {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+
+    img {
+      width: 3rem;
+      height: 3rem;
     }
   }
 }
