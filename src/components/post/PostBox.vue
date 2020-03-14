@@ -1,7 +1,10 @@
 <template>
   <div class="post-box">
     <div class="title">
-      <p>{{ category.name }}</p>
+      <p
+        class="category"
+        @click="$router.push(`/?category=${post.fk_category_idx}`)"
+      >{{ category.name }}</p>
       <h1>{{ post.title }}</h1>
       <div class="post-info">
         <p class="user-id">{{ post.fk_user_id }}</p>
@@ -25,6 +28,7 @@ import moment from "moment";
 import marked from "marked";
 import { API_ADDR } from "../../../config/server";
 import getDataFromResp from "@/lib/util/getDataFromResp";
+import { eventBus } from "../../lib/evnetBus";
 
 type PostType = {
   idx: number;
@@ -107,6 +111,13 @@ export default class PostBox extends Vue {
     justify-content: center;
     padding-bottom: 1rem;
     border-bottom: 1px $gray3 solid;
+
+    .category {
+      cursor: pointer;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
 
     p {
       margin: 0;

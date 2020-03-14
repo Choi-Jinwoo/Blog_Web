@@ -20,6 +20,7 @@ type Category = {
 };
 
 type PostResponseType = {
+  idx: number;
   title: string;
   fk_category_idx: number;
   thumbnail: string;
@@ -29,6 +30,7 @@ type PostResponseType = {
 };
 
 type PostType = {
+  idx: number;
   title: string;
   category: string;
   thumbnail: string;
@@ -62,6 +64,17 @@ export default class PostView extends Vue {
     this.categoryIdxMapped = categories.map((category: Category) => {
       return category.idx;
     });
+
+    if (this.$route.query.category) {
+      const categoryIdx = Number(this.$route.query.category);
+
+      if (this.categoryIdxMapped.indexOf(categoryIdx) === -1) {
+        this.$router.push("/notfound");
+        return;
+      }
+
+      this.category = categoryIdx;
+    }
 
     this.getPosts();
 
@@ -105,6 +118,7 @@ export default class PostView extends Vue {
         categoryIdx !== -1 ? this.categories[categoryIdx].name : "기타";
 
       const post: PostType = {
+        idx: resPost.idx,
         title: resPost.title,
         category: categoryName,
         thumbnail: resPost.thumbnail,

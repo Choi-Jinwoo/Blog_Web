@@ -4,7 +4,7 @@
       <side-bar></side-bar>
     </div>
     <post-view />
-    <div class="subscribe-btn">SUBSCRIBE</div>
+    <div class="subscribe-btn">Subscribe</div>
   </div>
 </template>
 
@@ -68,10 +68,13 @@ export default class Main extends Vue {}
     right: 1.5rem;
     border-radius: 2rem;
     font-size: 0.75rem;
-    background-color: $gray4;
-    color: #ffffff;
-    box-shadow: 0px 0px 2px 2px rgba($color: #000000, $alpha: 0.2);
+    border: 1.2px $gray6 solid;
+    background-color: $gray1;
+    color: $gray6;
     cursor: pointer;
+    &:hover {
+      background-color: $gray2;
+    }
   }
 }
 </style>

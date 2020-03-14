@@ -179,6 +179,9 @@ export default class SideBar extends Vue {
       margin: 0;
       margin-left: 0.5rem;
       padding: 0;
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 
@@ -296,9 +299,10 @@ export default class SideBar extends Vue {
       font-size: 0.8rem;
       color: $gray5;
       cursor: pointer;
-    }
-    :hover {
-      text-decoration: underline;
+
+      &:hover {
+        text-decoration: underline;
+      }
     }
   }
 }

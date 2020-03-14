@@ -1,5 +1,5 @@
 <template>
-  <div class="post-card">
+  <div @click="$router.push(`/${post.idx}`)" class="post-card">
     <img v-show="post.thumbnail" :src="post.thumbnail" :alt="post.title" />
     <div class="post-info">
       <!-- if thumbnail exist -->
@@ -37,6 +37,7 @@ import getDataFromResp from "@/lib/util/getDataFromResp";
 import { API_ADDR } from "../../../../config/server";
 
 type PostType = {
+  idx: number;
   title: string;
   category: string;
   thumbnail: string;
