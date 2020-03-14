@@ -6,9 +6,23 @@
         <p>{{ author.id }}</p>
         <p class="created-at">{{ createdAt }}</p>
       </div>
+
+      <div class="comment-ctrl-box" v-show="author && user && author.id === user.id && !editMode">
+        <p @click="editMode=true">수정</p>
+        <p @click="deleteComment">삭제</p>
+      </div>
+
+      <div class="comment-ctrl-box" v-show="editMode">
+        <p @click="editMode=false">취소</p>
+        <p @click="editComment">완료</p>
+      </div>
     </div>
 
-    <div class="content">{{ comment.content }}</div>
+    <div class="content" v-if="!editMode">{{ comment.content }}</div>
+
+    <div class="edit-box" v-else>
+      <textarea :value="this.comment.content" id="edit-content"></textarea>
+    </div>
   </div>
 </template>
 
@@ -48,12 +62,97 @@ export default class Comment extends Vue {
 
   author: AuthorType = {} as AuthorType;
 
+  editMode: boolean = false;
+
   async mounted() {
     this.getAuthor();
   }
 
   get createdAt() {
     return moment(this.comment.created_at).format("YYYY-MM-DD hh:mm:ss");
+  }
+
+  async editComment() {
+    const editInputElement = document.getElementById("edit-content") as any;
+    if (!editInputElement) return;
+
+    if (!editInputElement.value.length) {
+      this.$toasted.error("댓글을 일력하세요").goAway(800);
+      return;
+    }
+    try {
+      await axios.put(
+        `${API_ADDR}/comment/${this.comment.idx}`,
+        {
+          content: editInputElement.value
+        },
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("x-access-token")
+          }
+        }
+      );
+
+      this.editMode = false;
+      this.$emit("comment-change");
+    } catch (err) {
+      switch (err.response.status) {
+        case 400:
+          this.$toasted.error("댓글을 입력하세요").goAway(800);
+          break;
+        case 401:
+          this.$toasted.error("로그인 후 이용해주세요").goAway(800);
+          break;
+        case 403:
+          this.$toasted.error("비공개로 전환된 글입니다").goAway(800);
+          break;
+        case 404:
+          this.$toasted.error("삭제된 댓글(글)입니다").goAway(800);
+          break;
+        case 410:
+          this.$toasted
+            .error("로그인 정보가 만료로 재 로그인 후 이용해주세요")
+            .goAway(800);
+          break;
+        default:
+          this.$toasted.error("오류가 발생하였습니다");
+      }
+    }
+  }
+
+  async deleteComment() {
+    if (confirm("삭제시 댓글과 답글이 영구히 삭제됩니다") === false) return;
+
+    try {
+      await axios.delete(`${API_ADDR}/comment/${this.comment.idx}`, {
+        headers: {
+          "x-access-token": localStorage.getItem("x-access-token")
+        }
+      });
+      this.$emit("comment-change");
+    } catch (err) {
+      switch (err.response.status) {
+        case 400:
+          this.$toasted.error("댓글을 입력하세요").goAway(800);
+          break;
+        case 401:
+          this.$toasted.error("로그인 후 이용해주세요").goAway(800);
+          break;
+        case 403:
+          this.$toasted.error("비공개로 전환된 글입니다").goAway(800);
+          break;
+        case 404:
+          this.$toasted.error("삭제된 댓글(글)입니다").goAway(800);
+          break;
+        case 410:
+          this.$toasted
+            .error("로그인 정보가 만료로 재 로그인 후 이용해주세요")
+            .goAway(800);
+          break;
+        default:
+          this.$toasted.error("오류가 발생하였습니다");
+      }
+    }
   }
 
   async getAuthor() {
@@ -128,10 +227,36 @@ export default class Comment extends Vue {
         font-size: 0.75rem;
       }
     }
+
+    .comment-ctrl-box {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      flex-grow: 1;
+      p {
+        margin: 0;
+        margin-left: 1rem;
+        padding: 0;
+        font-size: 0.75rem;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+    }
   }
 
   .content {
     margin-top: 1rem;
+  }
+
+  .edit-box {
+    textarea {
+      box-sizing: border-box;
+      resize: none;
+      margin-top: 1rem;
+      width: 100%;
+    }
   }
 }
 </style>

@@ -6,7 +6,13 @@
     </div>
 
     <div class="comment-container">
-      <Comment v-for="(comment, index) in comments" :key="index" :comment="comment" />
+      <Comment
+        @comment-change="getComments"
+        v-for="(comment, index) in comments"
+        :key="index"
+        :comment="comment"
+        :user="user"
+      />
     </div>
   </div>
 </template>
@@ -60,6 +66,7 @@ export default class CommentBox extends Vue {
   async createComment() {
     if (!this.content.length) {
       this.$toasted.error("댓글을 입력하세요").goAway(800);
+      return;
     }
     try {
       await axios.post(
