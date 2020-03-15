@@ -25,6 +25,11 @@ const routes = [
     component: () => import('@/views/write/index.vue'),
   },
   {
+    path: '/admin',
+    name: 'Admin',
+    component: () => import('@/views/admin/index.vue'),
+  },
+  {
     path: '/:idx',
     name: 'Post',
     component: () => import('@/views/post/index.vue'),
