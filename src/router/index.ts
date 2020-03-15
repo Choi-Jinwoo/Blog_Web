@@ -30,6 +30,11 @@ const routes = [
     component: () => import('@/views/admin/index.vue'),
   },
   {
+    path: '/notice',
+    name: 'Notice',
+    component: () => import('@/views/notice/index.vue'),
+  },
+  {
     path: '/:idx',
     name: 'Post',
     component: () => import('@/views/post/index.vue'),

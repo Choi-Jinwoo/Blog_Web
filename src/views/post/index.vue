@@ -9,7 +9,7 @@
 import { Vue, Component } from "vue-property-decorator";
 
 import PostBox from "@/components/post/PostBox.vue";
-import TopBar from "@/components/post/TopBar.vue";
+import TopBar from "@/components/common/TopBar/index.vue";
 
 @Component({
   components: {

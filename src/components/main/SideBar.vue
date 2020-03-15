@@ -2,7 +2,7 @@
   <div class="side-bar">
     <div class="notice-bar">
       <div class="notice-btn">공지</div>
-      <p>{{ noticeTitle }}</p>
+      <p @click="$router.push('/notice')">{{ noticeTitle }}</p>
     </div>
 
     <div class="title-bar">

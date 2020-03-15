@@ -17,7 +17,7 @@ export default class Post extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "../../style/palette.scss";
+@import "../../../style/palette.scss";
 .top-bar {
   box-sizing: border-box;
   display: flex;
