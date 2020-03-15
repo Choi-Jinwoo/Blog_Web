@@ -4,7 +4,9 @@
     <div class="notice-input">
       <input type="text" placeholder="공지 제목을 입력하세요" v-model="notice.title" />
       <textarea placeholder="공지 내용을 입력하세요" v-model="notice.content" />
-      <p @click="createNotice">등록</p>
+      <div class="create-btn">
+        <p @click="createNotice">등록</p>
+      </div>
     </div>
   </div>
 </template>
@@ -59,8 +61,6 @@ export default class NoticeForm extends Vue {
 
 .notice-form {
   box-sizing: border-box;
-  width: 50%;
-  margin: 0 auto;
   padding: 1rem;
   border: 1px $gray3 solid;
   h2 {
@@ -68,6 +68,7 @@ export default class NoticeForm extends Vue {
     padding: 0;
     color: $gray6;
   }
+
   .notice-input {
     display: flex;
     flex-direction: column;
@@ -92,14 +93,19 @@ export default class NoticeForm extends Vue {
       }
     }
 
-    p {
-      margin: 0;
-      padding: 0;
-      font-size: 0.75rem;
-      text-align: right;
-      cursor: pointer;
-      &:hover {
-        text-decoration: underline;
+    .create-btn {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      p {
+        margin: 0;
+        padding: 0;
+        font-size: 0.75rem;
+        text-align: right;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }
