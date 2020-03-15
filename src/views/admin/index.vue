@@ -1,9 +1,8 @@
 <template>
   <div class="admin">
-    <div class="notice-box"></div>
-    <div class="category-box"></div>
     <notice-form />
     <category-form />
+    <temp-post-form />
   </div>
 </template>
 
@@ -15,11 +14,13 @@ import getDataFromResp from "@/lib/util/getDataFromResp";
 
 import NoticeForm from "@/components/admin/NoticeForm.vue";
 import CategoryForm from "../../components/admin/CategoryForm/index.vue";
+import TempPostForm from "../../components/admin/TempPostForm.vue";
 
 @Component({
   components: {
     "notice-form": NoticeForm,
-    "category-form": CategoryForm
+    "category-form": CategoryForm,
+    "temp-post-form": TempPostForm
   }
 })
 export default class Admin extends Vue {}
@@ -27,5 +28,17 @@ export default class Admin extends Vue {}
 
 <style lang="scss" scoped>
 .admin {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  width: 80rem;
+  min-height: 100vh;
+  margin: 0 auto;
+
+  .notice-form,
+  .category-form,
+  .temp-post-form {
+    margin: 0.25rem;
+  }
 }
 </style>

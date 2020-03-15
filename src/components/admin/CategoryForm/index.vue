@@ -35,7 +35,8 @@ type CategoryType = {
 })
 export default class CategoryForm extends Vue {
   categories: CategoryType[] = [];
-  createName!: string;
+  createName: string = "";
+
   async mounted() {
     await this.getCategories();
   }

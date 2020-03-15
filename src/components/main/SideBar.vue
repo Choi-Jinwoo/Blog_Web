@@ -30,7 +30,7 @@
 
     <div class="bottom-bar">
       <p v-show="user.isAdmin" @click="$router.push('/write')">글쓰기</p>
-      <p v-show="user.isAdmin">관리자</p>
+      <p v-show="user.isAdmin" @click="$router.push('/admin')">관리자</p>
       <p v-if="!user.id" @click="$router.push('/login')">로그인</p>
       <p v-else @click="logout">로그아웃</p>
     </div>
