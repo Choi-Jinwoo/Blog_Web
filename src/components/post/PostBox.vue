@@ -10,6 +10,10 @@
         <p class="user-id">{{ post.fk_user_id }}</p>
         <p>{{ post.created_at }}</p>
       </div>
+      <div class="post-ctrl-bar" v-show="post.fk_user_id === user.id">
+        <p @click="$router.push(`/write?post=${post.idx}`)">수정</p>
+        <p @click="deletePost">삭제</p>
+      </div>
     </div>
 
     <div class="content">
@@ -33,6 +37,7 @@ import getDataFromResp from "@/lib/util/getDataFromResp";
 import { eventBus } from "../../lib/evnetBus";
 
 import CommentBox from "@/components/post/CommentBox/index.vue";
+import router from "../../router";
 
 type PostType = {
   idx: number;
@@ -127,6 +132,38 @@ export default class PostBox extends Vue {
       };
     }
   }
+
+  async deletePost() {
+    if (!confirm("정말 글을 삭제하시겠습니까?")) return;
+    try {
+      await axios.delete(`${API_ADDR}/post/${this.post.idx}`, {
+        headers: {
+          "x-access-token": localStorage.getItem("x-access-token")
+        }
+      });
+      this.$router.push("/");
+    } catch (err) {
+      switch (err.response.status) {
+        case 401:
+          this.$toasted.error("관리자만 이용할 수 있습니다").goAway(800);
+          break;
+        case 403:
+          this.$toasted.error("본인 글만 삭제할 수 있습니다").goAway(800);
+          break;
+        case 404:
+          this.$toasted.error("삭제된 글 입니다").goAway(800);
+          break;
+        case 410:
+          this.$toasted
+            .error("로그인 정보 만료로 재 로그인 후 이용해주세요")
+            .goAway(800);
+          break;
+        default:
+          this.$toasted.error("오류가 발생하였습니다").goAway(800);
+          break;
+      }
+    }
+  }
 }
 </script>
 
@@ -177,6 +214,22 @@ export default class PostBox extends Vue {
       .user-id {
         font-weight: bold;
         margin-right: 2rem;
+      }
+    }
+
+    .post-ctrl-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      margin-top: 0.5rem;
+      width: 100%;
+      p {
+        margin-right: 0.5rem;
+        font-size: 0.75rem;
+        cursor: pointer;
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

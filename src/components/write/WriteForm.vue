@@ -104,6 +104,8 @@ export default class Write extends Vue {
     is_private: false
   } as PostType;
 
+  modifyIdx!: number;
+
   categories: CategoryType[] = [];
 
   thumbnailURL: string = "";
@@ -116,11 +118,53 @@ export default class Write extends Vue {
       alert("관리자만 접근 가능합니다");
       this.$router.push("/");
     }
+
+    if (this.$route.query.post) {
+      this.getPost();
+    }
+
     this.getCategories();
   }
 
   get convertedContent() {
     return marked(this.post.content);
+  }
+
+  async getPost() {
+    const idx = this.$route.query.post;
+    try {
+      const resp: AxiosResponse = await axios.get(
+        `${API_ADDR}/post/${idx}?image=raw`,
+        {
+          headers: {
+            "x-access-token": localStorage.getItem("x-access-token")
+          }
+        }
+      );
+      const { post } = getDataFromResp(resp);
+
+      this.modifyIdx = post.idx;
+      this.post.title = post.title;
+      this.post.content = post.content;
+      this.post.thumbnail = post.thumbnail;
+      this.post.category_idx = post.fk_category_idx;
+      this.post.is_private = post.is_private;
+      if (post.thumbnail)
+        this.thumbnailURL = await this.createURL(post.thumbnail);
+    } catch (err) {
+      switch (err.response.status) {
+        case 400:
+        case 404:
+          this.$router.push("/notfound");
+          return;
+        case 403:
+          alert("비공개 글입니다");
+          return;
+        default:
+          alert("오류가 발생하였습니다");
+          return;
+      }
+    }
   }
 
   async getProfile() {
@@ -153,6 +197,37 @@ export default class Write extends Vue {
     this.categories = categories;
   }
 
+  async modifyPost(post: any) {
+    try {
+      await axios.put(`${API_ADDR}/post/${this.modifyIdx}`, post, {
+        headers: {
+          "x-access-token": localStorage.getItem("x-access-token")
+        }
+      });
+
+      alert("글 수정이 완료되었습니다");
+      this.$router.push("/");
+    } catch (err) {
+      switch (err.response.status) {
+        case 400:
+          this.$toasted.error("양식을 확인해주세요").goAway(800);
+          return;
+        case 401:
+        case 403:
+          this.$toasted.error("관리자만 이용할 수 있습니다").goAway(800);
+          return;
+        case 404:
+          this.$toasted.error("삭제된 카테고리 입니다").goAway(800);
+          return;
+        case 410:
+          this.$toasted
+            .error("로그인 정보 만료로 재 로그인 후 이용해주세요")
+            .goAway(800);
+          return;
+      }
+    }
+  }
+
   async createPost() {
     const post: PostType = {
       title: this.post.title,
@@ -161,6 +236,11 @@ export default class Write extends Vue {
       is_private: this.post.is_private,
       category_idx: this.post.category_idx
     };
+
+    if (this.modifyIdx) {
+      this.modifyPost(post);
+      return;
+    }
 
     try {
       await axios.post(`${API_ADDR}/post`, post, {
@@ -192,13 +272,19 @@ export default class Write extends Vue {
   }
 
   async tempSave() {
-    const post: PostType = {
+    const post: any = {
       title: this.post.title,
       content: this.post.content,
       thumbnail: this.post.thumbnail,
       is_private: this.post.is_private,
       category_idx: this.post.category_idx
     };
+
+    if (this.modifyIdx) {
+      post.is_temp = true;
+      this.modifyPost(post);
+      return;
+    }
 
     try {
       await axios.post(`${API_ADDR}/post/temp`, post, {
@@ -391,7 +477,6 @@ export default class Write extends Vue {
 
     .category-box {
       width: 90%;
-      width: 90%;
       margin-top: 2rem;
       .category-select {
         padding: 0.25rem;
@@ -399,6 +484,15 @@ export default class Write extends Vue {
         border: $gray5 1px solid;
         background-color: #ffffff;
         text-align: center;
+      }
+    }
+
+    .save-box {
+      width: 90%;
+      margin-top: 2rem;
+
+      .Btn {
+        margin-right: 1rem;
       }
     }
   }
