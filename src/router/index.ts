@@ -40,10 +40,15 @@ const routes = [
     component: () => import('@/views/subscribe/index.vue'),
   },
   {
+    path: '/notfound',
+    name: 'NotFound',
+    component: () => import('@/views/notfound/index.vue'),
+  },
+  {
     path: '/:idx',
     name: 'Post',
     component: () => import('@/views/post/index.vue'),
-  }
+  },
 ]
 
 const router = new VueRouter({

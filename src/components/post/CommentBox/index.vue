@@ -123,8 +123,7 @@ export default class CommentBox extends Vue {
           this.$router.push("/");
           break;
         case 404:
-          alert("삭제된 글입니다");
-          this.$router.push("/");
+          this.$router.push("/notfound");
           break;
         default:
           alert("오류가 발생하였습니다");
