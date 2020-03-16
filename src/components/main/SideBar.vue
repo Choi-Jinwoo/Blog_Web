@@ -6,7 +6,7 @@
     </div>
 
     <div class="title-bar">
-      <h1>꼬꼬마 블로그</h1>
+      <h1>Jinu blog</h1>
       <div v-show="user.id" class="profile">
         <p>{{ user.id }}</p>
         <img :src="user.profileImage" />
