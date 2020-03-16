@@ -4,7 +4,7 @@
       <side-bar></side-bar>
     </div>
     <post-view />
-    <div class="subscribe-btn">Subscribe</div>
+    <div class="subscribe-btn" @click="$router.push('/subscribe')">Subscribe</div>
   </div>
 </template>
 

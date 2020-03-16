@@ -35,6 +35,11 @@ const routes = [
     component: () => import('@/views/notice/index.vue'),
   },
   {
+    path: '/subscribe',
+    name: 'Subscribe',
+    component: () => import('@/views/subscribe/index.vue'),
+  },
+  {
     path: '/:idx',
     name: 'Post',
     component: () => import('@/views/post/index.vue'),

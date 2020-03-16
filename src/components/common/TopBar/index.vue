@@ -4,7 +4,7 @@
       <span @click="$router.push('/')">Home</span>
     </div>
     <div class="subscribe">
-      <div class="subscribe-btn">Subscribe</div>
+      <div class="subscribe-btn" @click="$router.push('/subscribe')">Subscribe</div>
     </div>
   </div>
 </template>
