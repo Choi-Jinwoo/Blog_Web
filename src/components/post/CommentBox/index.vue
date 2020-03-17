@@ -62,7 +62,7 @@ export default class CommentBox extends Vue {
   async mounted() {
     setTimeout(() => {
       this.getComments();
-    }, 100);
+    }, 500);
   }
 
   async createComment() {
