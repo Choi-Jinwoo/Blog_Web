@@ -120,8 +120,6 @@ export default class ReplyBox extends Vue {
           this.$router.push("/");
           break;
         case 404:
-          alert("삭제된 댓글(글)입니다");
-          this.$router.push("/");
           break;
         default:
           alert("오류가 발생하였습니다");
