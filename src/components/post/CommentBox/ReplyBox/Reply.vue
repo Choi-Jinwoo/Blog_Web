@@ -69,7 +69,11 @@ export default class Reply extends Vue {
   editMode: boolean = false;
 
   async mounted() {
-    this.getAuthor();
+    if (!this.reply.fk_user_id) {
+      this.getBasicProfile();
+    } else {
+      this.getAuthor();
+    }
   }
 
   get createdAt() {

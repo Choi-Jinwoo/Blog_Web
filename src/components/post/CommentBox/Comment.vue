@@ -94,7 +94,11 @@ export default class Comment extends Vue {
   showReplies: boolean = false;
 
   async mounted() {
-    this.getAuthor();
+    if (!this.comment.fk_user_id) {
+      this.getBasicProfile();
+    } else {
+      this.getAuthor();
+    }
   }
 
   get createdAt() {
