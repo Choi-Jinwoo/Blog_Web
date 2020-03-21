@@ -1,19 +1,12 @@
-# blog_web
+# Blog
 
-## Project setup
-```
-yarn install
-```
+blog.wlswoo.com
 
-### Compiles and hot-reloads for development
-```
-yarn serve
-```
+![image](https://user-images.githubusercontent.com/49791336/77218791-74e79800-6b72-11ea-8143-432393410ec2.png)
 
-### Compiles and minifies for production
-```
-yarn build
-```
+## 기술 스택(프론트 엔드)
+- Vue.js
+- Sass
+- Typescript
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+[블로그 제작 관련 글](http://blog.wlswoo.com/4)
