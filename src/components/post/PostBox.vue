@@ -288,7 +288,7 @@ export default class PostBox extends Vue {
       }
 
       a {
-        text-decoration: none;
+        text-decoration: underline;
         color: $blue3;
       }
 

@@ -544,7 +544,7 @@ export default class Write extends Vue {
       }
 
       a {
-        text-decoration: none;
+        text-decoration: underline;
         color: $blue3;
       }
 
