@@ -12,6 +12,7 @@
     "@types/marked": "^0.7.3",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "highlight.js": "^9.18.1",
     "js-sha512": "^0.8.0",
     "marked": "^0.8.0",
     "moment": "^2.24.0",

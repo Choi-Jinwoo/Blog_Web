@@ -36,6 +36,7 @@ export default class Register extends Vue {}
       width: 90%;
     }
     width: 50%;
+    max-width: 768px;
   }
 }
 </style>

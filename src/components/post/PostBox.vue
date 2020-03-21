@@ -31,7 +31,8 @@
 import { Vue, Component } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
 import moment from "moment";
-import marked from "marked";
+import marked, { MarkedOptions } from "marked";
+import hljs from "highlight.js";
 import { API_ADDR } from "../../../config/server";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 import { eventBus } from "../../lib/evnetBus";
@@ -75,6 +76,14 @@ export default class PostBox extends Vue {
   async mounted() {
     await this.getPost();
     this.getCategory();
+
+    const markedOptions: MarkedOptions = {
+      highlight: function(code, lang) {
+        if (hljs.getLanguage(lang)) return hljs.highlight(lang, code).value;
+        return hljs.highlightAuto(code).value;
+      }
+    };
+    marked.setOptions(markedOptions);
     this.convertedContent = marked(this.post.content);
     this.getProfile();
   }
@@ -168,8 +177,8 @@ export default class PostBox extends Vue {
 </script>
 
 <style lang="scss">
+@import "~highlight.js/styles/atom-one-dark.css";
 @import "../../style/palette.scss";
-@import url("https://fonts.googleapis.com/css?family=Nanum+Gothic+Coding&display=swap");
 
 .post-box {
   color: $gray6;
@@ -266,14 +275,14 @@ export default class PostBox extends Vue {
         box-sizing: border-box;
         width: 100%;
         padding: 1rem;
-        border: $gray3 1px solid;
         border-radius: 3px;
-        background-color: $gray1;
+        background-color: $gray6;
 
         code {
           padding: 0;
           font-weight: normal;
-          color: #000000;
+          font-size: 0.75rem;
+          color: $gray1;
           background-color: transparent;
         }
       }

@@ -531,14 +531,14 @@ export default class Write extends Vue {
         box-sizing: border-box;
         width: 100%;
         padding: 1rem;
-        border: $gray3 1px solid;
         border-radius: 3px;
-        background-color: $gray1;
+        background-color: $gray6;
 
         code {
           padding: 0;
           font-weight: normal;
-          color: #000000;
+          font-size: 0.75rem;
+          color: $gray1;
           background-color: transparent;
         }
       }
