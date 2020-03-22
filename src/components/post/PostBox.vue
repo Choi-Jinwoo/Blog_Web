@@ -294,10 +294,11 @@ export default class PostBox extends Vue {
 
       blockquote {
         box-sizing: border-box;
-        margin: 0;
+        margin: 1rem 0;
+        padding: 0.25rem 0;
         padding-left: 2%;
         border-left: 5px solid $blue3;
-        background-color: $gray1;
+        background-color: $gray0;
       }
 
       table {
