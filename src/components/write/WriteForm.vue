@@ -86,6 +86,7 @@ type PostType = {
   thumbnail: string;
   category_idx: number;
   is_private: boolean;
+  is_temp: boolean;
 };
 
 type CategoryType = {
@@ -159,6 +160,7 @@ export default class Write extends Vue {
           return;
         case 403:
           alert("비공개 글입니다");
+          this.$router.push("/");
           return;
         default:
           alert("오류가 발생하였습니다");
@@ -234,13 +236,16 @@ export default class Write extends Vue {
       content: this.post.content,
       thumbnail: this.post.thumbnail,
       is_private: this.post.is_private,
-      category_idx: this.post.category_idx
+      category_idx: this.post.category_idx,
+      is_temp: false
     };
 
     if (this.modifyIdx) {
       this.modifyPost(post);
       return;
     }
+
+    delete post.is_temp;
 
     try {
       await axios.post(`${API_ADDR}/post`, post, {
@@ -277,7 +282,8 @@ export default class Write extends Vue {
       content: this.post.content,
       thumbnail: this.post.thumbnail,
       is_private: this.post.is_private,
-      category_idx: this.post.category_idx
+      category_idx: this.post.category_idx,
+      is_temp: true
     };
 
     if (this.modifyIdx) {
@@ -285,6 +291,8 @@ export default class Write extends Vue {
       this.modifyPost(post);
       return;
     }
+
+    delete post.is_temp;
 
     try {
       await axios.post(`${API_ADDR}/post/temp`, post, {
