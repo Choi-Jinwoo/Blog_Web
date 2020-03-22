@@ -11,7 +11,9 @@
 
       <div class="img-not-exist" v-else>
         <p class="category">{{ post.category}}</p>
-        <h3>{{ post.title }}</h3>
+        <div class="title-container">
+          <h3>{{ post.title }}</h3>
+        </div>
         <p class="created-at">{{ post.createdAt}}</p>
       </div>
 
@@ -171,17 +173,21 @@ export default class PostCard extends Vue {
       align-items: center;
       justify-content: center;
 
-      h3 {
+      .title-container {
         flex-grow: 3;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0;
-        padding: 0;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        overflow: hidden;
-        font-size: 1.75rem;
+        max-width: 100%;
+        h3 {
+          margin: 0;
+          padding: 0;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          text-align: right;
+          overflow: hidden;
+          font-size: 1.5rem;
+        }
       }
 
       .category,
