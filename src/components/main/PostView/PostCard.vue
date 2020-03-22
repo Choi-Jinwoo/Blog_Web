@@ -160,7 +160,7 @@ export default class PostCard extends Vue {
         white-space: nowrap;
         text-align: right;
         overflow: hidden;
-        font-size: 1.75rem;
+        font-size: 1.25rem;
       }
     }
 
