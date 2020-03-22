@@ -109,6 +109,11 @@ export default class PostBox extends Vue {
         }
       });
       const { post } = getDataFromResp(resp);
+
+      if (post.is_temp) {
+        this.$router.push("/notfound");
+        return;
+      }
       post.created_at = moment(post.created_at).format("YYYY-MM-DD");
       this.post = post;
     } catch (err) {
@@ -119,6 +124,7 @@ export default class PostBox extends Vue {
           return;
         case 403:
           alert("비공개 글입니다");
+          this.$router.push("/");
           return;
         default:
           alert("오류가 발생하였습니다");

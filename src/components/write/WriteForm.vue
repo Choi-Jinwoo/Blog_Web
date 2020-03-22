@@ -160,6 +160,7 @@ export default class Write extends Vue {
           return;
         case 403:
           alert("비공개 글입니다");
+          this.$router.push("/");
           return;
         default:
           alert("오류가 발생하였습니다");
