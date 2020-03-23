@@ -62,6 +62,28 @@ type UserType = {
   thumbnail: string;
 };
 
+const markedOptions: MarkedOptions = {
+  highlight: function(code, lang) {
+    if (hljs.getLanguage(lang)) return hljs.highlight(lang, code).value;
+    return hljs.highlightAuto(code).value;
+  }
+};
+
+const renderer = new marked.Renderer();
+renderer.link = (href, title, text) => {
+  return (
+    '<a target="_blank" href="' +
+    href +
+    '" title="' +
+    title +
+    '">' +
+    text +
+    "</a>"
+  );
+};
+
+marked.setOptions(markedOptions);
+
 @Component({
   components: {
     "comment-box": CommentBox
@@ -77,14 +99,7 @@ export default class PostBox extends Vue {
     await this.getPost();
     this.getCategory();
 
-    const markedOptions: MarkedOptions = {
-      highlight: function(code, lang) {
-        if (hljs.getLanguage(lang)) return hljs.highlight(lang, code).value;
-        return hljs.highlightAuto(code).value;
-      }
-    };
-    marked.setOptions(markedOptions);
-    this.convertedContent = marked(this.post.content);
+    this.convertedContent = marked(this.post.content, { renderer });
     this.getProfile();
   }
 
