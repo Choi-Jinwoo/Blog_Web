@@ -6,7 +6,7 @@
       <div class="img-exist" v-if="post.thumbnail">
         <p class="category">{{ post.category}}</p>
         <p class="created-at">{{ post.createdAt}}</p>
-        <h3>{{ post.title }}</h3>
+        <h3 :title="post.title">{{ post.title }}</h3>
       </div>
 
       <div class="img-not-exist" v-else>

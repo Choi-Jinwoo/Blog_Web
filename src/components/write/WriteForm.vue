@@ -73,7 +73,8 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import marked from "marked";
+import marked, { MarkedOptions } from "marked";
+import hljs from "highlight.js";
 import axios, { AxiosResponse } from "axios";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 import { API_ADDR } from "../../../config/server";
@@ -93,6 +94,28 @@ type CategoryType = {
   idx: number;
   name: string;
 };
+
+const markedOptions: MarkedOptions = {
+  highlight: function(code, lang) {
+    if (hljs.getLanguage(lang)) return hljs.highlight(lang, code).value;
+    return hljs.highlightAuto(code).value;
+  }
+};
+
+const renderer = new marked.Renderer();
+renderer.link = (href, title, text) => {
+  return (
+    '<a target="_blank" href="' +
+    href +
+    '" title="' +
+    title +
+    '">' +
+    text +
+    "</a>"
+  );
+};
+
+marked.setOptions(markedOptions);
 
 @Component({
   components: {
@@ -128,7 +151,7 @@ export default class Write extends Vue {
   }
 
   get convertedContent() {
-    return marked(this.post.content);
+    return marked(this.post.content, { renderer });
   }
 
   async getPost() {
@@ -327,7 +350,7 @@ export default class Write extends Vue {
     const reqFiles = e.target.files || e.dataTransfer.files;
     const formData = new FormData();
     formData.append("files", reqFiles[0]);
-    this.uploadFiles(formData);
+    this.uploadFiles(formData, e);
   }
 
   async uploadWithPaste(e: any) {
@@ -338,7 +361,7 @@ export default class Write extends Vue {
     e.prevent;
     const formData = new FormData();
     formData.append("files", reqFiles[0]);
-    this.uploadFiles(formData);
+    this.uploadFiles(formData, e);
   }
 
   async onClickUploadThumbnail() {
@@ -365,7 +388,7 @@ export default class Write extends Vue {
     this.thumbnailURL = await this.createURL(files[0]);
   }
 
-  async uploadFiles(formData: FormData) {
+  async uploadFiles(formData: FormData, e: any) {
     const resp: AxiosResponse = await axios.post(
       `${API_ADDR}/upload`,
       formData,
@@ -379,7 +402,18 @@ export default class Write extends Vue {
     const { files } = getDataFromResp(resp);
     files.forEach(async (file: string) => {
       const url = await this.createURL(file);
-      this.post.content += `![이미지](${encodeURI(url)})\n`;
+      const cursorStart = e.target.selectionStart;
+      const cursorEnd = e.target.selectionEnd;
+
+      const beforeText = this.post.content.substring(0, cursorStart);
+      const afterText = this.post.content.substring(
+        cursorEnd,
+        this.post.content.length
+      );
+
+      this.post.content = `${beforeText} ![이미지](${encodeURI(
+        url
+      )}) ${afterText}`;
     });
   }
 
@@ -398,6 +432,7 @@ export default class Write extends Vue {
 </script>
 
 <style lang="scss">
+@import "~highlight.js/styles/atom-one-dark.css";
 @import "../../style/palette.scss";
 
 .write-form {
