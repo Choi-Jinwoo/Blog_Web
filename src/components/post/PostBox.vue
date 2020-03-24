@@ -97,6 +97,8 @@ export default class PostBox extends Vue {
 
   async mounted() {
     await this.getPost();
+    document.title = this.post.title;
+
     this.getCategory();
 
     this.convertedContent = marked(this.post.content, { renderer });
