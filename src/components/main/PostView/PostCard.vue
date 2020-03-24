@@ -118,9 +118,14 @@ export default class PostCard extends Vue {
   flex-direction: column;
   width: 100%;
   background-color: #ffffff;
-  box-shadow: 0 0 8px 2px rgba($color: $gray5, $alpha: 0.2);
+  box-sizing: border-box;
+  border: 1px solid $gray1;
+  border-radius: 3px;
+  transition: box-shadow 0.25s;
 
   img {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
     width: 100%;
     height: 12rem;
     object-fit: cover;
@@ -243,8 +248,7 @@ export default class PostCard extends Vue {
     }
   }
   &:hover {
-    transform: scale(1.02);
-    box-shadow: 0 0 8px 4px rgba($color: $gray5, $alpha: 0.5);
+    box-shadow: 0 0 8px 2px rgba($color: $gray5, $alpha: 0.2);
   }
 }
 </style>
