@@ -93,6 +93,12 @@ export default class PostView extends Vue {
     });
 
     eventBus.$on("select-category", async (idx: number) => {
+      if (idx === null) {
+        this.$router.push({
+          path: "/",
+          query: {}
+        });
+      }
       this.category = idx;
       this.posts = [];
       this.initView();
