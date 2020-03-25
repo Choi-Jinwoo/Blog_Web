@@ -248,7 +248,7 @@ export default class PostCard extends Vue {
     }
   }
   &:hover {
-    box-shadow: 0 0 8px 2px rgba($color: $gray5, $alpha: 0.2);
+    box-shadow: 0 4px 16px 0px rgba($color: $gray5, $alpha: 0.15);
   }
 }
 </style>
