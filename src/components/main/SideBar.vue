@@ -91,6 +91,11 @@ export default class SideBar extends Vue {
         case 401:
         case 404:
           break;
+        case 410:
+          this.$toasted
+            .error("로그인 정보 만료로 재 로그인 후 사용해주세요.")
+            .goAway(800);
+          break;
         default:
           this.$toasted.error("오류가 발생하였습니다").goAway(800);
       }
