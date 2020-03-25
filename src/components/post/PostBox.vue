@@ -35,6 +35,7 @@ import marked, { MarkedOptions } from "marked";
 import hljs from "highlight.js";
 import { API_ADDR } from "../../../config/server";
 import getDataFromResp from "@/lib/util/getDataFromResp";
+import { Token } from "@/lib/Storage";
 import { eventBus } from "../../lib/evnetBus";
 
 import CommentBox from "@/components/post/CommentBox/index.vue";
@@ -109,7 +110,7 @@ export default class PostBox extends Vue {
     try {
       const resp: AxiosResponse = await axios.get(`${API_ADDR}/profile/my`, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
       const { user } = getDataFromResp(resp);
@@ -122,7 +123,7 @@ export default class PostBox extends Vue {
     try {
       const resp: AxiosResponse = await axios.get(`${API_ADDR}/post/${idx}`, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
       const { post } = getDataFromResp(resp);
@@ -170,7 +171,7 @@ export default class PostBox extends Vue {
     try {
       await axios.delete(`${API_ADDR}/post/${this.post.idx}`, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
       this.$router.push("/");

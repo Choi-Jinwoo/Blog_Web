@@ -26,6 +26,7 @@ import getDataFromResp from "../../../lib/util/getDataFromResp";
 
 import Btn from "@/components/common/Btn/index.vue";
 import Comment from "@/components/post/CommentBox/Comment.vue";
+import { Token } from "../../../lib/Storage";
 
 type CommentType = {
   idx: number;
@@ -79,7 +80,7 @@ export default class CommentBox extends Vue {
         },
         {
           headers: {
-            "x-access-token": localStorage.getItem("x-access-token")
+            "x-access-token": Token.getToken()
           }
         }
       );
@@ -109,7 +110,7 @@ export default class CommentBox extends Vue {
         `${API_ADDR}/comment?post=${this.postIdx}`,
         {
           headers: {
-            "x-access-token": localStorage.getItem("x-access-token")
+            "x-access-token": Token.getToken()
           }
         }
       );

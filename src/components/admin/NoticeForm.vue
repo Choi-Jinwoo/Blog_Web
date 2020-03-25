@@ -15,6 +15,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
 import { API_ADDR } from "../../../config/server";
+import { Token } from "@/lib/Storage";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 
 type NoticeType = {
@@ -30,7 +31,7 @@ export default class NoticeForm extends Vue {
     try {
       await axios.post(`${API_ADDR}/notice`, this.notice, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
       this.$toasted.success("공지 등록이 완료되었습니다").goAway(800);

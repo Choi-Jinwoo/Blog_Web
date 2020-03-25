@@ -24,6 +24,7 @@ import getDataFromResp from "../../../../lib/util/getDataFromResp";
 
 import Btn from "@/components/common/Btn/index.vue";
 import Reply from "@/components/post/CommentBox/ReplyBox/Reply.vue";
+import { Token } from "../../../../lib/Storage";
 
 type ReplyType = {
   idx: number;
@@ -76,7 +77,7 @@ export default class ReplyBox extends Vue {
         },
         {
           headers: {
-            "x-access-token": localStorage.getItem("x-access-token")
+            "x-access-token": Token.getToken()
           }
         }
       );
@@ -106,7 +107,7 @@ export default class ReplyBox extends Vue {
         `${API_ADDR}/reply?comment=${this.commentIdx}`,
         {
           headers: {
-            "x-access-token": localStorage.getItem("x-access-token")
+            "x-access-token": Token.getToken()
           }
         }
       );

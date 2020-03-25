@@ -21,6 +21,7 @@ import { Vue, Component } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
 import Category from "./Category.vue";
 import { API_ADDR } from "../../../../config/server";
+import { Token } from "@/lib/Storage";
 import getDataFromResp from "../../../lib/util/getDataFromResp";
 
 type CategoryType = {
@@ -56,7 +57,7 @@ export default class CategoryForm extends Vue {
         },
         {
           headers: {
-            "x-access-token": localStorage.getItem("x-access-token")
+            "x-access-token": Token.getToken()
           }
         }
       );

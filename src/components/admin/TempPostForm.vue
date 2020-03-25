@@ -16,6 +16,7 @@
 import { Vue, Component } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
 import { API_ADDR } from "../../../config/server";
+import { Token } from "@/lib/Storage";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 
 @Component
@@ -30,7 +31,7 @@ export default class TempPostForm extends Vue {
     try {
       const resp: AxiosResponse = await axios.get(`${API_ADDR}/post/temp`, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
       const { posts } = getDataFromResp(resp);

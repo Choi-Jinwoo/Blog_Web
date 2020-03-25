@@ -35,6 +35,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
 import moment from "moment";
 import { API_ADDR } from "../../../../../config/server";
+import { Token } from "@/lib/Storage";
 import getDataFromResp from "../../../../lib/util/getDataFromResp";
 
 type AuthorType = {
@@ -97,7 +98,7 @@ export default class Reply extends Vue {
         },
         {
           headers: {
-            "x-access-token": localStorage.getItem("x-access-token")
+            "x-access-token": Token.getToken()
           }
         }
       );
@@ -135,7 +136,7 @@ export default class Reply extends Vue {
     try {
       await axios.delete(`${API_ADDR}/reply/${this.reply.idx}`, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
       this.$emit("reply-change");

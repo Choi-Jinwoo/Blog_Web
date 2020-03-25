@@ -29,6 +29,7 @@ import { Vue, Component } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
 import { sha512, Message } from "js-sha512";
 import { API_ADDR } from "../../../config/server";
+import { Token } from "@/lib/Storage";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 import Btn from "@/components/common/Btn/index.vue";
 
@@ -53,7 +54,7 @@ export default class LoginForm extends Vue {
       const data = getDataFromResp(resp);
       const token = data["x-access-token"];
 
-      localStorage.setItem("x-access-token", token);
+      Token.setToken(token);
       this.$router.push("/");
     } catch (err) {
       switch (err.response.status) {

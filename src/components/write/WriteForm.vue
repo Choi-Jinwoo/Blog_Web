@@ -77,6 +77,7 @@ import marked, { MarkedOptions } from "marked";
 import hljs from "highlight.js";
 import axios, { AxiosResponse } from "axios";
 import getDataFromResp from "@/lib/util/getDataFromResp";
+import { Token } from "@/lib/Storage";
 import { API_ADDR } from "../../../config/server";
 
 import Btn from "@/components/common/Btn/index.vue";
@@ -161,7 +162,7 @@ export default class Write extends Vue {
         `${API_ADDR}/post/${idx}?image=raw`,
         {
           headers: {
-            "x-access-token": localStorage.getItem("x-access-token")
+            "x-access-token": Token.getToken()
           }
         }
       );
@@ -196,7 +197,7 @@ export default class Write extends Vue {
     try {
       const resp: AxiosResponse = await axios.get(`${API_ADDR}/profile/my`, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
 
@@ -226,7 +227,7 @@ export default class Write extends Vue {
     try {
       await axios.put(`${API_ADDR}/post/${this.modifyIdx}`, post, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
 
@@ -273,7 +274,7 @@ export default class Write extends Vue {
     try {
       await axios.post(`${API_ADDR}/post`, post, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
       alert("글 업로드가 완료되었습니다");
@@ -320,7 +321,7 @@ export default class Write extends Vue {
     try {
       await axios.post(`${API_ADDR}/post/temp`, post, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
       alert("임시저장이 완료되었습니다");

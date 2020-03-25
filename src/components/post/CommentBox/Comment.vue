@@ -51,6 +51,7 @@ import { Component, Vue, Prop } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
 import moment from "moment";
 import { API_ADDR } from "../../../../config/server";
+import { Token } from "@/lib/Storage";
 import getDataFromResp from "../../../lib/util/getDataFromResp";
 
 import ReplyBox from "@/components/post/CommentBox/ReplyBox/index.vue";
@@ -121,7 +122,7 @@ export default class Comment extends Vue {
         },
         {
           headers: {
-            "x-access-token": localStorage.getItem("x-access-token")
+            "x-access-token": Token.getToken()
           }
         }
       );
@@ -159,7 +160,7 @@ export default class Comment extends Vue {
     try {
       await axios.delete(`${API_ADDR}/comment/${this.comment.idx}`, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
       this.$emit("comment-change");

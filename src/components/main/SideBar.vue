@@ -43,6 +43,7 @@ import axios, { AxiosResponse } from "axios";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 import { eventBus } from "@/lib/evnetBus";
 import { API_ADDR } from "../../../config/server";
+import { Token } from "../../lib/Storage";
 
 type UserType = {
   id: string;
@@ -72,7 +73,7 @@ export default class SideBar extends Vue {
     try {
       const resp: AxiosResponse = await axios.get(`${API_ADDR}/profile/my`, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
 

@@ -22,6 +22,7 @@ import { Vue, Component, Prop } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
 import { API_ADDR } from "../../../../config/server";
 import getDataFromResp from "../../../lib/util/getDataFromResp";
+import { Token } from "../../../lib/Storage";
 
 type NoticeType = {
   idx: number;
@@ -53,7 +54,7 @@ export default class Notice extends Vue {
     try {
       const resp: AxiosResponse = await axios.get(`${API_ADDR}/profile/my`, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
 

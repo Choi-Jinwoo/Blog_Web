@@ -21,6 +21,7 @@
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
 import axios, { AxiosResponse } from "axios";
+import { Token } from "@/lib/Storage";
 import { API_ADDR } from "../../../../config/server";
 
 type CategoryType = {
@@ -45,7 +46,7 @@ export default class Category extends Vue {
         },
         {
           headers: {
-            "x-access-token": localStorage.getItem("x-access-token")
+            "x-access-token": Token.getToken()
           }
         }
       );
@@ -83,7 +84,7 @@ export default class Category extends Vue {
     try {
       await axios.delete(`${API_ADDR}/category/${this.category.idx}`, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
 

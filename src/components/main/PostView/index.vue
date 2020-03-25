@@ -13,6 +13,7 @@ import { API_ADDR } from "../../../../config/server";
 
 import PostCard from "@/components/main/PostView/PostCard.vue";
 import moment from "moment";
+import { Token } from "../../../lib/Storage";
 
 type Category = {
   idx: number;
@@ -146,7 +147,7 @@ export default class PostView extends Vue {
     try {
       const resp: AxiosResponse = await axios.get(url, {
         headers: {
-          "x-access-token": localStorage.getItem("x-access-token")
+          "x-access-token": Token.getToken()
         }
       });
 
@@ -173,7 +174,7 @@ export default class PostView extends Vue {
         `${API_ADDR}/post/find?query=${query}`,
         {
           headers: {
-            "x-access-token": localStorage.getItem("x-access-token")
+            "x-access-token": Token.getToken()
           }
         }
       );
