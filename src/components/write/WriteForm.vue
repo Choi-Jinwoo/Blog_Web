@@ -11,6 +11,7 @@
           placeholder="내용을 작성해주세요"
           @drop.prevent="uploadWithDrop"
           @paste="uploadWithPaste"
+          @keydown.tab="indentWithTab"
         ></textarea>
       </div>
     </div>
@@ -428,6 +429,26 @@ export default class Write extends Vue {
 
     const { url } = getDataFromResp(resp);
     return url;
+  }
+
+  indentWithTab(e: Event) {
+    e.preventDefault();
+    const target = e.target as HTMLTextAreaElement;
+
+    const cursorStart = target.selectionStart;
+    const cursorEnd = target.selectionEnd;
+
+    const beforeText = this.post.content.substring(0, cursorStart);
+    const afterText = this.post.content.substring(
+      cursorEnd,
+      this.post.content.length
+    );
+
+    this.post.content = `${beforeText}\t${afterText}`;
+
+    setTimeout(() => {
+      target.selectionStart = target.selectionEnd = cursorStart + 1;
+    }, 10);
   }
 }
 </script>
