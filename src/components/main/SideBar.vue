@@ -134,7 +134,8 @@ export default class SideBar extends Vue {
   }
 
   logout() {
-    localStorage.removeItem("x-access-token");
+    Token.removeToken();
+    Token.removeSavedToken();
     location.href = "./";
   }
 }

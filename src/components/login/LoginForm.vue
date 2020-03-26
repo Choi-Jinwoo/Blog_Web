@@ -11,6 +11,12 @@
         <p>비밀번호</p>
         <input type="password" v-model="pw" @keydown.enter="login" />
       </div>
+
+      <div class="save-id">
+        <input type="checkbox" v-model="idSave" />
+        <p>아이디 저장</p>
+      </div>
+
       <Btn text="로그인" @click="login"></Btn>
     </div>
 
@@ -41,6 +47,7 @@ import Btn from "@/components/common/Btn/index.vue";
 export default class LoginForm extends Vue {
   id: string = "";
   pw: string = "";
+  idSave: Boolean = false;
 
   async login() {
     const castedPw: Message = String(this.pw);
@@ -55,6 +62,12 @@ export default class LoginForm extends Vue {
       const token = data["x-access-token"];
 
       Token.setToken(token);
+      if (this.idSave) {
+        Token.setSavedToken(token);
+      } else {
+        Token.removeSavedToken();
+      }
+
       this.$router.push("/");
     } catch (err) {
       switch (err.response.status) {
@@ -116,8 +129,26 @@ export default class LoginForm extends Vue {
       }
     }
 
+    .save-id {
+      display: flex;
+      align-items: center;
+      margin-top: 0.75rem;
+
+      input {
+        width: 0.75rem;
+        height: 0.75rem;
+      }
+
+      p {
+        margin: 0;
+        padding: 0;
+        font-size: 0.75rem;
+        color: $gray5;
+      }
+    }
+
     .Btn {
-      margin-top: 2rem;
+      margin-top: 1rem;
     }
   }
 

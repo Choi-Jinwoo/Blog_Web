@@ -8,11 +8,19 @@ export class Token {
     sessionStorage.setItem('x-access-token', token);
   };
 
+  static removeToken() {
+    sessionStorage.removeItem('x-access-token');
+  }
+
   static getSavedToken() {
     return localStorage.getItem('x-access-token');
   };
 
-  static setSaedToken(token: string) {
+  static setSavedToken(token: string) {
     localStorage.setItem('x-access-token', token);
   };
+
+  static removeSavedToken() {
+    localStorage.removeItem('x-access-token');
+  }
 };
