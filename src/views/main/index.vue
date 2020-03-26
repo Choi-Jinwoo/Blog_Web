@@ -20,7 +20,7 @@ import PostView from "@/components/main/PostView/index.vue";
 @Component({
   components: {
     "side-bar": SideBar,
-    "post-view": PostView
+    "post-view": PostView,
   }
 })
 export default class Main extends Vue {}

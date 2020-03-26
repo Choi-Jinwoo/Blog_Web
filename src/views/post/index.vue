@@ -2,6 +2,7 @@
   <div class="post">
     <top-bar />
     <post-box />
+    <Footer />
   </div>
 </template>
 
@@ -10,11 +11,13 @@ import { Vue, Component } from "vue-property-decorator";
 
 import PostBox from "@/components/post/PostBox.vue";
 import TopBar from "@/components/common/TopBar/index.vue";
+import Footer from "@/components/common/Footer/index.vue";
 
 @Component({
   components: {
     "post-box": PostBox,
-    "top-bar": TopBar
+    "top-bar": TopBar,
+    Footer
   }
 })
 export default class Post extends Vue {}
@@ -22,6 +25,8 @@ export default class Post extends Vue {}
 
 <style lang="scss" scoped>
 .post {
+  position: relative;
+  min-height: 100vh;
   .top-bar {
     position: fixed;
     top: 0;
