@@ -34,18 +34,13 @@ export default class Post extends Vue {
     this.openWindow("https://www.facebook.com/ChoiJinwoo03");
   }
 
-  copyMailAddr() {
-    const copyInput = document.createElement("textarea");
-    copyInput.value = "chlwlsdn0828@gmail.com";
-
-    const range = document.createRange();
-    range.selectNodeContents(copyInput);
-
-    const selection = window.getSelection() as Selection;
-    selection.removeAllRanges();
-    selection.addRange(range);
-    copyInput.setSelectionRange(0, 999999);
-    this.$toasted.info("클립보드에 복사되었습니다.").goAway(800);
+  async copyMailAddr() {
+    try {
+      await this.$copyText("chlwlsdn0828@gmail.com");
+      this.$toasted.info("클립보드에 복사되었습니다").goAway(800);
+    } catch (err) {
+      this.$toasted.error("클립보드에 복사에 실패하였습니다").goAway(800);
+    }
   }
 
   openWindow(url: string) {
