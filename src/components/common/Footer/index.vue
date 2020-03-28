@@ -5,6 +5,11 @@
     </div>
 
     <div class="sns">
+      <img
+        src="../../../assets/svg/footer_gmail.svg"
+        title="chlwlsdn0828@gmail.com"
+        @click="copyMailAddr"
+      />
       <img src="../../../assets/svg/footer_github.svg" alt @click="openGithub" />
       <img src="../../../assets/svg/footer_facebook.svg" alt @click="openFacebook" />
       <img src="../../../assets/svg/footer_blog.png" alt @click="openNaverBlog" />
@@ -27,6 +32,20 @@ export default class Post extends Vue {
 
   openFacebook() {
     this.openWindow("https://www.facebook.com/ChoiJinwoo03");
+  }
+
+  copyMailAddr() {
+    const copyInput = document.createElement("textarea");
+    copyInput.value = "chlwlsdn0828@gmail.com";
+
+    const range = document.createRange();
+    range.selectNodeContents(copyInput);
+
+    const selection = window.getSelection() as Selection;
+    selection.removeAllRanges();
+    selection.addRange(range);
+    copyInput.setSelectionRange(0, 999999);
+    this.$toasted.info("클립보드에 복사되었습니다.").goAway(800);
   }
 
   openWindow(url: string) {
