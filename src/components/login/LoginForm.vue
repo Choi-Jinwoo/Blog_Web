@@ -14,7 +14,7 @@
 
       <div class="save-id">
         <input type="checkbox" v-model="idSave" />
-        <p>아이디 저장</p>
+        <p @click="idSave = !idSave">아이디 저장</p>
       </div>
 
       <Btn text="로그인" @click="login"></Btn>
@@ -137,6 +137,7 @@ export default class LoginForm extends Vue {
       input {
         width: 0.75rem;
         height: 0.75rem;
+        cursor: pointer;
       }
 
       p {
@@ -144,6 +145,7 @@ export default class LoginForm extends Vue {
         padding: 0;
         font-size: 0.75rem;
         color: $gray5;
+        cursor: pointer;
       }
     }
 
