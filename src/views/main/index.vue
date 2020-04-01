@@ -69,11 +69,11 @@ export default class Main extends Vue {}
     border-radius: 2rem;
     font-size: 0.75rem;
     border: 1.2px $gray6 solid;
-    background-color: $gray1;
     color: $gray6;
     cursor: pointer;
     &:hover {
-      background-color: $gray2;
+      background-color: $gray6;
+      color: #ffffff;
     }
   }
 }
