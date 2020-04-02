@@ -14,6 +14,7 @@ import { API_ADDR } from "../../../../config/server";
 import PostCard from "@/components/main/PostView/PostCard.vue";
 import moment from "moment";
 import { Token } from "../../../lib/Storage";
+import CategorySingleton from "../../../lib/singleton/category";
 
 type Category = {
   idx: number;
@@ -66,17 +67,11 @@ export default class PostView extends Vue {
       return category.idx;
     });
 
-    if (this.$route.query.category) {
-      const categoryIdx = Number(this.$route.query.category);
-
-      if (this.categoryIdxMapped.indexOf(categoryIdx) === -1) {
-        this.$router.push("/notfound");
-        return;
-      }
-
-      this.category = categoryIdx;
+    const categoryInstance: CategorySingleton = CategorySingleton.category;
+    let selectedCategory = categoryInstance.idx;
+    if (categoryInstance && categoryInstance !== undefined) {
+      this.category = selectedCategory;
     }
-
     this.getPosts();
 
     window.addEventListener("scroll", async () => {
@@ -94,12 +89,6 @@ export default class PostView extends Vue {
     });
 
     eventBus.$on("select-category", async (idx: number) => {
-      if (idx === null) {
-        this.$router.push({
-          path: "/",
-          query: {}
-        });
-      }
       this.category = idx;
       this.posts = [];
       this.initView();

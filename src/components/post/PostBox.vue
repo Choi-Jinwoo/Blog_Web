@@ -1,10 +1,7 @@
 <template>
   <div class="post-box">
     <div class="title">
-      <p
-        class="category"
-        @click="$router.push(`/?category=${post.fk_category_idx}`)"
-      >{{ category.name }}</p>
+      <p class="category" @click="selectCategory">{{ category.name }}</p>
       <h1>{{ post.title }}</h1>
       <div class="post-info">
         <p class="user-id">{{ post.fk_user_id }}</p>
@@ -36,10 +33,12 @@ import hljs from "highlight.js";
 import { API_ADDR } from "../../../config/server";
 import getDataFromResp from "@/lib/util/getDataFromResp";
 import { Token } from "@/lib/Storage";
+import CategorySingleton from "@/lib/singleton/category";
 import { eventBus } from "../../lib/evnetBus";
 
 import CommentBox from "@/components/post/CommentBox/index.vue";
 import router from "../../router";
+import Category from "../admin/CategoryForm/Category.vue";
 
 type PostType = {
   idx: number;
@@ -196,6 +195,12 @@ export default class PostBox extends Vue {
           break;
       }
     }
+  }
+
+  selectCategory() {
+    const categoryInstance: CategorySingleton = CategorySingleton.category;
+    categoryInstance.idx = this.post.fk_category_idx;
+    router.push("/");
   }
 }
 </script>

@@ -20,7 +20,7 @@
 
     <div class="category-container">
       <h3>Category</h3>
-      <p @click="selectCategory(null);">전체</p>
+      <p @click="selectCategory(null)">전체</p>
       <p
         v-for="(category, index) in categories"
         :key="index"
