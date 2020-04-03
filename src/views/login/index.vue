@@ -8,21 +8,21 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
+import { Vue, Component, Prop } from 'vue-property-decorator';
 
-import SideIntro from "@/components/login/SideIntro.vue";
-import LoginForm from "../../components/login/LoginForm.vue";
+import SideIntro from '@/components/login/SideIntro.vue';
+import LoginForm from '../../components/login/LoginForm.vue';
 @Component({
   components: {
-    "side-intro": SideIntro,
-    "login-form": LoginForm
-  }
+    'side-intro': SideIntro,
+    'login-form': LoginForm,
+  },
 })
 export default class Login extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "../../style/palette";
+@import '../../style/palette';
 
 .login {
   display: flex;
@@ -41,6 +41,8 @@ export default class Login extends Vue {}
 
     display: flex;
     width: 50%;
+    max-width: 800px;
+
     .side-intro {
       @media only screen and (max-width: 768px) {
         display: none;

@@ -7,19 +7,19 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import RegisterForm from "@/components/register/RegisterFrom.vue";
+import { Vue, Component } from 'vue-property-decorator';
+import RegisterForm from '@/components/register/RegisterFrom.vue';
 
 @Component({
   components: {
-    "register-form": RegisterForm
-  }
+    'register-form': RegisterForm,
+  },
 })
 export default class Register extends Vue {}
 </script>
 
 <style lang="scss" scoped>
-@import "../../style/palette";
+@import '../../style/palette';
 
 .register {
   display: flex;
@@ -36,7 +36,7 @@ export default class Register extends Vue {}
       width: 90%;
     }
     width: 50%;
-    max-width: 768px;
+    max-width: 700px;
   }
 }
 </style>

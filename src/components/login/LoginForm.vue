@@ -31,22 +31,22 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from "vue-property-decorator";
-import axios, { AxiosResponse } from "axios";
-import { sha512, Message } from "js-sha512";
-import { API_ADDR } from "../../../config/server";
-import { Token } from "@/lib/Storage";
-import getDataFromResp from "@/lib/util/getDataFromResp";
-import Btn from "@/components/common/Btn/index.vue";
+import { Vue, Component } from 'vue-property-decorator';
+import axios, { AxiosResponse } from 'axios';
+import { sha512, Message } from 'js-sha512';
+import { API_ADDR } from '../../../config/server';
+import { Token } from '@/lib/Storage';
+import getDataFromResp from '@/lib/util/getDataFromResp';
+import Btn from '@/components/common/Btn/index.vue';
 
 @Component({
   components: {
-    Btn
-  }
+    Btn,
+  },
 })
 export default class LoginForm extends Vue {
-  id: string = "";
-  pw: string = "";
+  id: string = '';
+  pw: string = '';
   idSave: Boolean = false;
 
   async login() {
@@ -55,30 +55,35 @@ export default class LoginForm extends Vue {
     try {
       const resp: AxiosResponse = await axios.post(`${API_ADDR}/auth/login`, {
         id: this.id,
-        pw: sha512(castedPw)
+        pw: sha512(castedPw),
       });
 
       const data = getDataFromResp(resp);
-      const token = data["x-access-token"];
+      const token = data['x-access-token'];
 
       Token.setToken(token);
+
+      /**
+       * ID Save 옵션 true > token 저장
+       * ID Save 옵션 false > 저장된 token 삭제
+       */
       if (this.idSave) {
         Token.setSavedToken(token);
       } else {
         Token.removeSavedToken();
       }
 
-      this.$router.push("/");
+      this.$router.push('/');
     } catch (err) {
       switch (err.response.status) {
         case 400:
-          this.$toasted.error("아이디, 비밀번호가 비었습니다").goAway(800);
+          this.$toasted.error('아이디, 비밀번호가 비었습니다').goAway(800);
           break;
         case 401:
-          this.$toasted.error("아이디, 비밀번호가 틀렸습니다").goAway(800);
+          this.$toasted.error('아이디, 비밀번호가 틀렸습니다').goAway(800);
           break;
         default:
-          this.$toasted.error("오류가 발생하였습니다").goAway(800);
+          this.$toasted.error('오류가 발생하였습니다').goAway(800);
           break;
       }
     }
@@ -87,7 +92,7 @@ export default class LoginForm extends Vue {
 </script>
 
 <style lang="scss" scoped>
-@import "../../style/palette.scss";
+@import '../../style/palette.scss';
 
 .login-form {
   display: flex;
