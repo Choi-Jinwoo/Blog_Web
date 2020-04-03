@@ -21,11 +21,9 @@
     <div class="category-container">
       <h3>Category</h3>
       <p @click="selectCategory(null)">전체</p>
-      <p
-        v-for="(category, index) in categories"
-        :key="index"
-        @click="selectCategory(category.idx)"
-      >{{ category.name }}</p>
+      <p v-for="(category, index) in categories" :key="index" @click="selectCategory(category.idx)">
+        {{ category.name }}
+      </p>
     </div>
 
     <div class="bottom-bar">
@@ -38,12 +36,12 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component, Prop } from "vue-property-decorator";
-import axios, { AxiosResponse } from "axios";
-import getDataFromResp from "@/lib/util/getDataFromResp";
-import { eventBus } from "@/lib/evnetBus";
-import { API_ADDR } from "../../../config/server";
-import { Token } from "../../lib/Storage";
+import { Vue, Component, Prop } from 'vue-property-decorator';
+import axios, { AxiosResponse } from 'axios';
+import getDataFromResp from '@/lib/util/getDataFromResp';
+import { eventBus } from '@/lib/evnetBus';
+import { API_ADDR } from '../../../config/server';
+import { Token } from '../../lib/Storage';
 
 type UserType = {
   id: string;
@@ -60,8 +58,8 @@ type CategoryType = {
 export default class SideBar extends Vue {
   user: UserType = {} as UserType;
   categories: CategoryType[] = [];
-  findQuery: string = "";
-  noticeTitle: string = "";
+  findQuery: string = '';
+  noticeTitle: string = '';
 
   async mounted() {
     this.getProfile();
@@ -73,8 +71,8 @@ export default class SideBar extends Vue {
     try {
       const resp: AxiosResponse = await axios.get(`${API_ADDR}/profile/my`, {
         headers: {
-          "x-access-token": Token.getToken()
-        }
+          'x-access-token': Token.getToken(),
+        },
       });
 
       const { user: resUser } = getDataFromResp(resp);
@@ -82,7 +80,7 @@ export default class SideBar extends Vue {
       const user: UserType = {
         id: resUser.id,
         profileImage: resUser.profile_image,
-        isAdmin: resUser.is_admin
+        isAdmin: resUser.is_admin,
       };
 
       this.user = user;
@@ -93,12 +91,10 @@ export default class SideBar extends Vue {
         case 404:
           break;
         case 410:
-          this.$toasted
-            .error("로그인 정보 만료로 재 로그인 후 사용해주세요.")
-            .goAway(800);
+          this.$toasted.error('로그인 정보 만료로 재 로그인 후 사용해주세요.').goAway(800);
           break;
         default:
-          this.$toasted.error("오류가 발생하였습니다").goAway(800);
+          this.$toasted.error('오류가 발생하였습니다').goAway(800);
       }
     }
   }
@@ -111,10 +107,10 @@ export default class SideBar extends Vue {
     } catch (err) {
       switch (err.response.status) {
         case 404:
-          this.noticeTitle = "공지사항 없음";
+          this.noticeTitle = '공지사항 없음';
           break;
         default:
-          this.noticeTitle = "공지사항 오류 발생";
+          this.noticeTitle = '공지사항 오류 발생';
       }
     }
   }
@@ -126,23 +122,23 @@ export default class SideBar extends Vue {
   }
 
   selectCategory(idx: number) {
-    eventBus.$emit("select-category", idx);
+    eventBus.$emit('select-category', idx);
   }
 
   findPost() {
-    eventBus.$emit("find-post", this.findQuery);
+    eventBus.$emit('find-post', this.findQuery);
   }
 
   logout() {
     Token.removeToken();
     Token.removeSavedToken();
-    location.href = "./";
+    location.href = './';
   }
 }
 </script>
 
 <style lang="scss" scoped>
-@import "../../style/palette.scss";
+@import '../../style/palette.scss';
 .side-bar {
   display: flex;
   flex-direction: column;
@@ -236,10 +232,10 @@ export default class SideBar extends Vue {
 
   .search-bar {
     flex-grow: 0.4;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: flex-start;
-    box-sizing: border-box;
 
     img {
       width: 1.25rem;
