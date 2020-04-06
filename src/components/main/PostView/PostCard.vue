@@ -12,7 +12,7 @@
       <div class="img-not-exist" v-else>
         <p class="category">{{ post.category}}</p>
         <div class="title-container">
-          <h3>{{ post.title }}</h3>
+          <h3 :title="post.title">{{ post.title }}</h3>
         </div>
         <p class="created-at">{{ post.createdAt}}</p>
       </div>
