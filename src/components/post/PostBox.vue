@@ -99,6 +99,12 @@ export default class PostBox extends Vue {
     await this.getPost();
     document.title = this.post.title;
 
+    // set meta
+    const meta = document.createElement("meta");
+    meta.name = "Keywords";
+    meta.content = this.post.title;
+    document.getElementsByTagName("head")[0].appendChild(meta);
+
     this.getCategory();
 
     this.convertedContent = marked(this.post.content, { renderer });
