@@ -20,7 +20,7 @@ import PostView from "@/components/main/PostView/index.vue";
 @Component({
   components: {
     "side-bar": SideBar,
-    "post-view": PostView,
+    "post-view": PostView
   }
 })
 export default class Main extends Vue {}
@@ -69,6 +69,7 @@ export default class Main extends Vue {}
     border-radius: 2rem;
     font-size: 0.75rem;
     border: 1.2px $gray6 solid;
+    background-color: #ffffff;
     color: $gray6;
     cursor: pointer;
     &:hover {
