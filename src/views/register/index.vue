@@ -7,19 +7,24 @@
 </template>
 
 <script lang="ts">
-import { Vue, Component } from 'vue-property-decorator';
-import RegisterForm from '@/components/register/RegisterFrom.vue';
+import { Vue, Component } from "vue-property-decorator";
+import RegisterForm from "@/components/register/RegisterFrom.vue";
 
 @Component({
   components: {
-    'register-form': RegisterForm,
-  },
+    "register-form": RegisterForm
+  }
 })
-export default class Register extends Vue {}
+export default class Register extends Vue {
+  mounted() {
+    alert("곧 지원 종료될 기능입니다");
+    this.$router.push("/");
+  }
+}
 </script>
 
 <style lang="scss" scoped>
-@import '../../style/palette';
+@import "../../style/palette";
 
 .register {
   display: flex;
