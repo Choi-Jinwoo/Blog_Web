@@ -1,10 +1,9 @@
 <template>
   <div class="side-intro">
     <div class="intro-text-form">
-      <h1>Welcome</h1>
-      <p>안녕하세요</p>
+      <h1>관리자 로그인</h1>
+      <p>관리자만 로그인이 가능합니다</p>
     </div>
-    <!-- <img src="../../assets/svg/login_joyride.svg" alt="Hello" /> -->
     <div class="img-form">
       <img src="../../assets/svg/login_highfive.svg" alt="Hello" />
     </div>
