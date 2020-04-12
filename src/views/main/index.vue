@@ -1,9 +1,7 @@
 <template>
   <div class="main">
     <Header></Header>
-    <div class="side-bar-container">
-      <side-bar></side-bar>
-    </div>
+    <title-box></title-box>
     <post-view />
     <div class="subscribe-btn" @click="$router.push('/subscribe')">Subscribe</div>
   </div>
@@ -16,12 +14,12 @@ import getDataFromResp from "../../lib/util/getDataFromResp";
 import { API_ADDR } from "../../../config/server";
 
 import Header from "@/components/common/Header/index.vue";
-import SideBar from "@/components/main/SideBar.vue";
+import TitleBox from "@/components/main/TitleBox.vue";
 import PostView from "@/components/main/PostView/index.vue";
 
 @Component({
   components: {
-    SideBar,
+    TitleBox,
     PostView,
     Header
   }
