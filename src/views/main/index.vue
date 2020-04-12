@@ -46,6 +46,7 @@ export default class Main extends Vue {}
     align-items: center;
     width: 24%;
     .side-bar {
+      margin-top: 3.5rem;
       @media only screen and (max-width: 945px) {
         position: initial;
       }

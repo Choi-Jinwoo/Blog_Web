@@ -43,17 +43,25 @@ export default class Header extends Vue {}
     justify-content: space-between;
     align-items: center;
     width: 80%;
+    height: 3.5rem;
 
     .link-box {
       display: flex;
+      align-items: center;
 
       div {
+        box-sizing: border-box;
+        display: flex;
+        align-items: center;
+        height: 3.5rem;
         margin-right: 1rem;
         color: $gray2;
+        border-bottom: 2.5px solid transparent;
         cursor: pointer;
 
         &:hover {
-          color: $gray1;
+          color: #ffffff;
+          border-bottom: 2.5px solid #ffffff;
         }
       }
     }
