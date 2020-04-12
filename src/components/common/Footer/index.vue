@@ -5,14 +5,14 @@
     </div>
 
     <div class="sns">
-      <img
+      <!-- <img
         src="../../../assets/svg/footer_gmail.svg"
         title="chlwlsdn0828@gmail.com"
         @click="copyMailAddr"
-      />
-      <img src="../../../assets/svg/footer_github.svg" alt @click="openGithub" />
+      />-->
+      <!-- <img src="../../../assets/svg/footer_github.svg" alt @click="openGithub" />
       <img src="../../../assets/svg/footer_facebook.svg" alt @click="openFacebook" />
-      <img src="../../../assets/svg/footer_blog.png" alt @click="openNaverBlog" />
+      <img src="../../../assets/svg/footer_blog.png" alt @click="openNaverBlog" />-->
     </div>
   </div>
 </template>

@@ -1,5 +1,6 @@
 <template>
   <div class="main">
+    <Header></Header>
     <div class="side-bar-container">
       <side-bar></side-bar>
     </div>
@@ -14,13 +15,15 @@ import axios, { AxiosResponse } from "axios";
 import getDataFromResp from "../../lib/util/getDataFromResp";
 import { API_ADDR } from "../../../config/server";
 
+import Header from "@/components/common/Header/index.vue";
 import SideBar from "@/components/main/SideBar.vue";
 import PostView from "@/components/main/PostView/index.vue";
 
 @Component({
   components: {
-    "side-bar": SideBar,
-    "post-view": PostView
+    SideBar,
+    PostView,
+    Header
   }
 })
 export default class Main extends Vue {}
