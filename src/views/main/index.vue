@@ -1,8 +1,7 @@
 <template>
   <div class="main">
     <Header></Header>
-    <title-box></title-box>
-    <div class="subscribe-btn" @click="$router.push('/subscribe')">Subscribe</div>
+    <title-box></title-box>hi
   </div>
 </template>
 

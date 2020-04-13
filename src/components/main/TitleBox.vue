@@ -13,7 +13,9 @@
         @mouseover="showCategoryIdx = wrapperCategory.idx"
         @mouseleave="showCategoryIdx = null"
       >
-        <p>{{ wrapperCategory.name }}</p>
+        <b>
+          <p>{{ wrapperCategory.name }}</p>
+        </b>
 
         <div
           class="wrapped-category-box"
@@ -63,7 +65,12 @@ export default class TitleBox extends Vue {
 @import "../../style/palette.scss";
 
 .title-box {
+  display: flex;
+  position: relative;
+  flex-direction: column;
   margin-top: 3.5rem;
+  align-items: center;
+  justify-content: center;
   padding: 1.5rem;
   text-align: center;
   color: $gray6;
@@ -81,27 +88,41 @@ export default class TitleBox extends Vue {
   }
 
   .category-box {
+    position: absolute;
+    top: 6rem;
+    box-sizing: border-box;
     display: flex;
     align-items: flex-start;
     justify-content: center;
     .wrapper-category {
+      margin-top: 2rem;
       width: 5rem;
       font-size: 1rem;
-      color: $gray6;
+      color: $gray3;
+      border: 1px solid transparent;
       cursor: pointer;
 
       &:hover {
-        color: $gray3;
+        color: $gray6;
+        border: 1px solid $gray3;
+        border-radius: 3px;
+      }
+
+      p {
+        margin: 0 !important;
+        padding: 0.25rem 0 !important;
       }
 
       .wrapped-category-box {
-        padding: 1rem;
+        margin: 1rem 0;
 
         .wrapped-category {
           font-size: 0.75rem;
-          color: $gray6;
-          border-right: 1px solid $gray6;
-          border-left: 1px solid $gray6;
+          color: $gray5;
+
+          &:hover {
+            color: $gray6;
+          }
         }
       }
     }
