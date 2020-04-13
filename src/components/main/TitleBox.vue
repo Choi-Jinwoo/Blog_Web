@@ -96,7 +96,7 @@ export default class TitleBox extends Vue {
     justify-content: center;
     .wrapper-category {
       margin-top: 2rem;
-      width: 5rem;
+      width: 6rem;
       font-size: 1rem;
       color: $gray3;
       border: 1px solid transparent;
