@@ -1,7 +1,8 @@
 <template>
   <div class="main">
     <Header></Header>
-    <title-box></title-box>hi
+    <title-box></title-box>
+    <post-view></post-view>
   </div>
 </template>
 
