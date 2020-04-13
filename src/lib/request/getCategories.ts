@@ -11,6 +11,6 @@ export default async (): Promise<ICategoryResp[] | undefined> => {
     const { categories }: { categories: ICategoryResp[] } = getDataFromResp(resp);
     return categories;
   } catch (err) {
-    Vue.toasted.error('오류가 발생하였습니다');
+    Vue.toasted.error('오류가 발생하였습니다').goAway(800);
   }
 }
