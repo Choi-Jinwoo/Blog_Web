@@ -6,7 +6,6 @@
 
 <script lang="ts">
 import { Vue, Component, Prop } from "vue-property-decorator";
-import moment from "moment";
 import { Token } from "@/lib/Storage";
 import getPosts from "@/lib/request/getPosts";
 

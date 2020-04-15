@@ -100,6 +100,7 @@ export default class TitleBox extends Vue {
       font-size: 1rem;
       color: $gray3;
       border: 1px solid transparent;
+      background-color: #ffffff;
       cursor: pointer;
 
       &:hover {
