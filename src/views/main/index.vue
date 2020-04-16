@@ -27,4 +27,13 @@ export default class Main extends Vue {}
 </script>
 
 <style lang="scss" scoped>
+.main {
+  .Header {
+    z-index: 300;
+  }
+
+  .title-box {
+    z-index: 200;
+  }
+}
 </style>

@@ -2,7 +2,13 @@
   <div class="post-card">
     <div class="thumbnail-wrapper">
       <img :src="post.thumbnail" alt />
-      asdf
+    </div>
+
+    <div class="post-info">
+      <p>{{ post.strCategory }}</p>
+      <h1>{{ post.title }}</h1>
+      <p>{{ post.released_at }}</p>
+      <p>{{ post.view }}</p>
     </div>
   </div>
 </template>
@@ -20,11 +26,14 @@ export default class PostCard extends Vue {
 
 <style lang="scss" scoped>
 .post-card {
-  background-color: red;
+  box-sizing: border-box;
+  width: calc(100% / 3);
+  padding: 0 20px;
 
   .thumbnail-wrapper {
     img {
-      height: 12rem;
+      width: 100%;
+      height: 200px;
       object-fit: cover;
     }
   }

@@ -12,6 +12,9 @@ import getPosts from "@/lib/request/getPosts";
 import PostCard from "@/components/main/PostView/PostCard.vue";
 
 import IPost from "@/interface/IPost";
+import getCategories from "../../../lib/request/getCategories";
+import ICategoryResp from "../../../interface/ICategoryResp";
+import ICategory from "../../../interface/ICategory";
 
 @Component({
   components: {
@@ -27,12 +30,68 @@ export default class PostView extends Vue {
       page: this.page,
       limit: 20
     });
+
     if (!posts) posts = [];
-    this.posts = posts;
+
+    /**
+     * strCategory 설정
+     */
+    let categories: ICategoryResp[] | undefined = await getCategories();
+    if (!categories) categories = [];
+
+    // 내부 카테고리 map
+    const wrappedCategoires: ICategory[] = [];
+    categories.forEach(category => {
+      wrappedCategoires.push(...category.categories);
+    });
+
+    const categoryIdxMap: number[] = wrappedCategoires.map(
+      category => category.idx
+    );
+
+    posts.forEach(post => {
+      let strCategory = "기타";
+      if (post.fk_category_idx) {
+        const idx = categoryIdxMap.indexOf(post.fk_category_idx);
+        if (idx !== -1) {
+          strCategory = wrappedCategoires[idx].name;
+        }
+      }
+      post.strCategory = strCategory;
+    });
+
+    // this.posts = posts;
+    /**
+     * 더미 데이터
+     */
+    this.posts = [
+      ...posts,
+      ...posts,
+      ...posts,
+      ...posts,
+      ...posts,
+      ...posts,
+      ...posts,
+      ...posts,
+      ...posts,
+      ...posts
+    ];
   }
 }
 </script>
 
 <style lang="scss" scoped>
 @import "../../../style/palette.scss";
+
+.post-view {
+  margin: 80px auto;
+  width: 60%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+
+  .post-card {
+  }
+}
 </style>

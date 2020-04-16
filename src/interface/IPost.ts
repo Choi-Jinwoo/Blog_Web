@@ -7,6 +7,7 @@ export default interface IPost {
   is_private?: boolean;
   is_temp: boolean;
   fk_category_idx: number | null;
+  strCategory?: string;
   thumbnail: string | null;
   released_at: Date | null;
   updated_at: Date | null;
