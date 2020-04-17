@@ -84,6 +84,10 @@ export default class PostView extends Vue {
 @import "../../../style/palette.scss";
 
 .post-view {
+  @media only screen and (max-width: 1300px) {
+    width: 100%;
+  }
+
   margin: 80px auto;
   width: 60%;
   display: flex;
