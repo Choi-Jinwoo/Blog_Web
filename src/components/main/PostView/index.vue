@@ -94,8 +94,5 @@ export default class PostView extends Vue {
   flex-wrap: wrap;
   align-items: center;
   justify-content: flex-start;
-
-  .post-card {
-  }
 }
 </style>
