@@ -5,9 +5,12 @@
     </div>
 
     <div class="post-info">
-      <p class="category">{{ post.strCategory }}</p>
+      <div class="top-bar">
+        <p class="category">{{ post.strCategory }}</p>
+        <p class="released-at">{{ strReleasedAt }}</p>
+      </div>
+
       <h1 class="title">{{ post.title }}</h1>
-      <p class="released-at">{{ strReleasedAt }}</p>
       <p class="view">{{ post.view }}</p>
     </div>
   </div>
@@ -31,6 +34,8 @@ export default class PostCard extends Vue {
 </script>
 
 <style lang="scss" scoped>
+@import "../../../style/palette.scss";
+
 .post-card {
   box-sizing: border-box;
   width: calc(100% / 3);
@@ -45,6 +50,7 @@ export default class PostCard extends Vue {
   }
 
   .post-info {
+    padding: 0 1rem;
     p,
     h1 {
       padding: 0;
@@ -53,9 +59,20 @@ export default class PostCard extends Vue {
 
     p {
       font-size: 0.75rem;
+      color: $blue2;
     }
+
     h1 {
       font-size: 1.5rem;
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .category {
+        width: 3rem;
+      }
     }
   }
 }
