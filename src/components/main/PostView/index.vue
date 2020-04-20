@@ -26,6 +26,7 @@ export default class PostView extends Vue {
   page: number = 1;
 
   async created() {
+    // TODO: paging
     let posts = await getPosts(Token.getToken(), {
       page: this.page,
       limit: 20
@@ -34,7 +35,7 @@ export default class PostView extends Vue {
     if (!posts) posts = [];
 
     /**
-     * strCategory 설정
+     * TODO: strCategory 설정(메소드로 분리 필요 -> paging)
      */
     let categories: ICategoryResp[] | undefined = await getCategories();
     if (!categories) categories = [];

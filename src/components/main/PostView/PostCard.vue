@@ -1,8 +1,12 @@
 <template>
   <div class="post-card">
     <div class="content">
-      <div class="thumbnail-wrapper">
+      <div v-if="post.thumbnail" class="thumbnail-wrapper">
         <img :src="post.thumbnail" alt />
+      </div>
+
+      <div v-else class="thumbnail-wrapper">
+        <img src="../../../assets/svg/post_thumbnail.svg" alt />
       </div>
 
       <div class="post-info">
@@ -47,11 +51,17 @@ export default class PostCard extends Vue {
     background-color: #ffffff;
     border: 0.5px solid $gray1;
     border-bottom: 3px solid $blue2;
+    transition: box-shadow 0.25s;
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: 0 4px 16px 0px rgba($color: $gray5, $alpha: 0.15);
+    }
 
     .thumbnail-wrapper {
       img {
-        width: 100%;
         height: 200px;
+        width: 100%;
         object-fit: cover;
       }
     }

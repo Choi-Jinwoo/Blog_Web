@@ -2,9 +2,7 @@
   <div class="main">
     <Header></Header>
     <title-box></title-box>
-    <div class="post-view-wrapper">
-      <post-view></post-view>
-    </div>
+    <post-view></post-view>
   </div>
 </template>
 
@@ -38,9 +36,6 @@ export default class Main extends Vue {}
 
   .title-box {
     z-index: 200;
-  }
-
-  .post-view-wrapper {
   }
 }
 </style>
