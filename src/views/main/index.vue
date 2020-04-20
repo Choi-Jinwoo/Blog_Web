@@ -2,7 +2,9 @@
   <div class="main">
     <Header></Header>
     <title-box></title-box>
-    <post-view></post-view>
+    <div class="post-view-wrapper">
+      <post-view></post-view>
+    </div>
   </div>
 </template>
 
@@ -27,6 +29,8 @@ export default class Main extends Vue {}
 </script>
 
 <style lang="scss" scoped>
+@import "../../style/palette.scss";
+
 .main {
   .Header {
     z-index: 300;
@@ -34,6 +38,9 @@ export default class Main extends Vue {}
 
   .title-box {
     z-index: 200;
+  }
+
+  .post-view-wrapper {
   }
 }
 </style>

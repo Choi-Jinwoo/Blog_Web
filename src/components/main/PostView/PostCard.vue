@@ -1,17 +1,18 @@
 <template>
   <div class="post-card">
-    <div class="thumbnail-wrapper">
-      <img :src="post.thumbnail" alt />
-    </div>
-
-    <div class="post-info">
-      <div class="top-bar">
-        <p class="category">{{ post.strCategory }}</p>
-        <p class="released-at">{{ strReleasedAt }}</p>
+    <div class="content">
+      <div class="thumbnail-wrapper">
+        <img :src="post.thumbnail" alt />
       </div>
 
-      <h1 class="title">{{ post.title }}</h1>
-      <p class="view">{{ post.view }}</p>
+      <div class="post-info">
+        <div class="top-bar">
+          <p class="category">{{ post.strCategory }}</p>
+          <p class="released-at">{{ strReleasedAt }}</p>
+        </div>
+
+        <h1 class="title">{{ post.title }}</h1>
+      </div>
     </div>
   </div>
 </template>
@@ -40,38 +41,49 @@ export default class PostCard extends Vue {
   box-sizing: border-box;
   width: calc(100% / 3);
   padding: 0 20px;
+  margin: 1rem 0;
 
-  .thumbnail-wrapper {
-    img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-  }
+  .content {
+    background-color: #ffffff;
+    border: 0.5px solid $gray1;
+    border-bottom: 3px solid $blue2;
 
-  .post-info {
-    padding: 0 1rem;
-    p,
-    h1 {
-      padding: 0;
-      margin: 0;
+    .thumbnail-wrapper {
+      img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+      }
     }
 
-    p {
-      font-size: 0.75rem;
-      color: $blue2;
-    }
+    .post-info {
+      padding: 0 1.25rem;
+      p,
+      h1 {
+        padding: 0;
+        margin: 0;
+      }
 
-    h1 {
-      font-size: 1.5rem;
-    }
+      p {
+        font-size: 0.75rem;
+        padding: 0.25rem 0;
+        color: $gray4;
+      }
 
-    .top-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      .category {
-        width: 3rem;
+      h1 {
+        font-size: 1.25rem;
+        color: $gray6;
+        padding: 1rem 0;
+        margin-bottom: 0.75rem;
+      }
+
+      .top-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        .category {
+          width: 3rem;
+        }
       }
     }
   }
