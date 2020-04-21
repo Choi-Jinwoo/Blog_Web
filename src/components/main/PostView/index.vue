@@ -26,17 +26,35 @@ export default class PostView extends Vue {
   page: number = 1;
 
   async created() {
-    // TODO: paging
     let posts = await getPosts(Token.getToken(), {
       page: this.page,
-      limit: 20
+      limit: 8
     });
+    this.page += 1;
 
     if (!posts) posts = [];
 
+    this.posts = await this.initPosts(posts);
+
     /**
-     * TODO: strCategory 설정(메소드로 분리 필요 -> paging)
+     * Scroll Event(Paging)
      */
+    window.addEventListener("scroll", async () => {
+      if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        let posts = await getPosts(Token.getToken(), {
+          page: this.page,
+          limit: 8
+        });
+        this.page += 1;
+
+        if (!posts) posts = [];
+
+        this.posts = [...this.posts, ...(await this.initPosts(posts))];
+      }
+    });
+  }
+
+  async initPosts(posts: IPost[]): Promise<IPost[]> {
     let categories: ICategoryResp[] | undefined = await getCategories();
     if (!categories) categories = [];
 
@@ -61,22 +79,7 @@ export default class PostView extends Vue {
       post.strCategory = strCategory;
     });
 
-    // this.posts = posts;
-    /**
-     * 더미 데이터
-     */
-    this.posts = [
-      ...posts,
-      ...posts,
-      ...posts,
-      ...posts,
-      ...posts,
-      ...posts,
-      ...posts,
-      ...posts,
-      ...posts,
-      ...posts
-    ];
+    return posts;
   }
 }
 </script>

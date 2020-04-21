@@ -50,7 +50,7 @@ export default class PostCard extends Vue {
   .content {
     background-color: #ffffff;
     border: 0.5px solid $gray1;
-    border-bottom: 3px solid $blue2;
+    border-bottom: 4px solid $blue2;
     transition: box-shadow 0.25s;
     cursor: pointer;
 
