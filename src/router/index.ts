@@ -66,7 +66,7 @@ const routes = [
     component: () => import('@/views/notfound/index.vue'),
   },
   {
-    path: '/:idx',
+    path: '/post/:idx',
     name: 'Post',
     component: () => import('@/views/post/index.vue'),
   },

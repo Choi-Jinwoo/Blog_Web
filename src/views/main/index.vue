@@ -30,6 +30,7 @@ export default class Main extends Vue {}
 @import "../../style/palette.scss";
 
 .main {
+  background-color: $gray0;
   .Header {
     z-index: 300;
   }
