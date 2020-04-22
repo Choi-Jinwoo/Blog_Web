@@ -39,7 +39,6 @@ export default async (token: string | null, args: GetPostsArgs): Promise<IPost[]
     const { posts }: { posts: IPost[] } = getDataFromResp(resp);
     return posts;
   } catch (err) {
-    // FIXME: throw Error
     let message = '오류가 발생하였습니다';
 
     switch (err.response.status) {
@@ -48,6 +47,6 @@ export default async (token: string | null, args: GetPostsArgs): Promise<IPost[]
         break;
     }
 
-    Vue.toasted.error(message).goAway(800);
+    throw new Error(message);
   }
 }

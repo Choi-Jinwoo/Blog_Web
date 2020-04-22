@@ -51,10 +51,12 @@ export default class TitleBox extends Vue {
   showCategoryIdx: number | null = null;
 
   async created() {
-    // FIXME: Error Handling
-    let categories: ICategoryResp[] | undefined = await getCategories();
-    if (!categories) categories = [];
-    this.categories = categories;
+    try {
+      const categories: ICategoryResp[] = (await getCategories()) || [];
+      this.categories = categories;
+    } catch (err) {
+      this.$toasted.error(err).goAway(800);
+    }
   }
 }
 </script>

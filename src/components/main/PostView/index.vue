@@ -26,40 +26,40 @@ export default class PostView extends Vue {
   page: number = 1;
 
   async created() {
-    // FIXME: 중복의 제거가 필요해 보임(초기 받아오는 코드 & 이벤트 발생 코드)
-    // FIXME: Error Handling
-    let posts = await getPosts(Token.getToken(), {
-      page: this.page,
-      limit: 8
-    });
-    this.page += 1;
-
-    if (!posts) posts = [];
-
-    this.posts = await this.initPosts(posts);
+    this.posts = (await this.getCurrentPagePosts()) || [];
 
     /**
      * Scroll Event(Paging)
      */
     window.addEventListener("scroll", async () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
-        // FIXME: Error Handling
-        let posts = await getPosts(Token.getToken(), {
-          page: this.page,
-          limit: 8
-        });
-        this.page += 1;
-
-        if (!posts) posts = [];
-
-        this.posts = [...this.posts, ...(await this.initPosts(posts))];
+        const newPosts: IPost[] = (await this.getCurrentPagePosts()) || [];
+        this.posts = [...this.posts, ...newPosts];
       }
     });
   }
 
+  async getCurrentPagePosts(): Promise<IPost[] | undefined> {
+    try {
+      let posts =
+        (await getPosts(Token.getToken(), {
+          page: this.page,
+          limit: 8
+        })) || [];
+      this.page += 1;
+
+      return this.initPosts(posts);
+    } catch (err) {
+      this.$toasted.error(err.message).goAway(800);
+    }
+  }
+
+  /**
+   * Throw Able Error
+   * 카테고리 조회 시 예외 발생 가능
+   */
   async initPosts(posts: IPost[]): Promise<IPost[]> {
-    let categories: ICategoryResp[] | undefined = await getCategories();
-    if (!categories) categories = [];
+    let categories: ICategoryResp[] | undefined = (await getCategories()) || [];
 
     // 내부 카테고리 map
     const wrappedCategoires: ICategory[] = [];
@@ -67,10 +67,12 @@ export default class PostView extends Vue {
       wrappedCategoires.push(...category.categories);
     });
 
+    // 내부 카테고리 IDX map
     const categoryIdxMap: number[] = wrappedCategoires.map(
       category => category.idx
     );
 
+    // 내부 카테고리 strCategory 지정
     posts.forEach(post => {
       let strCategory = "기타";
       if (post.fk_category_idx) {
