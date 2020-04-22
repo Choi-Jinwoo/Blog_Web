@@ -39,6 +39,7 @@ export default async (token: string | null, args: GetPostsArgs): Promise<IPost[]
     const { posts }: { posts: IPost[] } = getDataFromResp(resp);
     return posts;
   } catch (err) {
+    // FIXME: throw Error
     let message = '오류가 발생하였습니다';
 
     switch (err.response.status) {

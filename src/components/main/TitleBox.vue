@@ -37,9 +37,6 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import axios, { AxiosResponse } from "axios";
-import { API_ADDR } from "../../../config/server";
-import getDataFromResp from "@/lib/util/getDataFromResp";
 import getCategories from "@/lib/request/getCategories";
 
 import ICategory from "@/interface/ICategory";
@@ -54,6 +51,7 @@ export default class TitleBox extends Vue {
   showCategoryIdx: number | null = null;
 
   async created() {
+    // FIXME: Error Handling
     let categories: ICategoryResp[] | undefined = await getCategories();
     if (!categories) categories = [];
     this.categories = categories;

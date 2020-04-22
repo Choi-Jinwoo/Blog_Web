@@ -27,6 +27,7 @@ export default class PostView extends Vue {
 
   async created() {
     // FIXME: 중복의 제거가 필요해 보임(초기 받아오는 코드 & 이벤트 발생 코드)
+    // FIXME: Error Handling
     let posts = await getPosts(Token.getToken(), {
       page: this.page,
       limit: 8
@@ -42,6 +43,7 @@ export default class PostView extends Vue {
      */
     window.addEventListener("scroll", async () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+        // FIXME: Error Handling
         let posts = await getPosts(Token.getToken(), {
           page: this.page,
           limit: 8

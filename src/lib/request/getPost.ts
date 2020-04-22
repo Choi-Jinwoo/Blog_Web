@@ -34,6 +34,6 @@ export default async (token: string | null, idx: number): Promise<IPost | undefi
         break;
     }
 
-    Vue.toasted.error(message).goAway(800);
+    throw new Error(message);
   }
 }
