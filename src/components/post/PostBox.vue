@@ -1,7 +1,7 @@
 <template>
   <div class="post-box">
     <div class="title">
-      <p>{{ post.strCategory }}</p>
+      <p class="category">{{ post.strCategory }}</p>
       <h1>{{ post.title }}</h1>
 
       <div class="post-info">
@@ -76,7 +76,9 @@ export default class PostBox extends Vue {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
+@import "../../style/post.scss";
+
 .post-box {
   margin-top: 3.5rem;
 }

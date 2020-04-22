@@ -1,0 +1,76 @@
+@import "~highlight.js/styles/atom-one-dark.css";
+@import "./palette.scss";
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+.content {
+  max-width: 100%;
+  font-size: 110%;
+
+  .thumbnail {
+    img {
+      display: block;
+      max-width: 100%;
+      margin: 0 auto;
+      margin-top: 4rem;
+      margin-bottom: 4rem;
+    }
+  }
+  .marked-content {
+    img {
+      display: block;
+      max-width: 100%;
+    }
+    code {
+      padding: 0.3rem;
+      font-weight: bold;
+      font-family: "Nanum Gothic Coding";
+      background-color: $red1;
+      color: $red6;
+    }
+    pre {
+      overflow: auto;
+      box-sizing: border-box;
+      width: 100%;
+      padding: 1rem;
+      border-radius: 3px;
+      background-color: $gray6;
+      code {
+        padding: 0;
+        font-weight: normal;
+        font-size: 0.75rem;
+        color: $gray1;
+        background-color: transparent;
+      }
+    }
+    a {
+      text-decoration: underline;
+      color: $blue3;
+    }
+    blockquote {
+      box-sizing: border-box;
+      margin: 1rem 0;
+      padding: 0.25rem 0;
+      padding-left: 2%;
+      border-left: 5px solid $blue3;
+      background-color: $gray0;
+    }
+    table {
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+      border: solid 1px $gray6;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    th,
+    td {
+      padding: 0;
+      text-align: center;
+      border: solid 1px $gray6;
+    }
+  }
+}
