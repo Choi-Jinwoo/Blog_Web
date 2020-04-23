@@ -21,14 +21,6 @@ const routes = [
     component: () => import('@/views/login/index.vue')
   },
   {
-    path: '/register',
-    name: 'Register',
-    meta: {
-      title: 'wlswoo blog - register'
-    },
-    component: () => import('@/views/register/index.vue')
-  },
-  {
     path: '/write',
     name: 'Write',
     meta: {

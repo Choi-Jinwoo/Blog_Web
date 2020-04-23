@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <Header></Header>
     <router-view />
   </div>
 </template>
@@ -8,7 +9,13 @@
 import { Vue, Component } from "vue-property-decorator";
 import { Token } from "./lib/Storage";
 
-@Component
+import Header from "@/components/common/Header/index.vue";
+
+@Component({
+  components: {
+    Header
+  }
+})
 export default class App extends Vue {
   mounted() {
     const savedToken: string | null = Token.getSavedToken();

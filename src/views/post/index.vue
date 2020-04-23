@@ -1,6 +1,5 @@
 <template>
   <div class="post">
-    <Header></Header>
     <post-box />
   </div>
 </template>
@@ -9,12 +8,10 @@
 import { Vue, Component } from "vue-property-decorator";
 
 import PostBox from "@/components/post/PostBox.vue";
-import Header from "../../components/common/Header/index.vue";
 
 @Component({
   components: {
-    "post-box": PostBox,
-    Header
+    "post-box": PostBox
   }
 })
 export default class Post extends Vue {}
