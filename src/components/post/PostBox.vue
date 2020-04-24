@@ -80,7 +80,40 @@ export default class PostBox extends Vue {
 @import "../../style/post.scss";
 
 .post-box {
+  @media only screen and (max-width: 945px) {
+    width: 90%;
+  }
   margin-top: 3.5rem;
+  padding-top: 120px;
+  width: 60%;
+  margin: 0 auto;
+
+  .title {
+    border-bottom: 1px solid $gray3;
+    padding-bottom: 1rem;
+    color: $gray6;
+
+    h1 {
+      margin: 0;
+      padding: 0;
+      font-size: 3rem;
+    }
+
+    .post-info {
+      display: flex;
+      align-items: center;
+
+      margin-top: 1rem;
+      p {
+        font-size: 0.75rem;
+        padding: 0 0.5rem;
+      }
+    }
+  }
+
+  .content {
+    margin-top: 5rem;
+  }
 }
 </style>
 

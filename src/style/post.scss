@@ -21,8 +21,11 @@ p {
   }
   .marked-content {
     img {
+      box-sizing: border-box;
       display: block;
+      margin: 0 auto;
       max-width: 100%;
+      padding: 2rem;
     }
     code {
       padding: 0.3rem;
