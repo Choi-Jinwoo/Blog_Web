@@ -16,6 +16,14 @@
       </div>
       <div class="marked-content" v-html="markedContent" />
     </div>
+
+    <div id="disqus_thread"></div>
+    <!-- <noscript>
+      Please enable JavaScript to view the
+      <a
+        href="https://disqus.com/?ref_noscript"
+      >comments powered by Disqus.</a>
+    </noscript>-->
   </div>
 </template>
 
@@ -40,6 +48,16 @@ export default class PostBox extends Vue {
   post: IPost = {} as IPost;
 
   async created() {
+    (function() {
+      // DON'T EDIT BELOW THIS LINE
+      var d = document,
+        s = d.createElement("script");
+      s.src = "https://blog-wlswoo-com.disqus.com/embed.js";
+      s.setAttribute("data-timestamp", new Date().toString());
+      (d.head || d.body).appendChild(s);
+    })();
+
+    //
     try {
       const post = await getPost(
         Token.getToken(),
