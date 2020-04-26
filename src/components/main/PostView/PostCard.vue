@@ -1,6 +1,6 @@
 <template>
   <div class="post-card">
-    <div class="content">
+    <div class="content" @click="$router.push(`/post/${post.idx}`)">
       <div v-if="post.thumbnail" class="thumbnail-wrapper">
         <img :src="post.thumbnail" alt />
       </div>
