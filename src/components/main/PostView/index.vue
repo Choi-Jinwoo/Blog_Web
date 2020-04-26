@@ -15,6 +15,7 @@ import IPost from "@/interface/IPost";
 import getCategories from "../../../lib/request/getCategories";
 import ICategoryResp from "../../../interface/ICategoryResp";
 import ICategory from "../../../interface/ICategory";
+import { eventBus } from "../../../lib/evnetBus";
 
 @Component({
   components: {
@@ -24,18 +25,29 @@ import ICategory from "../../../interface/ICategory";
 export default class PostView extends Vue {
   posts: IPost[] = [];
   page: number = 1;
+  cureentCategory: number | null = null;
 
   async created() {
     this.posts = (await this.getCurrentPagePosts()) || [];
 
     /**
-     * Scroll Event(Paging)
+     * Scroll 이벤트(페이징 기능 - 무한 스크롤)
      */
     window.addEventListener("scroll", async () => {
       if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
         const newPosts: IPost[] = (await this.getCurrentPagePosts()) || [];
         this.posts = [...this.posts, ...newPosts];
       }
+    });
+
+    /**
+     * Select Category 이벤트 발생시
+     */
+    eventBus.$on("select-category", async (idx: number | null) => {
+      this.cureentCategory = idx;
+      this.posts = [];
+      this.page = 1;
+      this.posts = (await this.getCurrentPagePosts()) || [];
     });
   }
 
@@ -44,6 +56,7 @@ export default class PostView extends Vue {
       let posts =
         (await getPosts(Token.getToken(), {
           page: this.page,
+          category: this.cureentCategory,
           limit: 8
         })) || [];
       this.page += 1;

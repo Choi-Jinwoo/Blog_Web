@@ -42,6 +42,14 @@ export default class PostCard extends Vue {
 @import "../../../style/palette.scss";
 
 .post-card {
+  @media only screen and (max-width: 768px) {
+    width: calc(100% / 2);
+  }
+
+  @media only screen and (max-width: 450px) {
+    width: 100%;
+  }
+
   box-sizing: border-box;
   width: calc(100% / 3);
   padding: 0 20px;

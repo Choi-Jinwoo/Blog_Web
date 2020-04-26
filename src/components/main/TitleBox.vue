@@ -6,6 +6,11 @@
     </div>
 
     <div class="category-box">
+      <div class="wrapper-category" @click="selectCategory(null)">
+        <b>
+          <p>전체</p>
+        </b>
+      </div>
       <div
         class="wrapper-category"
         v-for="(wrapperCategory) in categories"
@@ -26,6 +31,7 @@
             class="wrapped-category"
             v-for="(wrappedCategory) in wrapperCategory.categories"
             :key="wrappedCategory.idx"
+            @click="selectCategory(wrappedCategory.idx)"
           >
             <p>{{ wrappedCategory.name }}</p>
           </div>
@@ -41,6 +47,7 @@ import getCategories from "@/lib/request/getCategories";
 
 import ICategory from "@/interface/ICategory";
 import ICategoryResp from "@/interface/ICategoryResp";
+import { eventBus } from "../../lib/evnetBus";
 
 @Component
 export default class TitleBox extends Vue {
@@ -57,6 +64,13 @@ export default class TitleBox extends Vue {
     } catch (err) {
       this.$toasted.error(err).goAway(800);
     }
+  }
+
+  /**
+   * Category 선택 이벤트(PostView 컴포넌트로 전달)
+   */
+  selectCategory(idx: number | null) {
+    eventBus.$emit("select-category", idx);
   }
 }
 </script>

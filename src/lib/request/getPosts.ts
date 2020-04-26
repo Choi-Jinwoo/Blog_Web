@@ -6,7 +6,7 @@ import { API_ADDR } from '../../../config/server';
 import IPost from '@/interface/IPost';
 
 type GetPostsArgs = {
-  category?: number;
+  category?: number | null;
   order?: string;
   page: number;
   limit: number
@@ -21,12 +21,12 @@ export default async (token: string | null, args: GetPostsArgs): Promise<IPost[]
   let URL = `${API_ADDR}/post?page=${page}&limit=${limit}`;
   const headers: any = {}
 
+
   if (Number.isInteger(category as number))
-    URL.concat(`&category=${category}`);
+    URL = URL.concat(`&category=${category}`);
 
   if (order)
-    URL.concat(`&order=${order}`);
-
+    URL = URL.concat(`&order=${order}`);
 
   if (token)
     headers['x-access-token'] = token;

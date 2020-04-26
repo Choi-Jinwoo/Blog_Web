@@ -29,17 +29,15 @@ export default class App extends Vue {
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap");
 
+.Header {
+  z-index: 1000;
+}
+
 html,
 body {
   margin: 0;
   padding: 0;
 }
-
-input,
-textarea {
-  font-family: "Noto Sans KR";
-}
-
 #app {
   font-family: "Noto Sans KR";
 }

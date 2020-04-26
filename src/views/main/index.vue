@@ -30,10 +30,6 @@ export default class Main extends Vue {}
 
 .main {
   background-color: $gray0;
-  .Header {
-    z-index: 300;
-  }
-
   .title-box {
     z-index: 200;
   }
