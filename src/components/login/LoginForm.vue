@@ -30,6 +30,7 @@ export default class LoginForm extends Vue {
   idSave: Boolean = false;
 
   async login() {
+    // FIXME: Request 부분 모듈 빼기
     try {
       const resp: AxiosResponse = await axios.post(`${API_ADDR}/auth/login`, {
         code: this.code

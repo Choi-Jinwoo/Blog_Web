@@ -1,4 +1,3 @@
-import Vue from 'vue';
 import axios, { AxiosResponse } from 'axios';
 import getDataFromResp from '@/lib/util/getDataFromResp';
 import { API_ADDR } from '../../../config/server';

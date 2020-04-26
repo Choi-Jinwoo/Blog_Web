@@ -1,454 +1,77 @@
 <template>
   <div class="write-form">
-    <div class="input-box" v-if="!activeWriteOption">
-      <div class="title">
-        <input type="text" placeholder="제목을 입력하세요" v-model="post.title" />
-      </div>
+    <div class="upload-box">업로드하기</div>
 
-      <div class="content-container">
-        <textarea
-          v-model="post.content"
-          placeholder="내용을 작성해주세요"
-          @drop.prevent="uploadWithDrop"
-          @paste="uploadWithPaste"
-          @keydown.tab="indentWithTab"
-        ></textarea>
-      </div>
-    </div>
-
-    <!-- Upload Post Mode -->
-    <div class="upload-post-box" v-else>
-      <input
-        type="file"
-        id="thumbnail-upload-input"
-        @change="uploadThumbnail"
-        style="display: none"
-      />
-      <h2>{{ post.title }}</h2>
-
-      <div class="thumbnail-box">
-        <div class="upload-thumbnail">
-          <img :src="thumbnailURL" />
+    <div class="write-box">
+      <div class="input-box">
+        <div class="title">
+          <input type="text" placeholder="제목을 입력하세요" v-model="post.title" />
         </div>
-        <Btn text="썸네일 업로드" size="medium" @click="onClickUploadThumbnail" />
+
+        <div class="content-container">
+          <textarea v-model="post.content" placeholder="내용을 작성해주세요" @drop.prevent="uploadWithDrop"></textarea>
+        </div>
       </div>
 
-      <div class="private-box">
-        <div
-          class="private"
-          @click="post.is_private = !post.is_private"
-        >{{ post.is_private ? '비공개' : '공개' }}</div>
+      <div class="result-box">
+        <h1>{{ post.title }}</h1>
+        <div class="result-container" v-html="markedContent"></div>
       </div>
-
-      <div class="category-box">
-        <select class="category-select" v-model="post.category_idx">
-          <option
-            v-for="category in categories"
-            :key="category.idx"
-            :value="category.idx"
-          >{{ category.name }}</option>
-        </select>
-      </div>
-
-      <div class="save-box">
-        <Btn text="업로드" size="medium" @click="createPost" />
-        <Btn text="임시저장" size="medium" @click="tempSave" />
-      </div>
-    </div>
-
-    <div class="result-box">
-      <h1>{{ post.title }}</h1>
-      <div class="result-container" v-html="convertedContent"></div>
-    </div>
-
-    <div class="write-option">
-      <img
-        class="active-option-btn"
-        src="../../assets/svg/write_upload.svg"
-        v-show="!activeWriteOption"
-        @click="activeWriteOption = true"
-      />
     </div>
   </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
-import marked, { MarkedOptions } from "marked";
-import hljs from "highlight.js";
-import axios, { AxiosResponse } from "axios";
-import getDataFromResp from "@/lib/util/getDataFromResp";
+import marked from "marked";
 import { Token } from "@/lib/Storage";
-import { API_ADDR } from "../../../config/server";
+import { renderer, markedOptions } from "@/lib/markedOptions";
 
-import Btn from "@/components/common/Btn/index.vue";
+import uploadFile from "@/lib/request/uploadFile";
+import createURL from "@/lib/request/createURL";
 
-type PostType = {
-  title: string;
-  content: string;
-  thumbnail: string;
-  category_idx: number;
-  is_private: boolean;
-  is_temp: boolean;
-};
-
-type CategoryType = {
-  idx: number;
-  name: string;
-};
-
-const markedOptions: MarkedOptions = {
-  highlight: function(code, lang) {
-    if (hljs.getLanguage(lang)) return hljs.highlight(lang, code).value;
-    return hljs.highlightAuto(code).value;
-  }
-};
-
-const renderer = new marked.Renderer();
-renderer.link = (href, title, text) => {
-  return (
-    '<a target="_blank" href="' +
-    href +
-    '" title="' +
-    title +
-    '">' +
-    text +
-    "</a>"
-  );
-};
+import IPost from "../../interface/IPost";
+import getPost from "../../lib/request/getPost";
 
 marked.setOptions(markedOptions);
 
-@Component({
-  components: {
-    Btn
-  }
-})
+@Component
 export default class Write extends Vue {
-  post: PostType = {
-    content: "",
-    is_private: false
-  } as PostType;
+  post: IPost = {} as IPost;
 
-  modifyIdx!: number;
-
-  categories: CategoryType[] = [];
-
-  thumbnailURL: string = "";
-
-  activeWriteOption: boolean = false;
-
-  async mounted() {
-    const isAdmin = await this.getProfile();
-    if (!isAdmin) {
-      alert("관리자만 접근 가능합니다");
-      this.$router.push("/");
-    }
-
-    if (this.$route.query.post) {
-      this.getPost();
-    }
-
-    this.getCategories();
-  }
-
-  get convertedContent() {
-    return marked(this.post.content, { renderer });
-  }
-
-  async getPost() {
-    const idx = this.$route.query.post;
+  async created() {
     try {
-      const resp: AxiosResponse = await axios.get(
-        `${API_ADDR}/post/${idx}?image=raw`,
-        {
-          headers: {
-            "x-access-token": Token.getToken()
-          }
-        }
-      );
-      const { post } = getDataFromResp(resp);
+      /**
+       * 글 수정 시
+       */
+      const modifyIdx: number = Number(this.$route.query.idx);
+      if (Number.isInteger(modifyIdx)) {
+        const post: IPost | undefined = await getPost(
+          Token.getToken(),
+          modifyIdx,
+          true
+        );
 
-      this.modifyIdx = post.idx;
-      this.post.title = post.title;
-      this.post.content = post.content;
-      this.post.thumbnail = post.thumbnail;
-      this.post.category_idx = post.fk_category_idx;
-      this.post.is_private = post.is_private;
-      if (post.thumbnail)
-        this.thumbnailURL = await this.createURL(post.thumbnail);
-    } catch (err) {
-      switch (err.response.status) {
-        case 400:
-        case 404:
-          this.$router.push("/notfound");
-          return;
-        case 403:
-          alert("비공개 글입니다");
-          this.$router.push("/");
-          return;
-        default:
-          alert("오류가 발생하였습니다");
-          return;
+        if (!post) throw new Error("삭제된 글입니다");
+        this.post = post;
       }
-    }
-  }
-
-  async getProfile() {
-    try {
-      const resp: AxiosResponse = await axios.get(`${API_ADDR}/profile/my`, {
-        headers: {
-          "x-access-token": Token.getToken()
-        }
-      });
-
-      const { user: resUser } = getDataFromResp(resp);
-
-      return resUser.is_admin;
     } catch (err) {
-      switch (err.response.status) {
-        case 400:
-        case 401:
-        case 404:
-          break;
-        default:
-          this.$toasted.error("오류가 발생하였습니다").goAway(800);
-      }
+      alert(err.message);
       this.$router.push("/");
     }
   }
 
-  async getCategories() {
-    const resp: AxiosResponse = await axios.get(`${API_ADDR}/category`);
-    const { categories } = getDataFromResp(resp);
-    this.categories = categories;
-  }
-
-  async modifyPost(post: any) {
-    try {
-      await axios.put(`${API_ADDR}/post/${this.modifyIdx}`, post, {
-        headers: {
-          "x-access-token": Token.getToken()
-        }
-      });
-
-      alert("글 수정이 완료되었습니다");
-      this.$router.push("/");
-    } catch (err) {
-      switch (err.response.status) {
-        case 400:
-          this.$toasted.error("양식을 확인해주세요").goAway(800);
-          return;
-        case 401:
-        case 403:
-          this.$toasted.error("관리자만 이용할 수 있습니다").goAway(800);
-          return;
-        case 404:
-          this.$toasted.error("삭제된 카테고리 입니다").goAway(800);
-          return;
-        case 410:
-          this.$toasted
-            .error("로그인 정보 만료로 재 로그인 후 이용해주세요")
-            .goAway(800);
-          return;
-      }
-    }
-  }
-
-  async createPost() {
-    const post: PostType = {
-      title: this.post.title,
-      content: this.post.content,
-      thumbnail: this.post.thumbnail,
-      is_private: this.post.is_private,
-      category_idx: this.post.category_idx,
-      is_temp: false
-    };
-
-    if (this.modifyIdx) {
-      this.modifyPost(post);
-      return;
-    }
-
-    delete post.is_temp;
-
-    try {
-      await axios.post(`${API_ADDR}/post`, post, {
-        headers: {
-          "x-access-token": Token.getToken()
-        }
-      });
-      alert("글 업로드가 완료되었습니다");
-      this.$router.push("/");
-    } catch (err) {
-      switch (err.response.status) {
-        case 400:
-          this.$toasted.error("양식을 확인해주세요").goAway(800);
-          break;
-        case 401:
-        case 403:
-          this.$toasted.error("관리자만 이용할 수 있습니다").goAway(800);
-          break;
-        case 404:
-          this.$toasted.error("삭제된 카테고리 입니다").goAway(800);
-          break;
-        case 410:
-          this.$toasted
-            .error("로그인 정보 만료로 재 로그인 후 이용해주세요")
-            .goAway(800);
-          break;
-      }
-    }
-  }
-
-  async tempSave() {
-    const post: any = {
-      title: this.post.title,
-      content: this.post.content,
-      thumbnail: this.post.thumbnail,
-      is_private: this.post.is_private,
-      category_idx: this.post.category_idx,
-      is_temp: true
-    };
-
-    if (this.modifyIdx) {
-      post.is_temp = true;
-      this.modifyPost(post);
-      return;
-    }
-
-    delete post.is_temp;
-
-    try {
-      await axios.post(`${API_ADDR}/post/temp`, post, {
-        headers: {
-          "x-access-token": Token.getToken()
-        }
-      });
-      alert("임시저장이 완료되었습니다");
-      this.$router.push("/");
-    } catch (err) {
-      switch (err.response.status) {
-        case 400:
-          this.$toasted.error("제목이 필요합니다").goAway(800);
-          break;
-        case 401:
-        case 403:
-          this.$toasted.error("관리자만 이용할 수 있습니다").goAway(800);
-          break;
-        case 404:
-          this.$toasted.error("삭제된 카테고리 입니다").goAway(800);
-          break;
-        case 410:
-          this.$toasted
-            .error("로그인 정보 만료로 재 로그인 후 이용해주세요")
-            .goAway(800);
-          break;
-      }
-    }
+  get markedContent(): string {
+    return marked(String(this.post.content), { renderer });
   }
 
   async uploadWithDrop(e: any) {
     const reqFiles = e.target.files || e.dataTransfer.files;
     const formData = new FormData();
     formData.append("files", reqFiles[0]);
-    this.uploadFiles(formData, e);
-  }
-
-  async uploadWithPaste(e: any) {
-    const reqFiles = e.clipboardData.files;
-    if (!reqFiles.length) {
-      return;
-    }
-    e.prevent;
-    const formData = new FormData();
-    formData.append("files", reqFiles[0]);
-    this.uploadFiles(formData, e);
-  }
-
-  async onClickUploadThumbnail() {
-    document.getElementById("thumbnail-upload-input")!.click();
-  }
-
-  async uploadThumbnail(e: any) {
-    const formData = new FormData();
-    const [file] = e.target.files;
-    formData.append("files", file);
-
-    const resp: AxiosResponse = await axios.post(
-      `${API_ADDR}/upload`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      }
-    );
-
-    const { files } = getDataFromResp(resp);
-    this.post.thumbnail = files[0];
-    this.thumbnailURL = await this.createURL(files[0]);
-  }
-
-  async uploadFiles(formData: FormData, e: any) {
-    const resp: AxiosResponse = await axios.post(
-      `${API_ADDR}/upload`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        }
-      }
-    );
-
-    const { files } = getDataFromResp(resp);
-    files.forEach(async (file: string) => {
-      const url = await this.createURL(file);
-      const cursorStart = e.target.selectionStart;
-      const cursorEnd = e.target.selectionEnd;
-
-      const beforeText = this.post.content.substring(0, cursorStart);
-      const afterText = this.post.content.substring(
-        cursorEnd,
-        this.post.content.length
-      );
-
-      this.post.content = `${beforeText} ![이미지](${encodeURI(
-        url
-      )}) ${afterText}`;
-    });
-  }
-
-  async createURL(fileName: string): Promise<string> {
-    const resp: AxiosResponse = await axios.post(
-      `${API_ADDR}/file/create-url`,
-      {
-        file_name: fileName
-      }
-    );
-
-    const { url } = getDataFromResp(resp);
-    return url;
-  }
-
-  indentWithTab(e: Event) {
-    e.preventDefault();
-    const target = e.target as HTMLTextAreaElement;
-
-    const cursorStart = target.selectionStart;
-    const cursorEnd = target.selectionEnd;
-
-    const beforeText = this.post.content.substring(0, cursorStart);
-    const afterText = this.post.content.substring(
-      cursorEnd,
-      this.post.content.length
-    );
-
-    this.post.content = `${beforeText}\t${afterText}`;
-
-    setTimeout(() => {
-      target.selectionStart = target.selectionEnd = cursorStart + 1;
-    }, 10);
+    const [file]: string[] = await uploadFile(formData);
+    const fileURL = await createURL(file);
+    this.post.content += `![이미지](${encodeURI(fileURL)})`;
   }
 }
 </script>
@@ -458,10 +81,16 @@ export default class Write extends Vue {
 @import "../../style/palette.scss";
 
 .write-form {
-  display: flex;
   min-height: 100vh;
   max-height: 100vh;
   max-width: 100vw;
+  margin-top: 3.5rem;
+
+  .write-box {
+    display: flex;
+    min-height: 100vh;
+    max-height: 100vh;
+  }
 
   .input-box {
     display: flex;
