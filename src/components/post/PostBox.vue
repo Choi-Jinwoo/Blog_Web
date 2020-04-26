@@ -17,13 +17,10 @@
       <div class="marked-content" v-html="markedContent" />
     </div>
 
-    <div id="disqus_thread"></div>
-    <!-- <noscript>
-      Please enable JavaScript to view the
-      <a
-        href="https://disqus.com/?ref_noscript"
-      >comments powered by Disqus.</a>
-    </noscript>-->
+    <div class="comment">
+      <hr />
+      <div id="disqus_thread"></div>
+    </div>
   </div>
 </template>
 
@@ -103,6 +100,7 @@ export default class PostBox extends Vue {
   }
   margin-top: 3.5rem;
   padding-top: 120px;
+  padding-bottom: 60px;
   width: 60%;
   margin: 0 auto;
 
@@ -131,6 +129,13 @@ export default class PostBox extends Vue {
 
   .content {
     margin-top: 5rem;
+  }
+
+  .comment {
+    margin-top: 8rem;
+    #disqus_thread {
+      margin-top: 2rem;
+    }
   }
 }
 </style>
