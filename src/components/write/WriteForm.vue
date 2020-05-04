@@ -1,7 +1,5 @@
 <template>
   <div class="write-form">
-    <div class="upload-box">업로드하기</div>
-
     <div class="write-box">
       <div class="input-box">
         <div class="title">
@@ -9,13 +7,43 @@
         </div>
 
         <div class="content-container">
-          <textarea v-model="post.content" placeholder="내용을 작성해주세요" @drop.prevent="uploadWithDrop"></textarea>
+          <textarea
+            v-model="post.content"
+            placeholder="내용을 작성해주세요"
+            @drop.prevent="uploadWithDrop"
+            @paste="uploadWithPaste"
+          ></textarea>
         </div>
       </div>
 
-      <div class="result-box">
+      <div class="content">
         <h1>{{ post.title }}</h1>
-        <div class="result-container" v-html="markedContent"></div>
+        <div class="marked-content" v-html="markedContent"></div>
+      </div>
+
+      <div class="side-nav-wrapper">
+        <div class="side-nav-btn-wrapper">
+          <button class="side-nav-btn" @click="changeSideNavStatus">버튼</button>
+        </div>
+
+        <nav class="side-nav" :style="sideNavStyle">
+          <select>
+            <option
+              v-for="(category, index) in categories"
+              :key="index"
+              :value="category.idx"
+            >{{ category.name }}</option>
+          </select>
+          <input type="file" name id />
+          <img src alt />
+          <p>
+            비공개
+            <input type="checkbox" name id />
+          </p>
+
+          <button>업로드</button>
+          <button>임시저장</button>
+        </nav>
       </div>
     </div>
   </div>
@@ -32,12 +60,23 @@ import createURL from "@/lib/request/createURL";
 
 import IPost from "../../interface/IPost";
 import getPost from "../../lib/request/getPost";
+import ICategory from "../../interface/ICategory";
+import getCategories from "../../lib/request/getCategories";
+import ICategoryResp from "../../interface/ICategoryResp";
 
 marked.setOptions(markedOptions);
+
+type SideNavStyle = {
+  width: string;
+};
 
 @Component
 export default class Write extends Vue {
   post: IPost = {} as IPost;
+  categories: ICategory[] = [];
+  sideNavStyle = {
+    width: "200px"
+  };
 
   async created() {
     try {
@@ -55,6 +94,14 @@ export default class Write extends Vue {
         if (!post) throw new Error("삭제된 글입니다");
         this.post = post;
       }
+
+      const categories: ICategoryResp[] = (await getCategories()) || [];
+      const wrappedCategories: ICategory[] = [];
+      categories.forEach(category => {
+        wrappedCategories.push(...category.categories);
+      });
+
+      this.categories = wrappedCategories;
     } catch (err) {
       alert(err.message);
       this.$router.push("/");
@@ -62,16 +109,37 @@ export default class Write extends Vue {
   }
 
   get markedContent(): string {
-    return marked(String(this.post.content), { renderer });
+    return marked(String(this.post.content || ""), { renderer });
   }
 
   async uploadWithDrop(e: any) {
     const reqFiles = e.target.files || e.dataTransfer.files;
+    const file = await this.uploadFile(reqFiles);
+    const fileURL = await createURL(file);
+    this.post.content += `![이미지](${encodeURI(fileURL)})`;
+  }
+
+  async uploadWithPaste(e: any) {
+    const reqFiles = e.clipboardData.files;
+    if (!reqFiles.length) return;
+    e.prevent();
+    const file = await this.uploadFile(reqFiles);
+    const fileURL = await createURL(file);
+    this.post.content += `![이미지](${encodeURI(fileURL)})`;
+  }
+
+  async uploadFile(reqFiles: File[]): Promise<string> {
     const formData = new FormData();
     formData.append("files", reqFiles[0]);
     const [file]: string[] = await uploadFile(formData);
-    const fileURL = await createURL(file);
-    this.post.content += `![이미지](${encodeURI(fileURL)})`;
+    return file;
+  }
+
+  changeSideNavStatus() {
+    console.log("hi");
+
+    if (this.sideNavStyle.width === "0px") this.sideNavStyle.width = "200px";
+    else this.sideNavStyle.width = "0px";
   }
 }
 </script>
@@ -90,194 +158,71 @@ export default class Write extends Vue {
     display: flex;
     min-height: 100vh;
     max-height: 100vh;
-  }
 
-  .input-box {
-    display: flex;
-    flex-direction: column;
-    width: 50%;
-    .title {
-      width: 100%;
-
-      input {
-        box-sizing: border-box;
-        padding: 1rem;
-        width: 100%;
-        border: none;
-        font-size: 2rem;
-        font-weight: bold;
-
-        &:focus {
-          outline: none;
-        }
-      }
-    }
-
-    .content-container {
-      flex-grow: 1;
+    .input-box {
       display: flex;
       flex-direction: column;
-      textarea {
+      width: 50%;
+      .title {
+        width: 100%;
+
+        input {
+          box-sizing: border-box;
+          padding: 1rem;
+          width: 100%;
+          border: none;
+          font-size: 2rem;
+          font-weight: bold;
+
+          &:focus {
+            outline: none;
+          }
+        }
+      }
+
+      .content-container {
         flex-grow: 1;
-        box-sizing: border-box;
-        resize: none;
-        padding: 1rem;
-        width: 100%;
-        border: none;
-        &:focus {
-          outline: none;
-        }
-      }
-    }
-  }
-
-  .upload-post-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    width: 50%;
-
-    .thumbnail-box {
-      width: 90%;
-      .upload-thumbnail {
-        margin-bottom: 1rem;
-        height: 15rem;
-        overflow: hidden;
-
-        img {
-          display: block;
-          max-width: 100%;
-          object-fit: cover;
+        display: flex;
+        flex-direction: column;
+        textarea {
+          flex-grow: 1;
+          box-sizing: border-box;
+          resize: none;
+          padding: 1rem;
+          width: 100%;
+          border: none;
+          &:focus {
+            outline: none;
+          }
         }
       }
     }
 
-    .private-box {
+    .content {
+      overflow: auto;
+      box-sizing: border-box;
+      padding: 2rem;
+      width: 50%;
+      max-width: 50%;
+      background-color: $gray1;
+    }
+
+    .side-nav-wrapper {
       display: flex;
-      width: 90%;
-      margin-top: 2rem;
-      font-size: 1rem;
-      font-weight: bold;
-      color: #ffffff;
+      position: absolute;
+      right: 0;
+      height: 100%;
 
-      .private {
-        box-sizing: border-box;
-        padding: 0.25rem 2rem;
-        border-radius: 3px;
-        background-color: $blue2;
-        cursor: pointer;
-      }
-    }
-
-    .category-box {
-      width: 90%;
-      margin-top: 2rem;
-      .category-select {
-        padding: 0.25rem;
-        width: 8rem;
-        border: $gray5 1px solid;
+      .side-nav {
         background-color: #ffffff;
-        text-align: center;
-      }
-    }
-
-    .save-box {
-      width: 90%;
-      margin-top: 2rem;
-
-      .Btn {
-        margin-right: 1rem;
-      }
-    }
-  }
-
-  .result-box {
-    overflow: auto;
-    box-sizing: border-box;
-    padding: 2rem;
-    width: 50%;
-    max-width: 50%;
-    background-color: $gray1;
-
-    h1 {
-      word-break: break-all;
-      display: block;
-      margin: 0;
-      padding: 0;
-    }
-
-    .result-container {
-      img {
-        display: block;
-        max-width: 100%;
+        height: 100%;
       }
 
-      code {
-        padding: 0.3rem;
-        font-weight: bold;
-        font-family: "Nanum Gothic Coding";
-        background-color: $red1;
-        color: $red6;
+      .side-nav-btn-wrapper {
       }
 
-      pre {
-        overflow: auto;
-        box-sizing: border-box;
-        width: 100%;
-        padding: 1rem;
-        border-radius: 3px;
-        background-color: $gray6;
-
-        code {
-          padding: 0;
-          font-weight: normal;
-          font-size: 0.75rem;
-          color: $gray1;
-          background-color: transparent;
-        }
+      .side-nav-btn {
       }
-
-      a {
-        text-decoration: underline;
-        color: $blue3;
-      }
-
-      blockquote {
-        box-sizing: border-box;
-        margin: 1rem 0;
-        padding: 0.25rem 0;
-        padding-left: 2%;
-        border-left: 5px solid $blue3;
-        background-color: $gray0;
-      }
-
-      table {
-        box-sizing: border-box;
-        width: 100%;
-        max-width: 100%;
-        border: solid 1px $gray6;
-        border-collapse: collapse;
-        text-align: center;
-      }
-
-      th,
-      td {
-        padding: 0;
-        text-align: center;
-        border: solid 1px $gray6;
-      }
-    }
-  }
-
-  .write-option {
-    position: fixed;
-    bottom: 2rem;
-    right: 2rem;
-
-    img {
-      width: 3rem;
-      height: 3rem;
-      cursor: pointer;
     }
   }
 }
