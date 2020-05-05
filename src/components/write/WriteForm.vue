@@ -23,26 +23,25 @@
 
       <div class="side-nav-wrapper">
         <div class="side-nav-btn-wrapper">
-          <button class="side-nav-btn" @click="changeSideNavStatus">버튼</button>
+          <button class="side-nav-btn" @click="changeSideNavStatus">&lt;</button>
         </div>
 
         <nav class="side-nav" :style="sideNavStyle">
-          <select>
+          <select v-model="post.fk_category_idx">
             <option
               v-for="(category, index) in categories"
               :key="index"
               :value="category.idx"
             >{{ category.name }}</option>
           </select>
-          <input type="file" name id />
-          <img src alt />
+          <input type="file" @change="uploadThumbnail" />
           <p>
             비공개
-            <input type="checkbox" name id />
+            <input type="checkbox" v-model="this.post.is_private" />
           </p>
 
-          <button>업로드</button>
-          <button>임시저장</button>
+          <button @click="writePost(false)">업로드</button>
+          <button @click="writePost(true)">임시저장</button>
         </nav>
       </div>
     </div>
@@ -63,6 +62,10 @@ import getPost from "../../lib/request/getPost";
 import ICategory from "../../interface/ICategory";
 import getCategories from "../../lib/request/getCategories";
 import ICategoryResp from "../../interface/ICategoryResp";
+import IPostWrite from "@/interface/IPostWrite";
+import createPost from "../../lib/request/createPost";
+import modifyPost from "../../lib/request/modifyPost";
+import router from "../../router";
 
 marked.setOptions(markedOptions);
 
@@ -70,19 +73,18 @@ type SideNavStyle = {
   width: string;
 };
 
+// TODO: 사이드바 로직 추가 + 스타일 추가
 @Component
 export default class Write extends Vue {
   post: IPost = {} as IPost;
   categories: ICategory[] = [];
   sideNavStyle = {
-    width: "200px"
+    display: "none"
   };
 
   async created() {
     try {
-      /**
-       * 글 수정 시
-       */
+      // 글 수정 시
       const modifyIdx: number = Number(this.$route.query.idx);
       if (Number.isInteger(modifyIdx)) {
         const post: IPost | undefined = await getPost(
@@ -128,6 +130,12 @@ export default class Write extends Vue {
     this.post.content += `![이미지](${encodeURI(fileURL)})`;
   }
 
+  async uploadThumbnail(e: any) {
+    const reqFiles = e.target.files;
+    const file = await this.uploadFile(reqFiles);
+    this.post.thumbnail = file;
+  }
+
   async uploadFile(reqFiles: File[]): Promise<string> {
     const formData = new FormData();
     formData.append("files", reqFiles[0]);
@@ -136,10 +144,32 @@ export default class Write extends Vue {
   }
 
   changeSideNavStatus() {
-    console.log("hi");
+    if (this.sideNavStyle.display === "none") this.sideNavStyle.display = "";
+    else this.sideNavStyle.display = "none";
+  }
 
-    if (this.sideNavStyle.width === "0px") this.sideNavStyle.width = "200px";
-    else this.sideNavStyle.width = "0px";
+  async writePost(isTemp: boolean) {
+    const post: IPostWrite = {
+      title: this.post.title,
+      content: this.post.content,
+      is_temp: isTemp,
+      is_private: !!this.post.is_private,
+      category_idx: this.post.fk_category_idx,
+      thumbnail: this.post.thumbnail || null
+    } as IPostWrite;
+
+    try {
+      if (this.post.idx) {
+        await modifyPost(Token.getToken(), this.post.idx, post);
+        alert("글 수정에 성공하셨습니다");
+      } else {
+        await createPost(Token.getToken(), post);
+        alert("글 생성에 성공하셨습니다");
+      }
+      this.$router.push("/");
+    } catch (err) {
+      this.$toasted.error(err.message).goAway(800);
+    }
   }
 }
 </script>
@@ -151,7 +181,8 @@ export default class Write extends Vue {
 .write-form {
   min-height: 100vh;
   max-height: 100vh;
-  max-width: 100vw;
+  width: 100vw;
+  overflow: hidden;
   margin-top: 3.5rem;
 
   .write-box {
@@ -222,6 +253,15 @@ export default class Write extends Vue {
       }
 
       .side-nav-btn {
+        margin: 0;
+        border: none;
+        border-top-left-radius: 8px;
+        border-bottom-left-radius: 8px;
+        outline: none;
+        font-size: 16px;
+        background-color: $gray5;
+        color: $gray1;
+        cursor: pointer;
       }
     }
   }
