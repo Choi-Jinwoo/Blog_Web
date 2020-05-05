@@ -27,21 +27,23 @@
         </div>
 
         <nav class="side-nav" :style="sideNavStyle">
-          <select v-model="post.fk_category_idx">
-            <option
-              v-for="(category, index) in categories"
-              :key="index"
-              :value="category.idx"
-            >{{ category.name }}</option>
-          </select>
-          <input type="file" @change="uploadThumbnail" />
-          <p>
-            비공개
-            <input type="checkbox" v-model="this.post.is_private" />
-          </p>
+          <div class="side-nav-container">
+            <select v-model="post.fk_category_idx">
+              <option
+                v-for="(category, index) in categories"
+                :key="index"
+                :value="category.idx"
+              >{{ category.name }}</option>
+            </select>
+            <input type="file" @change="uploadThumbnail" />
+            <p>
+              비공개
+              <input type="checkbox" v-model="this.post.is_private" />
+            </p>
 
-          <button @click="writePost(false)">업로드</button>
-          <button @click="writePost(true)">임시저장</button>
+            <button @click="writePost(false)">업로드</button>
+            <button @click="writePost(true)">임시저장</button>
+          </div>
         </nav>
       </div>
     </div>
@@ -73,7 +75,6 @@ type SideNavStyle = {
   width: string;
 };
 
-// TODO: 사이드바 로직 추가 + 스타일 추가
 @Component
 export default class Write extends Vue {
   post: IPost = {} as IPost;
@@ -83,6 +84,10 @@ export default class Write extends Vue {
   };
 
   async created() {
+    window.onbeforeunload = function(e: any) {
+      e.returnValue = "";
+    };
+
     try {
       // 글 수정 시
       const modifyIdx: number = Number(this.$route.query.idx);
@@ -179,16 +184,15 @@ export default class Write extends Vue {
 @import "../../style/palette.scss";
 
 .write-form {
-  min-height: 100vh;
-  max-height: 100vh;
+  min-height: calc(100vh - 3.5rem);
+  max-height: calc(100vh - 3.5rem);
   width: 100vw;
-  overflow: hidden;
   margin-top: 3.5rem;
 
   .write-box {
     display: flex;
-    min-height: 100vh;
-    max-height: 100vh;
+    min-height: calc(100vh - 3.5rem);
+    max-height: calc(100vh - 3.5rem);
 
     .input-box {
       display: flex;
@@ -216,6 +220,7 @@ export default class Write extends Vue {
         display: flex;
         flex-direction: column;
         textarea {
+          font-size: 1rem;
           flex-grow: 1;
           box-sizing: border-box;
           resize: none;
@@ -242,17 +247,40 @@ export default class Write extends Vue {
       display: flex;
       position: absolute;
       right: 0;
-      height: 100%;
+      height: calc(100vh - 3.5rem);
 
       .side-nav {
+        display: flex;
+        justify-content: center;
         background-color: #ffffff;
         height: 100%;
-      }
 
-      .side-nav-btn-wrapper {
+        .side-nav-container {
+          margin-top: 30px;
+          width: 80%;
+          display: flex;
+          flex-direction: column;
+
+          input {
+            margin: 0 auto;
+            margin-top: 15px;
+          }
+
+          p {
+            margin: 0 auto;
+            margin-top: 15px;
+            font-size: 0.75rem;
+          }
+
+          button {
+            margin-top: 15px;
+          }
+        }
       }
 
       .side-nav-btn {
+        position: relative;
+        right: 0;
         margin: 0;
         border: none;
         border-top-left-radius: 8px;
