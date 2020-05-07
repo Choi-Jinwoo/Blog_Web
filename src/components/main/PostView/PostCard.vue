@@ -15,7 +15,7 @@
           <p class="released-at">{{ strReleasedAt }}</p>
         </div>
 
-        <h1 class="title">{{ post.title }}</h1>
+        <h1 class="title" :title="post.title">{{ post.title }}</h1>
       </div>
     </div>
   </div>
@@ -93,6 +93,9 @@ export default class PostCard extends Vue {
         color: $gray6;
         padding: 1rem 0;
         margin-bottom: 0.75rem;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        overflow: hidden;
       }
 
       .top-bar {

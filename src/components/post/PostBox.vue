@@ -25,6 +25,7 @@
 </template>
 
 <script lang="ts">
+// TODO: Meat 태그 사용으로 인한 검색 엔진 최적화
 import { Vue, Component } from "vue-property-decorator";
 import getPost from "@/lib/request/getPost";
 import getCategory from "@/lib/request/getCategory";
@@ -54,7 +55,6 @@ export default class PostBox extends Vue {
       (d.head || d.body).appendChild(s);
     })();
 
-    //
     try {
       const post = await getPost(
         Token.getToken(),
@@ -70,9 +70,23 @@ export default class PostBox extends Vue {
 
       this.post = post;
     } catch (err) {
-      alert(err.message);
-      this.$router.push("/");
+      this.$router.push("/notfound");
     }
+
+    // Title & Meta 태그 설정
+    document.title = this.post.title;
+
+    const keywords = this.post.title.replace(/ /gi, ", ");
+    const keywordMeta = document.createElement("meta");
+    keywordMeta.name = "keywords";
+    keywordMeta.content = keywords;
+
+    const descriptionMeta = document.createElement("meta");
+    descriptionMeta.name = "description";
+    descriptionMeta.content = this.post.content!.slice(0, 150);
+
+    document.head.appendChild(keywordMeta);
+    document.head.appendChild(descriptionMeta);
   }
 
   get strReleasedAt(): string {

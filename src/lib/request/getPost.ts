@@ -28,6 +28,9 @@ export default async (token: string | null, idx: number, isImageRaw?: boolean): 
     let message = '오류가 발생하였습니다';
 
     switch (err.response.status) {
+      case 400:
+        message = '존재하지 않는 글입니다'
+        break;
       case 403:
         message = '비공개 글입니다'
         break;
