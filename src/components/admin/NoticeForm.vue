@@ -2,7 +2,7 @@
   <div class="notice-form">
     <h2>Notice</h2>
     <div class="notice-input">
-      <input type="text" placeholder="공지 제목을 입력하세요" v-model="notice.title" />
+      <input type="text" placeholder="공지 제목을 입력하세요" v-model="notice" />
       <textarea placeholder="공지 내용을 입력하세요" v-model="notice.content" />
       <div class="create-btn">
         <p @click="createNotice">등록</p>
@@ -13,45 +13,21 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
-import axios, { AxiosResponse } from "axios";
-import { API_ADDR } from "../../../config/server";
-import { Token } from "@/lib/Storage";
-import getDataFromResp from "@/lib/util/getDataFromResp";
+import createNotice from "@/lib/request/createNotice";
 
-type NoticeType = {
-  title: string;
-  content: string;
-};
+import INotice from "@/interface/INotice";
+import { Token } from "../../lib/Storage";
 
 @Component
 export default class NoticeForm extends Vue {
-  notice: NoticeType = {} as NoticeType;
+  notice: INotice = {} as INotice;
 
   async createNotice() {
     try {
-      await axios.post(`${API_ADDR}/notice`, this.notice, {
-        headers: {
-          "x-access-token": Token.getToken()
-        }
-      });
-      this.$toasted.success("공지 등록이 완료되었습니다").goAway(800);
-      this.notice = {} as NoticeType;
+      await createNotice(Token.getToken(), this.notice);
+      this.$toasted.info("공지를 생성하였습니다").goAway(800);
     } catch (err) {
-      switch (err.response.status) {
-        case 400:
-          this.$toasted.error("양식을 확인해주세요").goAway(800);
-          break;
-        case 401:
-        case 403:
-          alert("관리자만 이용가능합니다");
-          this.$router.push("/");
-          break;
-        case 410:
-          this.$toasted
-            .error("로그인 정보 만료로 재 로그인 후 이용해주세요")
-            .goAway(800);
-          break;
-      }
+      this.$toasted.error(err.message).goAway(800);
     }
   }
 }

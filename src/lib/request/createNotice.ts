@@ -1,11 +1,11 @@
 import axios, { AxiosResponse } from 'axios';
 import { API_ADDR } from '../../../config/server';
-import IPostWrite from '@/interface/IPostWrite';
+import INotice from '@/interface/INotice';
 
-export default async (token: string | null, post: IPostWrite) => {
+export default async (token: string | null, notice: INotice) => {
   try {
-    const resp: AxiosResponse = await axios.post(`${API_ADDR}/post`,
-      post,
+    const resp: AxiosResponse = await axios.post(`${API_ADDR}/notice`,
+      notice,
       {
         headers: {
           'x-access-token': token,
@@ -20,9 +20,6 @@ export default async (token: string | null, post: IPostWrite) => {
         break;
       case 401:
         message = '관리자만 접근가능합니다'
-        break;
-      case 404:
-        message = '카테고리가 삭제되었습니다'
         break;
       case 410:
         message = '로그인 정보가 만료되었습니다'
