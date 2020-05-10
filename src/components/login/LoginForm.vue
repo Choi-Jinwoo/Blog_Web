@@ -23,6 +23,7 @@ import axios, { AxiosResponse } from "axios";
 import { API_ADDR } from "../../../config/server";
 import { Token } from "@/lib/Storage";
 import getDataFromResp from "@/lib/util/getDataFromResp";
+import { eventBus, BusEvent } from "../../lib/evnetBus";
 
 @Component
 export default class LoginForm extends Vue {
@@ -51,6 +52,7 @@ export default class LoginForm extends Vue {
         Token.removeSavedToken();
       }
 
+      eventBus.$emit(BusEvent.ADMIN_LOGIN);
       this.$router.push("/");
     } catch (err) {
       switch (err.response.status) {

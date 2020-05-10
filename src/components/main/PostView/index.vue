@@ -15,7 +15,7 @@ import IPost from "@/interface/IPost";
 import getCategories from "../../../lib/request/getCategories";
 import ICategoryResp from "../../../interface/ICategoryResp";
 import ICategory from "../../../interface/ICategory";
-import { eventBus } from "../../../lib/evnetBus";
+import { eventBus, BusEvent } from "../../../lib/evnetBus";
 
 @Component({
   components: {
@@ -43,7 +43,7 @@ export default class PostView extends Vue {
     /**
      * Select Category 이벤트 발생시
      */
-    eventBus.$on("select-category", async (idx: number | null) => {
+    eventBus.$on(BusEvent.SELECT_CATEGORY, async (idx: number | null) => {
       this.cureentCategory = idx;
       this.posts = [];
       this.page = 1;

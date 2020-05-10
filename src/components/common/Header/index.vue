@@ -18,6 +18,7 @@
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
 import { Token } from "../../../lib/Storage";
+import { eventBus, BusEvent } from "../../../lib/evnetBus";
 
 @Component
 export default class Header extends Vue {
@@ -25,6 +26,10 @@ export default class Header extends Vue {
 
   created() {
     if (Token.getToken()) this.isAdmin = true;
+
+    eventBus.$on(BusEvent.ADMIN_LOGIN, () => {
+      this.isAdmin = true;
+    });
   }
 }
 </script>
