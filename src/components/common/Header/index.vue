@@ -4,6 +4,7 @@
       <div class="link-box">
         <div class="home-btn">홈</div>
         <div class="aboutme-btn">소개</div>
+        <div class="admin-btn" v-show="isAdmin">관리자</div>
       </div>
       <div class="sns-box">
         <img src="../../../assets/svg/github_icon.svg" alt />
@@ -16,9 +17,16 @@
 
 <script lang="ts">
 import { Vue, Component } from "vue-property-decorator";
+import { Token } from "../../../lib/Storage";
 
 @Component
-export default class Header extends Vue {}
+export default class Header extends Vue {
+  isAdmin: boolean = false;
+
+  created() {
+    if (Token.getToken()) this.isAdmin = true;
+  }
+}
 </script>
 
 <style lang="scss" scoped>

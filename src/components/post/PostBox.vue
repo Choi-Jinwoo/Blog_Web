@@ -25,7 +25,6 @@
 </template>
 
 <script lang="ts">
-// TODO: Meat 태그 사용으로 인한 검색 엔진 최적화
 import { Vue, Component } from "vue-property-decorator";
 import getPost from "@/lib/request/getPost";
 import getCategory from "@/lib/request/getCategory";
