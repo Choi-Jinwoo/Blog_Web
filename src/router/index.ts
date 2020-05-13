@@ -16,7 +16,7 @@ const routes = [
     path: '/login',
     name: 'Login',
     meta: {
-      title: 'wlswoo blog - login'
+      title: 'wlswoo blog'
     },
     component: () => import('@/views/login/index.vue')
   },
@@ -24,7 +24,7 @@ const routes = [
     path: '/write',
     name: 'Write',
     meta: {
-      title: 'wlswoo blog - write'
+      title: 'wlswoo blog'
     },
     component: () => import('@/views/write/index.vue'),
   },
@@ -32,7 +32,7 @@ const routes = [
     path: '/admin',
     name: 'Admin',
     meta: {
-      title: 'wlswoo blog - admin'
+      title: 'wlswoo blog'
     },
     component: () => import('@/views/admin/index.vue'),
   },
@@ -40,7 +40,7 @@ const routes = [
     path: '/notice',
     name: 'Notice',
     meta: {
-      title: 'wlswoo blog - notice'
+      title: 'wlswoo blog'
     },
     component: () => import('@/views/notice/index.vue'),
   },
@@ -48,7 +48,7 @@ const routes = [
     path: '/subscribe',
     name: 'Subscribe',
     meta: {
-      title: 'wlswoo blog - subscribe'
+      title: 'wlswoo blog'
     },
     component: () => import('@/views/subscribe/index.vue'),
   },
@@ -71,7 +71,7 @@ const routes = [
 
 const router = new VueRouter({
   mode: 'history',
-  base: process.env.BASE_URL,
+  // base: process.env.BASE_URL,
   routes
 });
 

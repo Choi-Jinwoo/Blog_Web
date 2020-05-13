@@ -12,6 +12,7 @@ import { Vue, Component } from "vue-property-decorator";
 import NoticeForm from "@/components/admin/NoticeForm.vue";
 import CategoryForm from "../../components/admin/CategoryForm/index.vue";
 import TempPostForm from "../../components/admin/TempPostForm.vue";
+import { Token } from "../../lib/Storage";
 
 @Component({
   components: {
@@ -20,7 +21,14 @@ import TempPostForm from "../../components/admin/TempPostForm.vue";
     "temp-post-form": TempPostForm
   }
 })
-export default class Admin extends Vue {}
+export default class Admin extends Vue {
+  created() {
+    if (!Token.getToken()) {
+      alert("관리자만 이용가능합니다");
+      this.$router.push("/");
+    }
+  }
+}
 </script>
 
 <style lang="scss" scoped>

@@ -40,8 +40,8 @@ export default class TempPostForm extends Vue {
       switch (err.response.status) {
         case 401:
         case 403:
-          alert("관리자만 이용가능합니다");
-          this.$router.push("/");
+          // alert("관리자만 이용가능합니다");
+          // this.$router.push("/");
           return;
         case 410:
           alert("로그인 정보 만료로 재 로그인 후 이용해주세요");

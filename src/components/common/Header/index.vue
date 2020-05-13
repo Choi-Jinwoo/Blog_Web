@@ -2,9 +2,9 @@
   <header class="Header">
     <div class="content">
       <div class="link-box">
-        <div class="home-btn">홈</div>
+        <div class="home-btn" @click="$router.push('/')">홈</div>
         <div class="aboutme-btn">소개</div>
-        <div class="admin-btn" v-show="isAdmin">관리자</div>
+        <div class="admin-btn" v-show="isAdmin" @click="$router.push('/admin')">관리자</div>
       </div>
       <div class="sns-box">
         <img src="../../../assets/svg/github_icon.svg" alt />
