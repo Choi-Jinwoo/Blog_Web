@@ -1,5 +1,11 @@
 <template>
-  <div class="wrapper-category">{{ wrapperCategory.name }}</div>
+  <div class="wrapper-category">
+    <div class="util-box">
+      {{ wrapperCategory.name }}
+      <button>수정</button>
+      <button>삭제</button>
+    </div>
+  </div>
 </template>
 
 <script lang="ts">
