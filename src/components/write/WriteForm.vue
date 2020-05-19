@@ -180,7 +180,7 @@ export default class Write extends Vue {
 </script>
 
 <style lang="scss">
-@import "~highlight.js/styles/atom-one-dark.css";
+@import "../../style/post.scss";
 @import "../../style/palette.scss";
 
 .write-form {
