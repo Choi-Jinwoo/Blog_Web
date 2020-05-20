@@ -7,8 +7,14 @@
         <div class="admin-btn" v-show="isAdmin" @click="$router.push('/admin')">관리자</div>
       </div>
       <div class="sns-box">
-        <img src="../../../assets/svg/github_icon.svg" alt />
-        <img src="../../../assets/svg/facebook_icon.svg" alt />
+        <img
+          src="../../../assets/svg/github_icon.svg"
+          @click="openWindow('https://github.com/Choi-jinwoo')"
+        />
+        <img
+          src="../../../assets/svg/facebook_icon.svg"
+          @click="openWindow('https://www.facebook.com/ChoiJinwoo03')"
+        />
         <img src="../../../assets/svg/mail_icon.svg" alt />
       </div>
     </div>
@@ -30,6 +36,10 @@ export default class Header extends Vue {
     eventBus.$on(BusEvent.ADMIN_LOGIN, () => {
       this.isAdmin = true;
     });
+  }
+
+  openWindow(url: string) {
+    const win = window.open(url, "_blank");
   }
 }
 </script>
