@@ -28,6 +28,7 @@ export default class App extends Vue {
 
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css?family=Noto+Sans+KR&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Source+Code+Pro&display=swap");
 
 .Header {
   z-index: 1000;
